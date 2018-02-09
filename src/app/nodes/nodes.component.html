@@ -1,0 +1,73 @@
+<div class="form-row">
+  <div class="form-group col-md-4">
+    <label for="nodName">Nome</label>
+    <input type="text" maxlength="200" class="form-control" id="nodName" placeholder="Nome" [(ngModel)]="newNode.Name">
+  </div>
+  <div class="form-group col-md-4">
+    <label for="docLabel">Label</label>
+    <input type="text" maxlength="200" class="form-control" id="docLabel" placeholder="Label" [(ngModel)]="newNode.Label">
+  </div>
+  <div class="form-group col-md-4">
+    <label for="docType">Tipo</label>
+    <select id="docType" class="form-control" [(ngModel)]="newNode.Type" #typeSel>
+      <option value="">Selecione...</option>
+      <option *ngFor="let ndType of NodesType" [value]="ndType.ID">{{ndType.Name}} </option>
+    </select>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group col-md-12">
+    <label for="docPath">Caminho xml</label>
+    <input type="text" maxlength="200" class="form-control" id="docPath" placeholder="Caminho Xml" [(ngModel)]="newNode.xPath"
+    />
+  </div>
+</div>
+
+<div class="row avl-mgn-top-5">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id != ''"  (click)="DeleteNodeTable()">Remover</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id != ''" [disabled]="!IsInputValid()" (click)="AddNodeToTable()">Adicionar</button>    
+    <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id == ''" [disabled]="!IsInputValid()" (click)="ClearNodeInput()">Cancelar</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id == ''" [disabled]="!IsInputValid()" (click)="UpdateNodeTable()">Alterar</button>
+  </div>
+</div>
+
+<div class="row avl-mgn-top-10">
+    <div class="col-md-12">
+        <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+          buttonCount: 5,
+          info: true,
+          type: 'input',
+          pageSizes: [10,20,100,10000],
+          previousNext: true      
+        }" (pageChange)="pageChange($event)"
+        [kendoGridSelectBy]="'Id'"
+        [selectedKeys]="selectedNodes"
+        [selectable]="{checkboxOnly:true,mode:'multiple'}"
+        >
+        
+        <kendo-grid-checkbox-column showSelectAll="true" width="30">
+            <ng-template kendoGridHeaderTemplate>
+                <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox
+                    [state]="selectAllState"
+                    (selectAllChange)="onSelectAllChange($event)">
+                <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+            </ng-template>
+        </kendo-grid-checkbox-column>
+          <kendo-grid-column field="" title="" width="50">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span class="btn btn-avl-outline-dark" (click)="EditNodeItem(dataItem.Id)" title="Editar">
+                <i class="fas fa-pencil-alt"></i>
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+        
+          <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
+          <kendo-grid-column field="Label" title="Label" width="150"></kendo-grid-column>
+          <kendo-grid-column field="xPath" title="Caminho xml" width="250"></kendo-grid-column>
+          <kendo-grid-column field="TypeDesc" title="Tipo" width="80"></kendo-grid-column>
+          
+        
+        </kendo-grid>
+    </div>
+</div>

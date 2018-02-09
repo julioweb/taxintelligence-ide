@@ -1,0 +1,40 @@
+<div class="row avl-mgn-top-5" *ngIf="isNewDoc || isEditDoc">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" (click)="DeleteVersionTable()">Remover</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" (click)="InitAddModal()">Adicionar</button>
+  </div>
+</div>
+
+<div class="row avl-mgn-top-10" *ngIf="isNewDoc">
+  <div class="col-md-12">
+    <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+                  buttonCount: 5,
+                  info: true,
+                  type: 'input',
+                  pageSizes: [10,20,100,10000],
+                  previousNext: true      
+                }" (pageChange)="pageChange($event)" [kendoGridSelectBy]="'ID'" [selectedKeys]="selectedVersions" [selectable]="{checkboxOnly:true,mode:'multiple'}">
+
+      <kendo-grid-checkbox-column showSelectAll="true" width="30">
+        <ng-template kendoGridHeaderTemplate>
+          <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox [state]="selectAllState" (selectAllChange)="onSelectAllChange($event)">
+          <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+        </ng-template>
+      </kendo-grid-checkbox-column>
+      <kendo-grid-column field="" title="" width="50">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span class="btn btn-avl-outline-dark" (click)="InitEditVersion(dataItem.ID)" title="Editar">
+            <i class="fas fa-pencil-alt"></i>
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
+      <kendo-grid-column field="Desc" title="Descrição" width="250"></kendo-grid-column>
+
+
+    </kendo-grid>
+  </div>
+</div>
+
+<grid-doc-version [docPai]="ParentId" class="row avl-mgn-top-10" *ngIf="!isNewDoc"></grid-doc-version>

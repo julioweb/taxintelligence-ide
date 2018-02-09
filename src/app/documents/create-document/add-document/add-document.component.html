@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row">
+    <div class="row-same-height">
+      <div class="col-md-10 col-sm-height">
+        <h1 class="avalara-title">Novo Documento</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row avl-mgn-top-15">
+    <div class="col-md-12">
+      <form #frmNewDoc="ngForm" (ngSubmit)="onSubmit(frmNewDoc)">
+
+        <fieldset class="avalara-fieldset">
+          <legend>Propriedades</legend>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="docName">Nome</label>
+              <input type="text" maxlength="50" class="form-control" id="docName" name="Name" placeholder="Nome" [(ngModel)]="docObjt.Name">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="docType">Tipo</label>
+              <select id="docType" name="Level" class="form-control" [(ngModel)]="docObjt.Level">
+                <option *ngFor="let level of LevelData" [value]="level.Key" [selected]="level.Key == 0 ? 'selected': ''">{{level.Value}} </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="docDesc">Descrição</label>
+              <textarea id="docDesc" class="form-control" name="Description" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="docObjt.Description"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="avalara-fieldset">
+          <legend>Campos</legend>
+          <app-nodes #nodeChild></app-nodes>
+        </fieldset>
+
+        <fieldset class="avalara-fieldset">
+          <legend>Versões</legend>
+          <document-version [isNewDoc]="true" [docPai]="docObjt.ID" #docVersion (docVersionPhone)="VersionChildCalling($event)"></document-version>
+        </fieldset>
+        <div class="row avl-mgn-top-5">
+          <div class="col-md-12">
+            <button class="btn btn-success float-right" title="Salvar">
+              <i class="fas fa-save"></i> Salvar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div>
+  <div class="modal-header">
+    <h4 class="modal-title float-left avalara-subtitle">Cadastro de Versão</h4>
+  </div>
+  <div class="modal-body">
+    <fieldset class="avalara-fieldset">
+      <legend>Propriedades</legend>
+      <div class="form-row">
+        <div class="form-group col-md-4" [class.avl-invalid-form]="!hasName">
+          <label for="nodName">Nome</label>
+          <input type="text" maxlength="50" class="form-control" id="nodName" placeholder="Nome" [(ngModel)]="newVersion.Name">
+          <div class="invalid-feedback">
+            Necessário informar um nome
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="docNamespace">Namespace</label>
+          <input type="text" maxlength="200" class="form-control" id="docNamespace" placeholder="Namespace" [(ngModel)]="newVersion.Namespace">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="docPrefix">Prefixo</label>
+          <input type="text" maxlength="200" class="form-control" id="docPrefix" placeholder="Prefixo" [(ngModel)]="newVersion.Prefix">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12" [class.avl-invalid-form]="!hasDesc">
+          <label for="docDesc">Descrição</label>
+          <input type="text" maxlength="100" class="form-control" id="docDesc" placeholder="Descrição" [(ngModel)]="newVersion.Desc"
+          />
+          <div class="invalid-feedback">
+            Necessário informar uma descrição
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="avalara-fieldset">
+      <legend>Campos</legend>
+      <div class="row">
+        <div class="col-md-5">
+          <div class="text-center">
+            <strong>Disponíveis</strong>
+          </div>
+          <ul class="list-group list-group-flush avl-list-items rounded" #AvaibleColumns>
+            <li class="list-group-item" *ngFor="let item of _AvaibleNodeList;let i = index;" [value]="i" (click)="SetItemSelected($event,'add')">{{item.Name}}</li>
+          </ul>
+        </div>
+        <div class="col-md-2 text-center">
+          <div><button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5"  title="Selecionar"><i class="fas fa-angle-right"></i></button></div>
+          <div><button (click)="SelectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar Todaas"><i class="fas fa-angle-double-right"></i></button></div>
+          <div><button (click)="UnselectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Voltar Todas"><i class="fas fa-angle-double-left"></i></button></div>
+          <div><button (click)="UnselectItem(false)" type="button" class="btn btn-default btn-sm" title="Voltar"><i class="fas fa-angle-left"></i></button></div>
+        </div>
+        <div class=col-md-5>
+          <div class="text-center">
+            <strong>Selecionados</strong>
+          </div>
+          <ul class="list-group list-group-flush avl-list-items rounded" #SelectedColumns>
+              <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i" (click)="SetItemSelected($event,'remove')">{{item.Name}}</li>
+          </ul>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="avalara-fieldset">
+      <legend>Relação</legend>
+    </fieldset>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">Salvar</button>
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+  </div>
+</div>

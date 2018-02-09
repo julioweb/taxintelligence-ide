@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title float-left">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    <div [innerHTML]="Message"></div>
+    <div class="avl-mgn-top-15" [class.avl-invalid-form]="!hasJust">
+      <strong class="text-secondary" for="justificationProcess">Justificativa:</strong>
+      <textarea class="form-control" id="justificationProcess" style="resize: none" rows="3" [(ngModel)]="curObj.JustificativaVal"></textarea>
+      <div class="invalid-feedback">
+          Necessário informar uma justificativa
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">Ok</button>
+  </div>

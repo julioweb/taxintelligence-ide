@@ -1,0 +1,29 @@
+<div class="container">
+  
+  <div class="row avl-mgn-btm-10">
+    <div class="col-md-12">
+      <div id="DashBoard1" style="width:100%;margin:10px;">Carregando.</div>
+    </div>
+  </div>
+
+  <div class="row avl-mgn-btm-10">
+      <div class="col-md-12">
+          <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <span class="nav-link text-primary" [class.active]="_tabIdxActive == 0" (click)="_tabIdxActive = 0" href="#">Validações e Transformações</span>
+              </li>
+              <li class="nav-item">
+                <span class="nav-link text-primary" [class.active]="_tabIdxActive == 1" (click)="_tabIdxActive = 1" href="#">Documentos</span>
+              </li>
+            </ul>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <app-dashgrid-rules [hidden]="!(_tabIdxActive == 0)" ></app-dashgrid-rules>
+      <app-dashgrid-documents [hidden]="!(_tabIdxActive == 1)"></app-dashgrid-documents>
+    </div>
+  </div>
+
+</div>

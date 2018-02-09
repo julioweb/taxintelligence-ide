@@ -1,0 +1,35 @@
+<div id="fullscreen_bg" class="fullscreen_bg" >
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class='col-md-3'></div>
+      <div class="col-md-6 bg-light border border-light rounded">
+        <div class="login-box well">
+          <form>
+            <legend>Login</legend>
+
+            <div class="alert" [ngClass]="{
+              'alert-danger':isDanger,
+              'alert-warning':!isDanger
+            }" *ngIf="LoginMsg != ''" role="alert"> {{LoginMsg}} </div>
+
+            <div class="form-group">
+              <label for="username-email">Usuário</label>
+              <input value='' id="username-email" placeholder="Usuário" type="text" class="form-control" name="usuario" [(ngModel)]="Usuario" >
+            </div>
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input id="password" value='' placeholder="Senha" type="password" class="form-control" name="senha" [(ngModel)]="Senha"/>
+            </div>
+            
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary btn-block " value="Login" #bLogin (click)="bLogin_click()" />
+            </div>
+            
+          </form>
+  
+        </div>
+      </div>
+      <div class='col-md-3'></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+/* You can add global styles to this file, and also import other style files */
+
+/**************************************************************************************************************/
+/************************************************* AVALARA ****************************************************/
+/**************************************************************************************************************/
+
+/* Custom Margins */
+
+/*Botom*/
+.avl-mgn-btm-5{margin-bottom: 5px;}
+.avl-mgn-btm-10{margin-bottom: 10px;}
+.avl-mgn-btm-15{margin-bottom: 15px;}
+
+/*Top*/
+.avl-mgn-top-5{margin-top: 5px;}
+.avl-mgn-top-10{margin-top: 10px;}
+.avl-mgn-top-15{margin-top: 15px;}
+
+/*Left*/
+.avl-mgn-left-5{margin-left: 5px;}
+.avl-mgn-left-10{margin-left: 10px;}
+.avl-mgn-left-15{margin-left: 15px;}
+
+/*Right*/
+.avl-mgn-right-5{margin-left: 5px;}
+.avl-mgn-right-10{margin-left: 10px;}
+.avl-mgn-right-15{margin-left: 15px;}
+
+/* General Tab Bars Custom */
+.nav-tabs span.nav-link:hover{ cursor: pointer;}
+.nav-tabs span.nav-link.active{ color: #f60 !important;}
+
+/*GRID BUTTON*/
+.avl-grid-btn{-webkit-appearance: none !important;}
+.avl-grid-btn:hover{border:1px solid rgba(0,0,0,.08); border-radius: 5px;}
+
+.row-same-height{ display: table; width: 100%; table-layout: fixed;}
+
+/* Custom FONTS */
+.avalara-title{font-weight: 400; color: #ff6600;}
+.avalara-subtitle{font-weight: 400; color:#e65c00;}
+h1.avalara-title,h1.avalara-subtitle{ font-size: 31px;}
+h2.avalara-title,h2.avalara-subtitle{ font-size: 28px;}
+h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
+
+.avalara-fieldset {border-top:1px solid #c5c2c0; margin-top: 10px;}
+.avalara-fieldset legend {padding: 0 10px 0 0; width: auto !important; color:#e65c00;}
+/* Custom FONTS */
+.btn-avl-outline-dark {
+    color: #343a40;
+    background-color: transparent;
+    background-image: none;
+}
+
+.btn-avl-outline-dark:hover {
+    color: #fff;
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
+
+.avl-invalid-form textarea, .avl-invalid-form input,.avl-invalid-form select{border-color: #dc3545;}
+.avl-invalid-form div.invalid-feedback{display: block;}
+
+.avl-grid-icon{ font-size: 20px;}
+
+.avl-cursor-pointer {cursor: pointer;}
+
+.dropdown-menu > li > a {
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.dropdown-menu > li > a:hover{ color:#ff6600;}
+
+.avl-list-items{max-height: 100%; overflow-y: auto; border:1px solid rgba(0,0,0,.125);}
+
+/**********************Modal Avalara***********************/
+.avl-modal-form{
+    width: 60% !important;
+    max-width: 60% !important;
+    max-height: 90%;
+    overflow-y: auto;
+}
+/**************************************************************************************************************/
+/************************************************* BOOSTRAP ****************************************************/
+/**************************************************************************************************************/
+
+
+
+/**************************************************************************************************************/
+/************************************************* KENDO ****************************************************/
+/**************************************************************************************************************/
+
+.k-grid td.k-state-selected, .k-grid tr.k-state-selected, ul.k-pager-numbers.k-reset li a.k-link.k-state-selected{ background-color:rgba(255, 102, 0,.9); color:#fff;}
+.k-grid-header, .k-grid-toolbar, .k-grouping-header, .k-grid-add-row, .k-grid-footer, .k-drag-clue,.k-pager-wrap {
+    color: #656565;
+    background-color: #ffffff;
+}

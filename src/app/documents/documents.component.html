@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="row">
+    <div class="row-same-height">
+      <div class="col-md-10 col-sm-height">
+        <h1 class="avalara-title">Documentos</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+            buttonCount: 5,
+            info: true,
+            type: 'input',
+            pageSizes: [10,20,100,10000],
+            previousNext: true
+          }" (pageChange)="pageChange($event)">
+
+        <ng-template kendoGridToolbarTemplate>
+          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AddNewDocument()">
+            <span class="btn btn-primary btn-sm">
+              <i class="far fa-file"></i>
+            </span>
+            <span class="btn">Adicionar</span>
+          </span>
+          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()">
+            <span class="btn btn-primary btn-sm">
+              <i class="fas fa-download"></i>
+            </span>
+            <span class="btn">Excel</span>
+          </span>
+          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AtualizaGrid()">
+            <span class="btn btn-primary btn-sm">
+              <i class="fas fa-sync"></i>
+            </span>
+            <span class="btn">Atualizar</span>
+          </span>
+        </ng-template>
+
+        <kendo-grid-column field="" title="" width="60">          
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="btn btn-avl-outline-dark" title="Editar">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
+            <span class="btn btn-avl-outline-dark" title="Adicionar Versão" (click)="AddGridVersao($event,dataItem.ID)">
+                <i class="fas fa-code-branch"></i>
+              </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column field="Name" title="Nome" width="150" ></kendo-grid-column>
+        <kendo-grid-column field="Description" title="Descrição" width="250"></kendo-grid-column>
+        <kendo-grid-column field="VersionsCount" title="Versões" class="text-center" width="40"></kendo-grid-column>
+
+        <div *kendoGridDetailTemplate="let dataItem">
+            <grid-doc-version [docPai]="dataItem.ID"></grid-doc-version>
+        </div>
+      </kendo-grid>
+    </div>
+  </div>
+</div>

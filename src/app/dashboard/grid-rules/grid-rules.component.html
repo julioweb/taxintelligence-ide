@@ -1,0 +1,36 @@
+<ng-container>
+  <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="true" (pageChange)="pageChange($event)"
+    [selectable]="true" (selectionChange)="SelectionEvent($event)">
+
+
+    <ng-template kendoGridToolbarTemplate>
+      <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()">
+        <span class="btn btn-primary btn-sm">
+          <i class="fas fa-download"></i>
+        </span>
+        <span class="btn">Excel</span>
+      </span>
+      <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AtualizaGrid()">
+        <span class="btn btn-primary btn-sm">
+          <i class="fas fa-sync"></i>
+        </span>
+        <span class="btn">Atualizar</span>
+      </span>
+    </ng-template>
+
+
+    <kendo-grid-column *ngIf="SelectMultipleItem != null" field="" title="" width="15">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <input type="checkbox" [checked]="IsSelectItem(dataItem)" (change)="EventSelectLine($event,dataItem)" />
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Description" title="Descrição" width="250" (click)="ToogleSelectLine(dataItem)"></kendo-grid-column>
+
+    <kendo-grid-column field="Total" title="Quantidade" width="80" (click)="ToogleSelectLine(dataItem)"></kendo-grid-column>
+
+
+
+    <kendo-grid-excel fileName="Lista.xlsx"></kendo-grid-excel>
+  </kendo-grid>
+</ng-container>

@@ -1,0 +1,9 @@
+<div class="modal-header">
+    <h4 class="modal-title float-left">{{title}}</h4>
+  </div>
+  <div class="modal-body" [ngClass]="GetCssAlertClass()" [innerHTML]="Message">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">Ok</button>
+  </div>

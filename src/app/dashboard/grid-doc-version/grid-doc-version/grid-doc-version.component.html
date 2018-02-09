@@ -1,0 +1,21 @@
+<kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+  buttonCount: 5,
+  info: true,
+  type: 'input',
+  pageSizes: [10,20,100,10000],
+  previousNext: true
+}" (pageChange)="pageChange($event)">
+
+  <kendo-grid-column field="" title="" width="40">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <span class="btn btn-avl-outline-dark" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
+  <kendo-grid-column field="Desc" title="Descrição" width="250"></kendo-grid-column>
+  <kendo-grid-column field="NodeCout" title="Campos" width="37" class="text-center"></kendo-grid-column>
+
+</kendo-grid>

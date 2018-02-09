@@ -1,0 +1,38 @@
+<kendo-grid #grid="kendoGrid"
+            [data]="GridData"
+            [pageSize]="GridPageSize"
+            [skip]="GridSkip"
+            [pageable]="true"
+            (pageChange)="pageChange($event)">
+
+
+  <ng-template kendoGridToolbarTemplate>
+    <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()"><span class="btn btn-primary btn-sm"><i class="fas fa-download"></i></span><span class="btn">Excel</span></span>
+    <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AtualizaGrid()"><span class="btn btn-primary btn-sm"><i class="fas fa-sync"></i></span><span class="btn">Atualizar</span></span>
+  </ng-template>
+
+
+  <kendo-grid-column field="DocumentID" title="DOCUMENTO ID (Chave)" width="350"></kendo-grid-column>
+  <kendo-grid-column field="DocumentNumber" title="Número da nota fiscal" width="180"></kendo-grid-column>
+  <kendo-grid-column field="DocumentSeries" title="Série" width="80"></kendo-grid-column>
+  <kendo-grid-column title="Data de emissão" width="150">
+    <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.CompetenceDate | date: 'dd/MM/yyyy'}}</ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column  title="Valor" width="100">
+    <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TotalValue | myCurrency}}</ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="TotErrorRules" title="Erros ao Validar" width="130"></kendo-grid-column>
+
+
+  <kendo-grid-column field="CNPJ" title="CNPJ Destinatário" width="150">
+      <ng-template kendoGridCellTemplate let-dataItem>{{FormatCnpjItem(dataItem.CNPJ)}}</ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column title="DATA DO PROCESSAMENTO" width="200">
+    <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.DtFim | date: 'dd/MM/yyyy HH:mm'}}</ng-template>
+  </kendo-grid-column>
+  
+  <kendo-grid-excel fileName="Lista.xlsx"></kendo-grid-excel>
+</kendo-grid>
