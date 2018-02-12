@@ -47,6 +47,7 @@ import { AddDocumentComponent } from './documents/create-document/add-document/a
 import { NodesComponent } from './nodes/nodes.component';
 import { DocumentVersionComponent } from './document-version/document-version.component';
 import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-version-doc.component';
+import { routing } from './app.routing';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,6 @@ import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-versi
     BrowserModule,
     FormsModule,
     HttpModule,
-//    routing,
     Ng2Webstorage,
     //NGX MODAL
     ModalModule.forRoot(),
@@ -84,7 +84,8 @@ import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-versi
     // LayoutModule,
     DatePickerModule,
     DropDownsModule,
-    IntlModule
+    IntlModule,
+    routing
   ],
   providers: [
     AuthService,
