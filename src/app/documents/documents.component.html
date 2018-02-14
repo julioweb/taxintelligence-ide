@@ -1,3 +1,5 @@
+<app-full-loading #fullLoading></app-full-loading>
+
 <div class="container">
   <div class="row">
     <div class="row-same-height">
@@ -40,7 +42,7 @@
 
         <kendo-grid-column field="" title="" width="60">          
           <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="btn btn-avl-outline-dark" title="Editar">
+            <span class="btn btn-avl-outline-dark" title="Editar" (click)="EditarItem(dataItem.ID)">
               <i class="fas fa-pencil-alt"></i>
             </span>
             <span class="btn btn-avl-outline-dark" title="Adicionar Versão" (click)="AddGridVersao(dataItem.ID,dataItem.Level)">

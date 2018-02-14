@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, ElementRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { RuleService } from "../../services/data/rules/rule.service";
 import { ServiceUtils } from "../../services/Utils/Utils"
@@ -8,15 +10,14 @@ import { DocumentModel, DocVersionModel } from '../../models/Documents';
 import { RuleModelList, GroupRuleModel, RuleModel } from "../../models/RuleTot";
 import { ModalAlertComponent } from '../../modais/modal-alert/modal-alert.component';
 import { BsModalService } from 'ngx-bootstrap';
-
-
+import { FullLoadingComponent } from '../../modais/full-loading/full-loading.component';
 
 @Component({
   selector: 'cad-rule-group',
   templateUrl: './cad-rule-group.component.html',
   styleUrls: ['./cad-rule-group.component.css']
 })
-export class CadRuleGroupComponent implements OnInit {
+export class CadRuleGroupComponent implements OnInit, OnDestroy {
 
   _RelacDocsLst: Array<DocumentModel> = new Array<DocumentModel>();
   _RelacDocVersionLst: Array<DocVersionModel> = new Array<DocVersionModel>();
@@ -24,6 +25,7 @@ export class CadRuleGroupComponent implements OnInit {
   grpObjt: GroupRuleModel;
 
   @Input() ruleGrpEditId: string;
+  inscricao: Subscription;
 
   public hasName: boolean = true;
   public hasDesc: boolean = true;
@@ -31,6 +33,7 @@ export class CadRuleGroupComponent implements OnInit {
 
   @ViewChild('AvaibleRules') avaibleLstElmnt: ElementRef;
   @ViewChild('SelectedRules') selectLstElmnt: ElementRef;
+  @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
 
   _RuleList: Array<RuleModel> = new Array<RuleModel>();
   _AvaibleRuleList: Array<RuleModel> = new Array<RuleModel>();
@@ -38,16 +41,23 @@ export class CadRuleGroupComponent implements OnInit {
 
   constructor(private bsRules: RuleService,
     public bsDocument: DocumentsService,
-    private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private route: ActivatedRoute) {
     this.bsUtils = new ServiceUtils();
     this.grpObjt = new GroupRuleModel();
 
     this.grpObjt.ID = this.bsUtils.GetNewGuidId();
-    this.ruleGrpEditId = "DDB2CF45-3EB4-4DBB-B230-0AD6180C91BA";//route.snapshot.params["Id"];
+    // this.ruleGrpEditId = "DDB2CF45-3EB4-4DBB-B230-0AD6180C91BA";//route.snapshot.params["Id"];
   }
 
 
   ngOnInit() {
+    this.inscricao = this.route.queryParams.subscribe(
+      (queryParams: any) => {
+        this.ruleGrpEditId = queryParams['id'];
+      }
+    );
+
     this.bsDocument.GetDocumentsList(0, 1000).subscribe(a => {
       this._RelacDocsLst = a.Data;
     });
@@ -60,6 +70,10 @@ export class CadRuleGroupComponent implements OnInit {
     if (this.ruleGrpEditId != null && this.ruleGrpEditId != "") {
       this.LoadRuleGroup();
     }
+  }
+
+  ngOnDestroy() {
+    this.inscricao.unsubscribe();
   }
 
   private LoadRuleGroup() {
@@ -81,6 +95,8 @@ export class CadRuleGroupComponent implements OnInit {
   }
   onSubmit(): void {
     if (this.IsInputValid()) {
+      this.fullLoading.showLoading();
+
       let isEdit = this.ruleGrpEditId != "" && this.ruleGrpEditId != null;
       this.grpObjt.RelacRules = this._SelectedList.map(a => { return a.RuleID });
       this.bsRules.SendRuleGroupPost(this.grpObjt, isEdit).subscribe(a => {
@@ -107,6 +123,7 @@ export class CadRuleGroupComponent implements OnInit {
           }
         }
 
+        this.fullLoading.hideLoading();
         this.modalService.show(ModalAlertComponent, { initialState: alertState });
       });
     }
@@ -130,7 +147,7 @@ export class CadRuleGroupComponent implements OnInit {
         }
         else {
           for (var i = 0; i < idxArray.length; i++) {
-            var remItem = this._AvaibleRuleList.find(x=> x.RuleID == idxArray[i])
+            var remItem = this._AvaibleRuleList.find(x => x.RuleID == idxArray[i])
             let idxrem = this._AvaibleRuleList.indexOf(remItem);
             this._AvaibleRuleList.splice(idxrem, 1);
           }
@@ -177,7 +194,7 @@ export class CadRuleGroupComponent implements OnInit {
         childrenLst[i].className = childrenLst[i].className.replace(" list-group-item-info", "");
       }
       for (var i = 0; i < idxArray.length; i++) {
-        var remItem = this._AvaibleRuleList.find(x=> x.RuleID == idxArray[i])
+        var remItem = this._AvaibleRuleList.find(x => x.RuleID == idxArray[i])
         let idxrem = this._AvaibleRuleList.indexOf(remItem);
         this._AvaibleRuleList.splice(idxrem, 1);
         //this._AvaibleRuleList.splice(idxArray[i], 1);
@@ -204,7 +221,7 @@ export class CadRuleGroupComponent implements OnInit {
         childrenLst[i].className = childrenLst[i].className.replace(" list-group-item-danger", "");
       }
       for (var i = 0; i < idxArray.length; i++) {
-        var remItem = this._SelectedList.find(x=> x.RuleID == idxArray[i])
+        var remItem = this._SelectedList.find(x => x.RuleID == idxArray[i])
         let idxrem = this._SelectedList.indexOf(remItem);
         this._SelectedList.splice(idxrem, 1);
         //this._SelectedList.splice(childrenLst[i].value, 1);

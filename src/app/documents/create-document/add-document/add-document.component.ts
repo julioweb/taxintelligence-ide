@@ -1,4 +1,5 @@
-import { Component, OnInit,ViewChild,Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
 import { DocumentsService } from "../../../services/data/documents/documents.service";
@@ -9,9 +10,11 @@ import { NodesComponent } from './../../../nodes/nodes.component';
 import { DocumentVersionComponent } from "../../../document-version/document-version.component";
 import { ModalAlertComponent } from "../../../modais/modal-alert/modal-alert.component";
 
-import { DocProcess,DocPostObject } from "../../../models/Documents";
+import { DocProcess, DocPostObject } from "../../../models/Documents";
 import { KeyValue } from "../../../models/KeyValue";
 import { Subscription } from 'rxjs/Subscription';
+
+import { FullLoadingComponent } from '../../../modais/full-loading/full-loading.component';
 // import { ActivatedRoute } from '@angular/router/src/router_state';
 
 
@@ -20,45 +23,58 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './add-document.component.html',
   styleUrls: ['./add-document.component.css']
 })
-export class AddDocumentComponent implements OnInit {
+export class AddDocumentComponent implements OnInit, OnDestroy {
 
-  private serviceUtils:ServiceUtils;
+  private serviceUtils: ServiceUtils;
 
   docObjt = {
     Name: "",
     Description: "",
     Level: 0,
-    ID:""
+    ID: ""
   }
 
-  @ViewChild('nodeChild') nodesChild:NodesComponent;
-  @ViewChild('docVersion') docVersion:DocumentVersionComponent;
+  @ViewChild('nodeChild') nodesChild: NodesComponent;
+  @ViewChild('docVersion') docVersion: DocumentVersionComponent;
+  @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
 
   @Input() docEditId: string;
+  inscricao: Subscription;
 
   public LevelData: Array<KeyValue> = new Array<KeyValue>();
-  curSubscribe:Subscription;
-  
+  curSubscribe: Subscription;
+
   constructor(public docProcess: DocumentsService,
-              private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private route: ActivatedRoute) {
     docProcess.GetDocLevelType().subscribe(a => {
       this.LevelData = a;
     });
 
     this.serviceUtils = new ServiceUtils();
 
-    this.docEditId = "281577B2-535D-1CBE-88F5-A06459BD0088";//route.snapshot.params["Id"];
+    // this.docEditId = "281577B2-535D-1CBE-88F5-A06459BD0088"; // route.snapshot.params["Id"];
     this.docObjt.ID = this.serviceUtils.GetNewGuidId();
   }
 
   ngOnInit() {
-     if(this.docEditId != null && this.docEditId != ""){
+    this.inscricao = this.route.queryParams.subscribe(
+      (queryParams: any) => {
+        this.docEditId = queryParams['id'];
+      }
+    );
+
+    if (this.docEditId != null && this.docEditId != "") {
       this.LoadDocument();
     }
   }
 
-  LoadDocument(){
-    this.docProcess.GetDocumentById(this.docEditId).subscribe(a=>{
+  ngOnDestroy() {
+    this.inscricao.unsubscribe();
+  }
+
+  LoadDocument() {
+    this.docProcess.GetDocumentById(this.docEditId).subscribe(a => {
       this.docObjt = a;
 
       this.nodesChild.LoadNodesFromServe(this.docObjt.ID);
@@ -66,12 +82,13 @@ export class AddDocumentComponent implements OnInit {
     });
   }
 
-  onSubmit(form: NgForm) {    
+  onSubmit(form: NgForm) {
+    this.fullLoading.showLoading();
     let nodesList = this.nodesChild.RetrieveNodeList();
     let versionList = this.docVersion.RetrieveVersionList();
     this.docObjt;
-    
-    let postObj:DocPostObject = {
+
+    let postObj: DocPostObject = {
       Properties: this.docObjt,
       NodeList: nodesList,
       VersionList: versionList
@@ -82,7 +99,7 @@ export class AddDocumentComponent implements OnInit {
     // console.log(postObj);
     let isEdit = this.docEditId != "" && this.docEditId != null;
 
-    this.docProcess.SendDocPost(postObj,isEdit).subscribe(a => {
+    this.docProcess.SendDocPost(postObj, isEdit).subscribe(a => {
 
       let alertState = {
         Message: `O registro foi salvo com sucesso`,
@@ -107,17 +124,18 @@ export class AddDocumentComponent implements OnInit {
         }
       }
 
+      this.fullLoading.hideLoading();
       this.modalService.show(ModalAlertComponent, { initialState: alertState });
     });
 
   }
 
-  VersionChildCalling($event){
+  VersionChildCalling($event) {
     let nodesList = this.nodesChild.RetrieveNodeList();
-    this.docVersion.SetNodeList(nodesList,$event);
+    this.docVersion.SetNodeList(nodesList, $event);
   }
 
-  DocTypeChanged(){
+  DocTypeChanged() {
     this.docVersion.SetDocumentLevel(this.docObjt.Level);
   }
 }
