@@ -47,6 +47,11 @@ import { AddDocumentComponent } from './documents/create-document/add-document/a
 import { NodesComponent } from './nodes/nodes.component';
 import { DocumentVersionComponent } from './document-version/document-version.component';
 import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-version-doc.component';
+import { ModalNewRelacComponent } from './modais/modal-new-relac/modal-new-relac.component';
+import { RulesComponent } from './rules/rules.component';
+import { RuleGroupComponent } from './rule-group/rule-group.component';
+import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
+import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +70,12 @@ import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-versi
     AddDocumentComponent,
     NodesComponent,
     DocumentVersionComponent,
-    ModalVersionDocComponent
+    ModalVersionDocComponent,
+    ModalNewRelacComponent,
+    RulesComponent,
+    RuleGroupComponent,
+    CadRuleGroupComponent,
+    CadRulesComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +109,8 @@ import { ModalVersionDocComponent } from './modais/modal-version-doc/modal-versi
     ModalAlertComponent,
     ModalConfirmComponent,
     ModalApproveDocComponent,
-    ModalVersionDocComponent
+    ModalVersionDocComponent,
+    ModalNewRelacComponent
   ],
   bootstrap: [AppComponent]
 })

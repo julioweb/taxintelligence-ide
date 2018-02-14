@@ -1,3 +1,6 @@
+import { KeyValue } from "./KeyValue";
+import { NodeItem } from "./Nodes";
+
 export class DocBriefList{
     public Total:number;
     public Data: Array<DocBrief>;
@@ -60,6 +63,7 @@ export class DocumentModel{
     public ID: string;
     public Name: string;
     public Description:string;
+    public Level:number;
 }
 
 export class DocVersionList
@@ -68,6 +72,10 @@ export class DocVersionList
     public Data: Array<DocVersionModel>;
 }
 
+export class VersionDocRelac{
+    public docID:string;
+    public versaoID: string;
+}
 export class DocVersionModel
 {
     public ID: string;
@@ -80,5 +88,13 @@ export class DocVersionModel
     public isEdited:boolean;
     public isDeleted: boolean;
     public SelNodes:Array<string>;
+    public RelacItems: Array<KeyValue>;
+    public DocRelac:VersionDocRelac;
+}
+
+export class DocPostObject{
+    public Properties: DocumentModel;
+    public NodeList:Array<NodeItem>;
+    public VersionList: Array<DocVersionModel>;
 }
 

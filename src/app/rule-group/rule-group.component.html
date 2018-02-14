@@ -2,7 +2,7 @@
   <div class="row">
     <div class="row-same-height">
       <div class="col-md-10 col-sm-height">
-        <h1 class="avalara-title">Documentos</h1>
+        <h1 class="avalara-title">Grupo de Regras</h1>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@
           }" (pageChange)="pageChange($event)">
 
         <ng-template kendoGridToolbarTemplate>
-          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AddNewDocument()">
+          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5">
             <span class="btn btn-primary btn-sm">
               <i class="far fa-file"></i>
             </span>
@@ -43,19 +43,14 @@
             <span class="btn btn-avl-outline-dark" title="Editar">
               <i class="fas fa-pencil-alt"></i>
             </span>
-            <span class="btn btn-avl-outline-dark" title="Adicionar Versão" (click)="AddGridVersao(dataItem.ID,dataItem.Level)">
-                <i class="fas fa-code-branch"></i>
-              </span>
           </ng-template>
         </kendo-grid-column>
 
-        <kendo-grid-column field="Name" title="Nome" width="150" ></kendo-grid-column>
-        <kendo-grid-column field="Description" title="Descrição" width="250"></kendo-grid-column>
-        <kendo-grid-column field="VersionsCount" title="Versões" class="text-center" width="40"></kendo-grid-column>
-
-        <div *kendoGridDetailTemplate="let dataItem">
-            <grid-doc-version [docPai]="dataItem.ID" [docPaiLevel]="dataItem.Level" #docVersion (docVersionPhone)="VersionChildCalling($event)" ></grid-doc-version>
-        </div>
+        <kendo-grid-column field="Name" title="Nome" width="100"></kendo-grid-column>
+        <kendo-grid-column field="Description" title="Descrição" width="250" ></kendo-grid-column>
+        <kendo-grid-column field="DocVersion" title="Versão de Documento" class="text-center" width="100"></kendo-grid-column>
+        <kendo-grid-column field="CNPJ" title="CNPJ" class="text-center" width="50"></kendo-grid-column>
+        <kendo-grid-column field="Order" title="Ordem" class="text-center" width="50"></kendo-grid-column>
       </kendo-grid>
     </div>
   </div>

@@ -4,13 +4,17 @@ export class NodeType{
 }
 
 export class NodeItem{
-    public Id:string;
+    public ID:string;
     public Name:string;
     public Label: string;
-    public xPath: string;
-    public Type: string;
+    public Xpath: string;
+    public TypeId: string;
     public TypeDesc: string;
     public isNew:boolean;
     public isEdited:boolean;
     public isDeleted:boolean;
+    public RelNodId:string;
+    public RelNodDesc:string;
+    public NodParentId:string;
+    public NodParentName:string;
 }

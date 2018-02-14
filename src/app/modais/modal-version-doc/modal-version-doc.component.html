@@ -42,21 +42,37 @@
             <strong>Disponíveis</strong>
           </div>
           <ul class="list-group list-group-flush avl-list-items rounded" #AvaibleColumns>
-            <li class="list-group-item" *ngFor="let item of _AvaibleNodeList;let i = index;" [value]="i" (click)="SetItemSelected($event,'add')">{{item.Name}}</li>
+            <li class="list-group-item" *ngFor="let item of _AvaibleNodeList;let i = index;" [value]="i" (click)="SetItemSelected($event,'add')">{{item.Label}}</li>
           </ul>
         </div>
         <div class="col-md-2 text-center">
-          <div><button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5"  title="Selecionar"><i class="fas fa-angle-right"></i></button></div>
-          <div><button (click)="SelectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar Todaas"><i class="fas fa-angle-double-right"></i></button></div>
-          <div><button (click)="UnselectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Voltar Todas"><i class="fas fa-angle-double-left"></i></button></div>
-          <div><button (click)="UnselectItem(false)" type="button" class="btn btn-default btn-sm" title="Voltar"><i class="fas fa-angle-left"></i></button></div>
+          <div>
+            <button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar">
+              <i class="fas fa-angle-right"></i>
+            </button>
+          </div>
+          <div>
+            <button (click)="SelectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar Todaas">
+              <i class="fas fa-angle-double-right"></i>
+            </button>
+          </div>
+          <div>
+            <button (click)="UnselectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Voltar Todas">
+              <i class="fas fa-angle-double-left"></i>
+            </button>
+          </div>
+          <div>
+            <button (click)="UnselectItem(false)" type="button" class="btn btn-default btn-sm" title="Voltar">
+              <i class="fas fa-angle-left"></i>
+            </button>
+          </div>
         </div>
         <div class=col-md-5>
           <div class="text-center">
             <strong>Selecionados</strong>
           </div>
           <ul class="list-group list-group-flush avl-list-items rounded" #SelectedColumns>
-              <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i" (click)="SetItemSelected($event,'remove')">{{item.Name}}</li>
+            <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i" (click)="SetItemSelected($event,'remove')">{{item.Label}}</li>
           </ul>
         </div>
       </div>
@@ -64,6 +80,60 @@
 
     <fieldset class="avalara-fieldset">
       <legend>Relação</legend>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="docRelac">Documento</label>
+          <select id="docRelac" class="form-control" [(ngModel)]="newVersion.DocRelac.docID" (change)="GetVersionrelacList(false)">
+            <option value="">Selecione...</option>
+            <option *ngFor="let doc of _RelacDocsLst" [value]="doc.ID">{{doc.Name}} </option>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="verRelac">Versão</label>
+          <select id="verRelac" class="form-control" [(ngModel)]="newVersion.DocRelac.versaoID" (change)="GetVersionListNodes(false)">
+            <option value="">Selecione...</option>
+            <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div *ngFor="let item of _SelectedList">
+            <span>{{item.Label}}</span>
+            <span (click)="OpenRelacNodeModal(item,false)" class="btn btn-primary btn-sm" *ngIf="(item.RelNodId == '' || item.RelNodId == null) && _RelacVersionNodList.length > 0" > <i class="far fa-plus-square"></i> </span>
+            <span *ngIf="item.RelNodId != '' && item.RelNodId != null">
+              <span> => </span>
+              <span (click)="OpenRelacNodeModal(item,true)" class="btn btn-link btn-sm" >{{item.RelNodDesc}}</span>
+              <span (click)="DeleteRelacNode(item.ID)"  class="btn btn-danger btn-sm" > <i class="fas fa-minus-square"></i> </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class="col-md-5">
+          <div class="text-center">
+            <strong>Campos</strong>
+          </div>
+          <ul class="list-group list-group-flush avl-list-items rounded">
+            <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i">{{item.Label}}</li>
+          </ul>
+        </div>
+        <div class="col-md-2 text-center">
+          <div>
+            <button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar">
+              <i class="fas fa-angle-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class=col-md-5>
+          <div class="text-center">
+            <strong>Relação</strong>
+          </div>
+          <ul class="list-group list-group-flush avl-list-items rounded">
+            <li class="list-group-item" *ngFor="let item of _RelacVersionNodList;let i = index;" [value]="i">{{item.Label}}</li>
+          </ul>
+        </div>
+      </div> -->
     </fieldset>
   </div>
   <div class="modal-footer">

@@ -83,8 +83,8 @@ h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
 .avl-modal-form{
     width: 60% !important;
     max-width: 60% !important;
-    max-height: 90%;
-    overflow-y: auto;
+    /* max-height: 90%;
+    overflow-y: auto; */
 }
 /**************************************************************************************************************/
 /************************************************* BOOSTRAP ****************************************************/

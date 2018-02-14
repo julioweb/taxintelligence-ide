@@ -1,0 +1,215 @@
+<div class="container">
+  <div class="row">
+    <div class="row-same-height">
+      <div class="col-md-10 col-sm-height">
+        <h1 class="avalara-title">Cadastro de Regras</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row avl-mgn-top-15">
+    <div class="col-md-12">
+      <form #frmNewGroup="ngForm" (ngSubmit)="onSubmit(frmNewGroup)">
+        <fieldset class="avalara-fieldset">
+          <legend>Propriedades</legend>
+          <div class="form-row">
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasName">
+              <label for="ruleName">
+                <strong>Nome</strong>
+              </label>
+              <input type="text" maxlength="50" class="form-control" id="ruleName" name="Name" placeholder="Nome" [(ngModel)]="ruleObjt.Summary">
+              <div class="invalid-feedback">
+                Necessário informar um nome
+              </div>
+            </div>
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasType">
+              <label for="ryleType">
+                <strong>Tipo</strong>
+              </label>
+              <select id="ryleType" class="form-control" name="ryleType" [(ngModel)]="ruleObjt.TypeId">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let type of _RuleTypeList" [value]="type.ID">{{type.Name}}</option>
+              </select>
+              <div class="invalid-feedback">
+                Necessário informar um tipo
+              </div>
+            </div>
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasOpType">
+              <label for="opType">
+                <strong>Operação</strong>
+              </label>
+              <select id="opType" class="form-control" name="opType" [(ngModel)]="ruleObjt.OperationId">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let operation of _OperationTypeList" [value]="operation.ID">{{operation.TotName}} </option>
+              </select>
+              <div class="invalid-feedback">
+                Necessário informar um tipo de Operação
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12 " [class.avl-invalid-form]="!hasDesc">
+              <label for="ruleDesc">
+                <strong>Descrição</strong>
+              </label>
+              <textarea id="ruleDesc" class="form-control" name="Description" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.RuleDescription"></textarea>
+              <div class="invalid-feedback">
+                Necessário informar uma Descrição
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="docRelac">Documento</label>
+              <select id="docRelac" class="form-control" name="docRelac" [(ngModel)]="docRelId" (change)="GetVersionList(false)">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let doc of _RelacDocsLst" [value]="doc.ID">{{doc.Name}} </option>
+              </select>
+            </div>
+            <div class="form-group col-md-6" [class.avl-invalid-form]="!hasDocVersion">
+              <label for="verRelac">
+                <strong>Versão</strong>
+              </label>
+              <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="docVersionId" (change)="GetVersionListNodes(false)">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
+              </select>
+              <div class="invalid-feedback">
+                Necessário informar uma Versão
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="detValMsg">Mensagem de Validação</label>
+              <input type="text" maxlength="500" class="form-control" id="detValMsg" name="detValMsg" placeholder="Nome" [(ngModel)]="ruleObjt.Detail.ValidationMsg">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="detCondition">
+                <strong>Condição</strong>
+              </label>
+              <select id="detCondition" class="form-control" name="detCondition" [(ngModel)]="ruleObjt.Detail.ConditionType">
+                <option value="1" selected>Igual</option>
+                <option value="2" selected>Contém</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="detLevel">
+                <strong>Nível</strong>
+              </label>
+              <select id="detLevel" class="form-control" name="detLevel" [(ngModel)]="ruleObjt.Detail.LevelType">
+                <option value="1" selected>Alerta</option>
+                <option value="2" selected>Erro</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="detDtInit"> Data Início </label>
+              <input type="date" class="form-control" id="detDtInit" name="detDtInit" placeholder="Data Início" [(ngModel)]="ruleObjt.Detail.InitValidity">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="detDtFim"> Data Fim </label>
+              <input type="date" class="form-control" id="detDtFim" name="detDtFim" placeholder="Data Fim" [(ngModel)]="ruleObjt.Detail.EndValiditiy">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="avalara-fieldset">
+          <legend>Validação</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="nodeRel">Campo</label>
+                  <select id="nodeRel" name="nodeRel" class="form-control" [(ngModel)]="newValidation.NodeID" #ValNodeSel>
+                    <option value="">Selecione...</option>
+                    <option *ngFor="let node of _RelacVersionNodList" [value]="node.ID">{{node.Label}} </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="valCondition">Condição</label>
+                  <select id="valCondition" name="valCondition" class="form-control" [(ngModel)]="newValidation.Condition" #ValCndtSel>
+                    <option value="eq" selected>Igual</option>
+                    <option value="lk">Contém</option>
+                    <option value="gt">Maior</option>
+                    <option value="gtEq">Maior ou Igual</option>
+                    <option value="lt">Menor</option>
+                    <option value="ltEq">Menor ou Igual</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="valValue">Valor</label>
+                  <input type="text" maxlength="2000" class="form-control" id="valValue" name="valValue" placeholder="valor" [(ngModel)]="newValidation.Value">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="valRelation">Operação Lógica</label>
+                    <select id="valRelation" name="valRelation" class="form-control" [(ngModel)]="newValidation.Relation" #ValRelacSel>
+                      <option value="AND" selected>E</option>
+                      <option value="OR">OU</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="row avl-mgn-top-5">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID != ''" (click)="DeleteValidationTable()">Remover</button>
+                  <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID != ''" [disabled]="!IsValidationInputValid()"
+                    (click)="AddValidationToTable()">Adicionar</button>
+                  <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID== ''" [disabled]="!IsValidationInputValid()"
+                    (click)="ClearValidationInput()">Cancelar</button>
+                  <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID == ''" [disabled]="!IsValidationInputValid()"
+                    (click)="UpdateValidationTable()">Alterar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row avl-mgn-top-10">
+            <div class="col-md-12">
+                <kendo-grid #grid="kendoGrid" [data]="GridVData" [pageSize]="GridVPageSize" [skip]="GridVSkip" [pageable]="{
+                  buttonCount: 5,
+                  info: true,
+                  type: 'input',
+                  pageSizes: [10,20,100,10000],
+                  previousNext: true      
+                }" (pageChange)="pageVChange($event)"
+                [kendoGridSelectBy]="'ID'"
+                [selectedKeys]="selectedValidations"
+                [selectable]="{checkboxOnly:true,mode:'multiple'}"
+                >
+                
+                <kendo-grid-checkbox-column showSelectAll="true" width="30">
+                    <ng-template kendoGridHeaderTemplate>
+                        <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox
+                            [state]="selectValidAllState"
+                            (selectAllChange)="onSelectAllVldChange($event)">
+                        <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+                    </ng-template>
+                </kendo-grid-checkbox-column>
+                  <kendo-grid-column field="" title="" width="50">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      <span class="btn btn-avl-outline-dark" (click)="EditValidationItem(dataItem.ID)" title="Editar">
+                        <i class="fas fa-pencil-alt"></i>
+                      </span>
+                    </ng-template>
+                  </kendo-grid-column>
+                
+                  <kendo-grid-column field="NodeDesc" title="Campo" width="150"></kendo-grid-column>
+                  <kendo-grid-column field="ConditionDesc" title="Condição" width="150"></kendo-grid-column>
+                  <kendo-grid-column field="Value" title="Valor" width="250"></kendo-grid-column>
+                  <kendo-grid-column field="RelationDesc" title="Lógica" width="80"></kendo-grid-column>
+                </kendo-grid>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="row avl-mgn-top-5">
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-success float-right" title="Salvar">
+              <i class="fas fa-save"></i> Salvar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

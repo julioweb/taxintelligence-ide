@@ -17,9 +17,9 @@ export class NodesComponent implements OnInit {
   newNode = {
     Name: "",
     Label: "",
-    xPath: "",
+    Xpath: "",
     Type:"",
-    Id:""
+    ID:""
   }
   nodeList:Array<NodeItem>;
 
@@ -35,7 +35,7 @@ export class NodesComponent implements OnInit {
 
   public NodesType: Array<NodeType> = new Array<NodeType>();
   
-  constructor(nodService: NodesService) { 
+  constructor(private nodService: NodesService) { 
     
     this.serviceUtils = new ServiceUtils();
 
@@ -48,44 +48,23 @@ export class NodesComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  public RetrieveNodeList(){
+    return this.nodeList;
+  }
+
+  public LoadNodesFromServe(docParentID:string){
+    this.nodService.GetDocumentNodes(docParentID).subscribe(a=> {
+     this.nodeList = a;
+     this.GridReload();
+    });
+  }
   
+  /*******************************************Grid**********************************************/
   public pageChange(event: PageChangeEvent): void {
     this.GridSkip = event.skip;
     this.GridReload();
   }
-
-  private ClearNodeInput(){
-    this.newNode.Name= "";
-    this.newNode.Label= "";
-    this.newNode.xPath= "";
-    this.newNode.Type= "";
-    this.newNode.Id = "";
-  }
-
-  private AddNodeToTable(){
-
-    let tmpNode:NodeItem = {
-      Id: this.serviceUtils.GetNewGuidId(),
-      Name: this.newNode.Name,
-      Label: this.newNode.Label,
-      xPath: this.newNode.xPath,
-      Type: this.newNode.Type,
-      TypeDesc: this.selectedtype.nativeElement.selectedOptions[0].text,
-      isNew:true,
-      isDeleted:false,
-      isEdited:false
-    };
-
-    this.nodeList.push(tmpNode);
-
-    if(this.selectAllState == 'checked'){
-      this.selectedNodes.push(tmpNode.Id);
-    }
-
-    this.ClearNodeInput();
-    this.GridReload();
-  }
-
   public GridReload() {    
     this.GridData = {
       data: this.nodeList.slice(this.GridSkip, this.GridSkip + this.GridPageSize),
@@ -93,34 +72,71 @@ export class NodesComponent implements OnInit {
     }
   }
 
-  private IsInputValid(){
-    return this.newNode.Label.trim() != "" && this.newNode.Name.trim() != "" && this.newNode.xPath.trim() != "" && this.newNode.Type != "";
-  }
-
   private onSelectAllChange(checkedState: SelectAllCheckboxState) {
     if (checkedState === 'checked') {
-      this.selectedNodes = this.nodeList.map((item) => item.Id);
+      this.selectedNodes = this.nodeList.map((item) => item.ID);
       this.selectAllState = 'checked';
     }
     else {
       this.selectedNodes = [];
       this.selectAllState = 'unchecked';
     }
-  }  
+  }
+
+  /*******************************************Criaçao e Edição**********************************************/
+  private ClearNodeInput(){
+    this.newNode.Name= "";
+    this.newNode.Label= "";
+    this.newNode.Xpath= "";
+    this.newNode.Type= "";
+    this.newNode.ID = "";
+  }
+
+  private AddNodeToTable(){
+
+    let tmpNode:NodeItem = {
+      ID: this.serviceUtils.GetNewGuidId(),
+      Name: this.newNode.Name,
+      Label: this.newNode.Label,
+      Xpath: this.newNode.Xpath,
+      TypeId: this.newNode.Type,
+      TypeDesc: this.selectedtype.nativeElement.selectedOptions[0].text,
+      isNew:true,
+      isDeleted:false,
+      isEdited:false,
+      RelNodDesc:"",
+      RelNodId:"",
+      NodParentId:"",
+      NodParentName:""
+    };
+
+    this.nodeList.push(tmpNode);
+
+    if(this.selectAllState == 'checked'){
+      this.selectedNodes.push(tmpNode.ID);
+    }
+
+    this.ClearNodeInput();
+    this.GridReload();
+  }
+
+  private IsInputValid(){
+    return this.newNode.Label.trim() != "" && this.newNode.Name.trim() != "" && this.newNode.Xpath.trim() != "" && this.newNode.Type != "";
+  }
 
   private EditNodeItem(itemID:string){
-    var temp = this.nodeList.find(x=> x.Id == itemID);
+    var temp = this.nodeList.find(x=> x.ID == itemID);
     if(temp != null){
       this.newNode.Name = temp.Name;
       this.newNode.Label = temp.Label;
-      this.newNode.Id = temp.Id;
-      this.newNode.Type = temp.Type;
-      this.newNode.xPath = temp.xPath;
+      this.newNode.ID = temp.ID;
+      this.newNode.Type = temp.TypeId;
+      this.newNode.Xpath = temp.Xpath;
     }
   }
 
   private UpdateNodeTable(){
-    var temp = this.nodeList.find(x=> x.Id == this.newNode.Id);
+    var temp = this.nodeList.find(x=> x.ID == this.newNode.ID);
     
     if(temp != null){
 
@@ -128,9 +144,9 @@ export class NodesComponent implements OnInit {
       
       this.nodeList[idxUpdt].Name = this.newNode.Name;
       this.nodeList[idxUpdt].Label = this.newNode.Label;
-      this.nodeList[idxUpdt].Id = this.newNode.Id;
-      this.nodeList[idxUpdt].Type = this.newNode.Type;
-      this.nodeList[idxUpdt].xPath = this.newNode.xPath;
+      this.nodeList[idxUpdt].ID = this.newNode.ID;
+      this.nodeList[idxUpdt].TypeId = this.newNode.Type;
+      this.nodeList[idxUpdt].Xpath = this.newNode.Xpath;
       if(!this.nodeList[idxUpdt].isNew)
             this.nodeList[idxUpdt].isEdited = true;
 
@@ -138,10 +154,6 @@ export class NodesComponent implements OnInit {
 
       this.ClearNodeInput();
     }
-  }
-
-  public RetrieveNodeList(){
-    return this.nodeList;
   }
 
   private DeleteNodeTable(){
@@ -162,16 +174,16 @@ export class NodesComponent implements OnInit {
     else{
       
       for(var i = 0; i< this.selectedNodes.length; i++){        
-        var temp = this.nodeList.find(x=> x.Id == this.selectedNodes[i]);
+        var temp = this.nodeList.find(x=> x.ID == this.selectedNodes[i]);
     
         if(temp != null){
           let idxItm = this.nodeList.indexOf(temp);
           this.nodeList[idxItm].isDeleted = true;
 
-          if(this.nodeList[idxItm].isNew)
-          {
+          // if(this.nodeList[idxItm].isNew)
+          // {
              this.nodeList.splice(idxItm,1);
-          }
+          //}
         }
       }
     }

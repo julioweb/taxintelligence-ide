@@ -6,7 +6,7 @@ import { environment } from "../../../../environments/environment";
 import { AuthService } from "../../auth/auth.service";
 import { FiltrosTelaAprovacaoStorage,FiltrosTelaAprovacaoTools } from "../../../services/business/aprovacao/FiltrosGridAprovacao";
 import { ServiceUtils } from "../../Utils/Utils";
-import{ DocBriefList, DocProcessList, DocumentList,DocVersionList } from "../../../models/Documents";
+import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel } from "../../../models/Documents";
 import { KeyValue } from "../../../models/KeyValue";
 
 @Injectable()
@@ -213,6 +213,55 @@ export class DocumentsService {
 
   /*****************************************************Document************************************************************** */
 
+  SendDocPost(docPost:DocPostObject, isEdit:boolean):Observable<string>{
+    return new Observable<string>(observable => {
+      var searchParams = {
+        //Subid: `${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        DocPost: docPost,
+        IsEdit: isEdit
+      };
+      
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let requestOptions = new RequestOptions();
+      requestOptions.headers = headers;
+
+      this.http.post(`${this._docmentSvcUrl}InsertUpdateDocument`,searchParams, requestOptions)
+        .toPromise()
+        .then(response => {          
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {          
+          observable.next('serverError');          
+          observable.complete();
+        });
+    });
+  }
+  
+  GetDocListByLevelType(levelID: number):Observable<Array<DocumentModel>>{
+    return new Observable<Array<DocumentModel>>(observable=> {
+      var searchParams = {
+        levelType: levelID
+      };
+      
+      let requestOptions = new RequestOptions();
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+      requestOptions.headers = headers;
+
+      this.http.get(`${this._docmentSvcUrl}GetAvaibleRelacDocList`,requestOptions)
+            .toPromise()
+            .then(response => {
+                observable.next(response.json() as Array<DocumentModel>);
+                observable.complete();
+            })
+            .catch(error => {
+                observable.error(error);
+            });
+    });
+  }
+
   GetDocLevelType(): Observable<Array<KeyValue>> {
 
     return new Observable<Array<KeyValue>>(observable => {
@@ -230,7 +279,7 @@ export class DocumentsService {
                 observable.error(error);
             });
     });
-}
+  }
 
   GetDocumentsList(Skip: number, PageSize:number): Observable<DocumentList>{
     return new Observable<DocumentList>(observable => {
@@ -246,6 +295,29 @@ export class DocumentsService {
       requestOptions.headers = new Headers({ 'Accept': 'application/json' });
 
       this.http.get(`${this._docmentSvcUrl}GetDocList`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  GetDocumentById(Id:string): Observable<DocumentModel>{
+    return new Observable<DocumentModel>(observable => {
+      var searchParams = {
+        id: Id
+      }; 
+           
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+      requestOptions.headers = new Headers({ 'Accept': 'application/json' });
+
+      this.http.get(`${this._docmentSvcUrl}Get`, requestOptions)
         .toPromise()
         .then(response => {
           observable.next(response.json());
@@ -282,6 +354,31 @@ export class DocumentsService {
         })
         .catch(error => {
           observable.error(error);
+        });
+    });
+  }
+
+  SendDocVersionPost(version:DocVersionModel, isEdit:boolean){
+    return new Observable<string>(observable => {
+      var searchParams = {
+        //Subid: `${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        Version: version,
+        isEdit: isEdit
+      };
+      
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let requestOptions = new RequestOptions();
+      requestOptions.headers = headers;
+
+      this.http.post(`${this._docmentSvcUrl}InsertUpdateDocVersion`,searchParams, requestOptions)
+        .toPromise()
+        .then(response => {          
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {          
+          observable.next('serverError');          
+          observable.complete();
         });
     });
   }

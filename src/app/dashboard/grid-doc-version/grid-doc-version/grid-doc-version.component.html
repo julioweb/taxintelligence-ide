@@ -8,7 +8,7 @@
 
   <kendo-grid-column field="" title="" width="40">
     <ng-template kendoGridCellTemplate let-dataItem>
-      <span class="btn btn-avl-outline-dark" title="Editar">
+      <span class="btn btn-avl-outline-dark" title="Editar" (click)="EditarVersao(dataItem)">
         <i class="fas fa-pencil-alt"></i>
       </span>
     </ng-template>

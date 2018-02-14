@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NodesComponent } from './nodes.component';
+import { ModalNewRelacComponent } from './modal-new-relac.component';
 
-describe('NodesComponent', () => {
-  let component: NodesComponent;
-  let fixture: ComponentFixture<NodesComponent>;
+describe('ModalNewRelacComponent', () => {
+  let component: ModalNewRelacComponent;
+  let fixture: ComponentFixture<ModalNewRelacComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NodesComponent ]
+      declarations: [ ModalNewRelacComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NodesComponent);
+    fixture = TestBed.createComponent(ModalNewRelacComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,9 +1,19 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
 import { GridDataResult, PageChangeEvent,GridComponent } from '@progress/kendo-angular-grid';
-// import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
-// import { DocProcessList, DocProcess } from "../models/Documents";
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { Subscription } from 'rxjs/Subscription';
+
 import { DocumentsService } from "../../../services/data/documents/documents.service";
+
+import { ModalVersionDocComponent } from "../../../modais/modal-version-doc/modal-version-doc.component";
+
+import { NodeItem } from "../../../models/Nodes";
+import { ServiceUtils } from '../../../services/Utils/Utils';
+import { ModalAlertComponent } from '../../../modais/modal-alert/modal-alert.component';
+import { DocVersionModel } from '../../../models/Documents';
+
 
 @Component({
   selector: 'grid-doc-version',
@@ -17,10 +27,29 @@ export class GridDocVersionComponent implements OnInit {
   public GridSkip: number = 0;
   
   @Input('docPai') docIdPai:string;
+  @Input('docPaiLevel') docPaiLevel:string;
 
   @Input() public category: Object;
 
-  constructor(public docProcess: DocumentsService,) {     
+  @Output('docVersionPhone') parentPhone: EventEmitter<String> = new EventEmitter<String>();
+
+  private serviceUtils: ServiceUtils;
+  bsModalRef: BsModalRef;
+  private curSubscribe: Subscription;
+
+  private versionItem: DocVersionModel;
+  ModalConfig = {
+    keyboard: false,
+    ignoreBackdropClick: true,
+    initialState: null,
+    class: "avl-modal-form"
+  };
+
+  private curVersionID:string;
+
+  constructor(public docProcess: DocumentsService,
+    private modalService: BsModalService) {
+      this.serviceUtils = new ServiceUtils();
   }
 
   ngOnInit() {
@@ -43,6 +72,66 @@ export class GridDocVersionComponent implements OnInit {
       this.GridData = {
         data: a.Data,
         total: a.Total
+      }
+    });
+  }
+
+  /************************************************************************** Edição da Versão **************************************************************************/
+
+  EditarVersao(versionItem:DocVersionModel){
+    this.versionItem = versionItem;
+    this.RequestDocNode();
+  }
+
+  RequestDocNode(){
+    this.parentPhone.emit(this.docIdPai);
+  }
+
+  public SetDocumentNod(nodeList:Array<NodeItem>){
+    this.OpenEditModal(nodeList);
+  }
+
+  OpenEditModal(nodeList: Array<NodeItem>) {
+    this.ModalConfig.initialState = {
+      _nodeList: nodeList,
+      curLevelType: this.docPaiLevel,
+      newVersion: this.versionItem
+    };
+    this.bsModalRef = this.modalService.show(ModalVersionDocComponent, this.ModalConfig);
+
+    this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+      if (result != null && result != "") {
+        var mdlResult = JSON.parse(result)
+
+        if (mdlResult.Modal == "NewVersion") {
+          if (mdlResult.Data != null) {
+            mdlResult.Data.DocID = this.docIdPai;
+            mdlResult.Data.isEdited = true;
+
+            this.docProcess.SendDocVersionPost(mdlResult.Data, true).subscribe(a => {
+              let alertState = {
+                Message: `Versão editada com sucesso.`,
+                title: "Versão Editada!",
+                alertType: "success"
+              };
+
+              if (a != "OK") {
+                alertState.title = "Ops!!"
+                if (a == "serverError" || a == "ERRO") {
+                  alertState.Message = "Ocorreu um erro ao tentar editar a versão, tente novamente mais tarde!";
+                }
+                else {
+                  alertState.Message = a;
+                }
+                alertState.alertType = "danger";
+              }
+
+              this.modalService.show(ModalAlertComponent, { initialState: alertState });
+              this.GridReload();
+            });
+          }
+          this.curSubscribe.unsubscribe();
+        }
       }
     });
   }

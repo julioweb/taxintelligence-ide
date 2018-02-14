@@ -18,17 +18,17 @@
 <div class="form-row">
   <div class="form-group col-md-12">
     <label for="docPath">Caminho xml</label>
-    <input type="text" maxlength="200" class="form-control" id="docPath" placeholder="Caminho Xml" [(ngModel)]="newNode.xPath"
+    <input type="text" maxlength="200" class="form-control" id="docPath" placeholder="Caminho Xml" [(ngModel)]="newNode.Xpath"
     />
   </div>
 </div>
 
 <div class="row avl-mgn-top-5">
   <div class="col-md-12">
-    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id != ''"  (click)="DeleteNodeTable()">Remover</button>
-    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id != ''" [disabled]="!IsInputValid()" (click)="AddNodeToTable()">Adicionar</button>    
-    <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id == ''" [disabled]="!IsInputValid()" (click)="ClearNodeInput()">Cancelar</button>
-    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.Id == ''" [disabled]="!IsInputValid()" (click)="UpdateNodeTable()">Alterar</button>
+    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''"  (click)="DeleteNodeTable()">Remover</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''" [disabled]="!IsInputValid()" (click)="AddNodeToTable()">Adicionar</button>    
+    <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()" (click)="ClearNodeInput()">Cancelar</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()" (click)="UpdateNodeTable()">Alterar</button>
   </div>
 </div>
 
@@ -41,7 +41,7 @@
           pageSizes: [10,20,100,10000],
           previousNext: true      
         }" (pageChange)="pageChange($event)"
-        [kendoGridSelectBy]="'Id'"
+        [kendoGridSelectBy]="'ID'"
         [selectedKeys]="selectedNodes"
         [selectable]="{checkboxOnly:true,mode:'multiple'}"
         >
@@ -56,7 +56,7 @@
         </kendo-grid-checkbox-column>
           <kendo-grid-column field="" title="" width="50">
             <ng-template kendoGridCellTemplate let-dataItem>
-              <span class="btn btn-avl-outline-dark" (click)="EditNodeItem(dataItem.Id)" title="Editar">
+              <span class="btn btn-avl-outline-dark" (click)="EditNodeItem(dataItem.ID)" title="Editar">
                 <i class="fas fa-pencil-alt"></i>
               </span>
             </ng-template>
@@ -64,7 +64,7 @@
         
           <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
           <kendo-grid-column field="Label" title="Label" width="150"></kendo-grid-column>
-          <kendo-grid-column field="xPath" title="Caminho xml" width="250"></kendo-grid-column>
+          <kendo-grid-column field="Xpath" title="Caminho xml" width="250"></kendo-grid-column>
           <kendo-grid-column field="TypeDesc" title="Tipo" width="80"></kendo-grid-column>
           
         

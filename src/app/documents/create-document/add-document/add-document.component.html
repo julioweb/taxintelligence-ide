@@ -20,7 +20,7 @@
             </div>
             <div class="form-group col-md-6">
               <label for="docType">Tipo</label>
-              <select id="docType" name="Level" class="form-control" [(ngModel)]="docObjt.Level">
+              <select id="docType" name="Level" class="form-control" [(ngModel)]="docObjt.Level" (change)="DocTypeChanged()">
                 <option *ngFor="let level of LevelData" [value]="level.Key" [selected]="level.Key == 0 ? 'selected': ''">{{level.Value}} </option>
               </select>
             </div>
@@ -40,7 +40,7 @@
 
         <fieldset class="avalara-fieldset">
           <legend>Versões</legend>
-          <document-version [isNewDoc]="true" [docPai]="docObjt.ID" #docVersion (docVersionPhone)="VersionChildCalling($event)"></document-version>
+          <document-version [docLevel]="docObjt.Level" [isNewDoc]="true" [docPai]="docObjt.ID" #docVersion (docVersionPhone)="VersionChildCalling($event)"></document-version>
         </fieldset>
         <div class="row avl-mgn-top-5">
           <div class="col-md-12">
