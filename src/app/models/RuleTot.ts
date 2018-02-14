@@ -25,7 +25,7 @@ export class RuleModel {
     public RuleDescription: string;
     public SubID: string;
     public Status: number;
-    public CreationDate: Date
+    public CreationDate: Date;
     public CreationUser: string;
     public Summary: string;
     public Detail:RuleDetailModel;

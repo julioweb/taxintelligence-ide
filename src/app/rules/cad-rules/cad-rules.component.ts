@@ -165,7 +165,8 @@ export class CadRulesComponent implements OnInit {
       Relation: this.newValidation.Relation,
       RelationDesc: this.validRelacSel.nativeElement.selectedOptions[0].text,
       Type: 0,
-      Value: this.newValidation.Value == null? "": this.newValidation.Value
+      Value: this.newValidation.Value == null? "": this.newValidation.Value,
+      Order: this._ListValidation.length
     };
 
     this._ListValidation.push(tmpValidation);
