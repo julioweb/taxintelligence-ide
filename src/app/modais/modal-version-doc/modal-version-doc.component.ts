@@ -71,10 +71,10 @@ export class ModalVersionDocComponent implements OnInit {
       }
       else {
         for (var i = 0; i < idxArray.length; i++) {
-          var remItem = this._AvaibleNodeList.find(x => x.ID == idxArray[i])
+          var remItem = this._AvaibleNodeList.find(x => x.ID == idxArray[i]);
           let idxrem = this._AvaibleNodeList.indexOf(remItem);
           this._AvaibleNodeList.splice(idxrem, 1);
-          //this._AvaibleNodeList.splice(idxArray[i], 1);        
+          // this._AvaibleNodeList.splice(idxArray[i], 1);
         }
       }
     }

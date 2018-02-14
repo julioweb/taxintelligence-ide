@@ -1,4 +1,19 @@
+<app-full-loading #fullLoading></app-full-loading>
+
 <div class="container">
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/rules-group">Grupo de Regras</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Cadastro de Grupo de Regras</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="row">
     <div class="row-same-height">
       <div class="col-md-10 col-sm-height">
@@ -14,7 +29,9 @@
           <legend>Propriedades</legend>
           <div class="form-row">
             <div class="form-group col-md-4" [class.avl-invalid-form]="!hasName">
-              <label for="grpName"><strong>Nome</strong></label>
+              <label for="grpName">
+                <strong>Nome</strong>
+              </label>
               <input type="text" maxlength="50" class="form-control" id="grpName" name="Name" placeholder="Nome" [(ngModel)]="grpObjt.Name">
               <div class="invalid-feedback">
                 Necessário informar um nome
@@ -31,7 +48,9 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-12 " [class.avl-invalid-form]="!hasDesc">
-              <label for="grpDesc"><strong>Descrição</strong></label>
+              <label for="grpDesc">
+                <strong>Descrição</strong>
+              </label>
               <textarea id="grpDesc" class="form-control" name="Description" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="grpObjt.Description"></textarea>
               <div class="invalid-feedback">
                 Necessário informar uma Descrição
@@ -47,7 +66,9 @@
               </select>
             </div>
             <div class="form-group col-md-6" [class.avl-invalid-form]="!hasDocVersion">
-              <label for="verRelac"><strong>Versão</strong></label>
+              <label for="verRelac">
+                <strong>Versão</strong>
+              </label>
               <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="grpObjt.DocVersionId">
                 <option value="">Selecione...</option>
                 <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
@@ -67,28 +88,28 @@
               <div class="text-center">
                 <strong>Disponíveis</strong>
               </div>
-              <ul class="list-group list-group-flush avl-list-items rounded" #AvaibleRules>
+              <ul class="list-group list-group-flush avl-list-items rounded list-max-height" #AvaibleRules>
                 <li class="list-group-item" *ngFor="let item of _AvaibleRuleList;let i = index;" [value]="i" (click)="SetItemSelected($event,'add')">{{item.Summary}}</li>
               </ul>
             </div>
             <div class="col-md-2 text-center">
-              <div>
-                <button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar">
+              <div class="my-2">
+                <button (click)="SelectItem(false)" type="button" class="btn btn-light btn-sm avl-mgn-btm-5" title="Selecionar">
                   <i class="fas fa-angle-right"></i>
                 </button>
               </div>
-              <div>
-                <button (click)="SelectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar Todaas">
+              <div class="my-2">
+                <button (click)="SelectItem(true)" type="button" class="btn btn-light btn-sm avl-mgn-btm-5" title="Selecionar Todaas">
                   <i class="fas fa-angle-double-right"></i>
                 </button>
               </div>
-              <div>
-                <button (click)="UnselectItem(true)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Voltar Todas">
+              <div class="my-2">
+                <button (click)="UnselectItem(true)" type="button" class="btn btn-light btn-sm avl-mgn-btm-5" title="Voltar Todas">
                   <i class="fas fa-angle-double-left"></i>
                 </button>
               </div>
-              <div>
-                <button (click)="UnselectItem(false)" type="button" class="btn btn-default btn-sm" title="Voltar">
+              <div class="my-2">
+                <button (click)="UnselectItem(false)" type="button" class="btn btn-light btn-sm" title="Voltar">
                   <i class="fas fa-angle-left"></i>
                 </button>
               </div>
@@ -97,13 +118,13 @@
               <div class="text-center">
                 <strong>Selecionados</strong>
               </div>
-              <ul class="list-group list-group-flush avl-list-items rounded" #SelectedRules>
+              <ul class="list-group list-group-flush avl-list-items rounded list-max-height" #SelectedRules>
                 <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i" (click)="SetItemSelected($event,'remove')">{{item.Summary}}</li>
               </ul>
             </div>
           </div>
         </fieldset>
-        
+
         <div class="row avl-mgn-top-5">
           <div class="col-md-12">
             <button type="submit" class="btn btn-success float-right" title="Salvar">

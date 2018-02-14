@@ -4,11 +4,10 @@
 <!-- <app-documents></app-documents> -->
 <!-- <create-document></create-document> -->
 <!-- <app-rules></app-rules> -->
-<app-cad-rules></app-cad-rules>
+<!-- <app-cad-rules></app-cad-rules> -->
 <!-- <app-rule-group></app-rule-group> -->
 <!-- <cad-rule-group></cad-rule-group> -->
-
-<!-- <div class="container">
+<div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-0">
         <a class="navbar-brand" routerLink="">
             <img src="../assets/images/avalara-logo.png" width="115" class="d-inline-block align-top" alt="Avalara TaxIntelligence"> TaxIntelligence
@@ -44,10 +43,7 @@
 
             <div class="collapse navbar-collapse" id="navbarApp">
                 <ul class="navbar-nav mr-auto p-0">
-                    <li class="nav-item py-2">
-                        <a class="nav-link text-uppercase" routerLink="/login">Login</a>
-                    </li>
-                    <li class="nav-item py-2" routerLinkActive="active">
+                    <li class="nav-item py-2" [class.active]="myRoute.url == '/'">
                         <a class="nav-link text-uppercase" routerLink="">Principal</a>
                     </li>
                     <li class="nav-item dropdown py-2" routerLinkActive="active">
@@ -56,7 +52,9 @@
                             Cadastros
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarCadastros">
-                            <a class="dropdown-item" href="/add-document" routerLinkActive="active">Create Document</a>
+                            <a class="dropdown-item" routerLink="/documents" routerLinkActive="active">Documentos</a>
+                            <a class="dropdown-item" routerLink="/rules" routerLinkActive="active">Regras</a>
+                            <a class="dropdown-item" routerLink="/rules-group" routerLinkActive="active">Grupo de Regras</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown py-2" routerLinkActive="active">
@@ -68,9 +66,6 @@
                             <a class="dropdown-item" routerLink="/doc-aprovacao" routerLinkActive="active">Aprovação</a>
                         </div>
                     </li>
-                    <li class="nav-item py-2" routerLinkActive="active">
-                            <a class="nav-link text-uppercase" routerLink="/documents">Documentos</a>
-                        </li>
                 </ul>
             </div>
         </nav>
@@ -86,4 +81,4 @@
         <span>© 2018 Avalara</span>
         <span class="float-right">Versão: 0.0.2</span>
     </div>
-</footer> -->
+</footer>

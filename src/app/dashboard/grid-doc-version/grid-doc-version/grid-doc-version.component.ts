@@ -1,5 +1,5 @@
-import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { GridDataResult, PageChangeEvent,GridComponent } from '@progress/kendo-angular-grid';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { GridDataResult, PageChangeEvent, GridComponent } from '@progress/kendo-angular-grid';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -13,6 +13,7 @@ import { NodeItem } from "../../../models/Nodes";
 import { ServiceUtils } from '../../../services/Utils/Utils';
 import { ModalAlertComponent } from '../../../modais/modal-alert/modal-alert.component';
 import { DocVersionModel } from '../../../models/Documents';
+import { FullLoadingComponent } from '../../../modais/full-loading/full-loading.component';
 
 
 @Component({
@@ -25,13 +26,14 @@ export class GridDocVersionComponent implements OnInit {
   public GridData: GridDataResult = null;
   public GridPageSize: number = 5;
   public GridSkip: number = 0;
-  
-  @Input('docPai') docIdPai:string;
-  @Input('docPaiLevel') docPaiLevel:string;
+
+  @Input('docPai') docIdPai: string;
+  @Input('docPaiLevel') docPaiLevel: string;
 
   @Input() public category: Object;
 
   @Output('docVersionPhone') parentPhone: EventEmitter<String> = new EventEmitter<String>();
+  @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
 
   private serviceUtils: ServiceUtils;
   bsModalRef: BsModalRef;
@@ -45,11 +47,11 @@ export class GridDocVersionComponent implements OnInit {
     class: "avl-modal-form"
   };
 
-  private curVersionID:string;
+  private curVersionID: string;
 
   constructor(public docProcess: DocumentsService,
     private modalService: BsModalService) {
-      this.serviceUtils = new ServiceUtils();
+    this.serviceUtils = new ServiceUtils();
   }
 
   ngOnInit() {
@@ -68,7 +70,7 @@ export class GridDocVersionComponent implements OnInit {
   }
 
   public GridReload() {
-    this.docProcess.GetDocVersionList(this.docIdPai,this.GridSkip, this.GridPageSize).subscribe(a => {
+    this.docProcess.GetDocVersionList(this.docIdPai, this.GridSkip, this.GridPageSize).subscribe(a => {
       this.GridData = {
         data: a.Data,
         total: a.Total
@@ -78,16 +80,16 @@ export class GridDocVersionComponent implements OnInit {
 
   /************************************************************************** Edição da Versão **************************************************************************/
 
-  EditarVersao(versionItem:DocVersionModel){
+  EditarVersao(versionItem: DocVersionModel) {
     this.versionItem = versionItem;
     this.RequestDocNode();
   }
 
-  RequestDocNode(){
+  RequestDocNode() {
     this.parentPhone.emit(this.docIdPai);
   }
 
-  public SetDocumentNod(nodeList:Array<NodeItem>){
+  public SetDocumentNod(nodeList: Array<NodeItem>) {
     this.OpenEditModal(nodeList);
   }
 
@@ -108,7 +110,9 @@ export class GridDocVersionComponent implements OnInit {
             mdlResult.Data.DocID = this.docIdPai;
             mdlResult.Data.isEdited = true;
 
+            this.fullLoading.showLoading();
             this.docProcess.SendDocVersionPost(mdlResult.Data, true).subscribe(a => {
+              this.fullLoading.hideLoading();
               let alertState = {
                 Message: `Versão editada com sucesso.`,
                 title: "Versão Editada!",

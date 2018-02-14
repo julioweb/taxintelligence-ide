@@ -53,6 +53,7 @@ import { RuleGroupComponent } from './rule-group/rule-group.component';
 import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
 import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 import { routing } from './app.routing';
+import { FullLoadingComponent } from './modais/full-loading/full-loading.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { routing } from './app.routing';
     RulesComponent,
     RuleGroupComponent,
     CadRuleGroupComponent,
-    CadRulesComponent
+    CadRulesComponent,
+    FullLoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -111,7 +113,8 @@ import { routing } from './app.routing';
     ModalConfirmComponent,
     ModalApproveDocComponent,
     ModalVersionDocComponent,
-    ModalNewRelacComponent
+    ModalNewRelacComponent,
+    FullLoadingComponent
   ],
   bootstrap: [AppComponent]
 })

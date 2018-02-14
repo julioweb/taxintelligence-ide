@@ -1,4 +1,6 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 // import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
@@ -16,6 +18,7 @@ import { GridDocVersionComponent } from "../dashboard/grid-doc-version/grid-doc-
 import { NodeItem } from "../models/Nodes";
 import { ServiceUtils } from '../services/Utils/Utils';
 import { ModalAlertComponent } from '../modais/modal-alert/modal-alert.component';
+import { FullLoadingComponent } from '../modais/full-loading/full-loading.component';
 
 
 @Component({
@@ -25,7 +28,8 @@ import { ModalAlertComponent } from '../modais/modal-alert/modal-alert.component
 })
 export class DocumentsComponent implements OnInit {
 
-  @ViewChild('docVersion') docVersion:GridDocVersionComponent;
+  @ViewChild('docVersion') docVersion: GridDocVersionComponent;
+  @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
 
   public GridData: GridDataResult = null;
   public GridPageSize: number = 10;
@@ -47,18 +51,18 @@ export class DocumentsComponent implements OnInit {
 
   NodesInCache = [];
 
-  public SendToChild:boolean = false;
+  public SendToChild: boolean = false;
 
   constructor(public docProcess: DocumentsService,
     public nodeService: NodesService,
-    private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private router: Router) {
     this.serviceUtils = new ServiceUtils();
     this.GridSkip = 0;
     this.GridReload();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /************************************************************************** Operações do Grid **************************************************************************/
   public pageChange(event: PageChangeEvent): void {
@@ -71,12 +75,11 @@ export class DocumentsComponent implements OnInit {
   }
 
   public GridReload() {
-
     this.docProcess.GetDocumentsList(this.GridSkip, this.GridPageSize).subscribe(a => {
       this.GridData = {
         data: a.Data,
         total: a.Total
-      }
+      };
     });
   }
 
@@ -99,11 +102,11 @@ export class DocumentsComponent implements OnInit {
         ID: tmpDocId,
         Data: a
       });
-      if(this.SendToChild){
+      if (this.SendToChild) {
         this.SendToChild = false;
         this.docVersion.SetDocumentNod(a);
       }
-      else{
+      else {
         this.OpenAddModal(a);
       }
     });
@@ -124,9 +127,11 @@ export class DocumentsComponent implements OnInit {
           if (mdlResult.Data != null) {
             mdlResult.Data.DocID = this.curSelDocId;
             mdlResult.Data.isNew = true;
-            mdlResult.Data.ID= this.serviceUtils.GetNewGuidId();
+            mdlResult.Data.ID = this.serviceUtils.GetNewGuidId();
 
+            this.fullLoading.showLoading();
             this.docProcess.SendDocVersionPost(mdlResult.Data, false).subscribe(a => {
+              this.fullLoading.hideLoading();
               let alertState = {
                 Message: `Versão adicionada com sucesso.`,
                 title: "Versão Criada!",
@@ -154,7 +159,7 @@ export class DocumentsComponent implements OnInit {
     });
   }
 
-  VersionChildCalling($event){
+  VersionChildCalling($event) {
     let tmpCache = this.NodesInCache.find(x => x.ID == $event);
     if (tmpCache != null) {
       this.docVersion.SetDocumentNod(tmpCache.Data);
@@ -166,6 +171,17 @@ export class DocumentsComponent implements OnInit {
   }
 
   AddNewDocument() {
+    this.router.navigate(['/add-document']);
+  }
 
+  EditarItem(id) {
+    this.router.navigate(
+      ['/edit-document'],
+      {
+        queryParams: {
+          'id': id
+        }
+      }
+    );
   }
 }
