@@ -52,6 +52,7 @@ import { RulesComponent } from './rules/rules.component';
 import { RuleGroupComponent } from './rule-group/rule-group.component';
 import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
 import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
+import { routing } from './app.routing';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,6 @@ import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-//    routing,
     Ng2Webstorage,
     //NGX MODAL
     ModalModule.forRoot(),
@@ -94,7 +94,8 @@ import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
     // LayoutModule,
     DatePickerModule,
     DropDownsModule,
-    IntlModule
+    IntlModule,
+    routing
   ],
   providers: [
     AuthService,
