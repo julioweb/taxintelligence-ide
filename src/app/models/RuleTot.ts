@@ -28,7 +28,9 @@ export class RuleModel {
     public CreationDate: Date;
     public CreationUser: string;
     public Summary: string;
-    public Detail:RuleDetailModel;
+    public Detail:RuleDetailModel;    
+    public DocId: string;
+    public VersionId: string;
 }
 
 export class RuleDetailModel {
@@ -36,8 +38,8 @@ export class RuleDetailModel {
     public ValidationMsg: string;
     public ConditionType: number;
     public LevelType: number;
-    public InitValidity: Date;
-    public EndValiditiy: Date;
+    public InitValidity: string;// Date;
+    public EndValiditiy: string;// Date;
     public PluginID: string;
     public TransformRule:Array<RuleDetailData>;
     public ValidationRule:Array<RuleDetailData>;
@@ -91,4 +93,11 @@ export class OperationType {
     public ID: string;
     public TotName: string;
     public TotDescription: string;
+}
+
+export class RulePlugin{
+    public ID:string;
+    public Name:string;
+    public Description:string;
+    public SubId:string;
 }

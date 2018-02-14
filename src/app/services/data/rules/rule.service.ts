@@ -4,7 +4,7 @@ import { Http, RequestOptions, URLSearchParams, QueryEncoder, Headers } from "@a
 import { environment } from "../../../../environments/environment";
 
 import { AuthService } from "../../auth/auth.service";
-import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType } from "../../../models/RuleTot";
+import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel } from "../../../models/RuleTot";
 import { ServiceUtils } from "../../Utils/Utils";
 
 
@@ -34,6 +34,30 @@ export class RuleService {
       requestOptions.params = Parametros;
 
       this.http.get(`${this._ruleSvcUrl}GetTypes`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  GetRulePlugins(): Observable<Array<RulePlugin>> {
+    return new Observable<Array<RulePlugin>>(observable => {
+
+      var searchParams = {
+        subId: `${environment.subscriptionId}`,
+        // skip: Skip,
+        // take: PageSize
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}GetRulePlugins`, requestOptions)
         .toPromise()
         .then(response => {
           observable.next(response.json());
@@ -106,6 +130,55 @@ export class RuleService {
       requestOptions.params = Parametros;
 
       this.http.get(`${this._ruleSvcUrl}GetRulesList`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  SendRulePost(rule: RuleModel, isEdit: boolean) {
+    return new Observable<string>(observable => {      
+      var searchParams = {
+        SubID: "",//`${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        CreationUser: 'bruno.lima', //`${environment.userName}`
+        RuleItem: rule,
+        IsEdit: isEdit
+      };
+
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let requestOptions = new RequestOptions();
+      requestOptions.headers = headers;
+
+      this.http.post(`${this._ruleSvcUrl}InsertUpdateRule`, searchParams, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.next('serverError');
+          observable.complete();
+        });
+    });
+  }
+
+  GetRuleById(rulID: string): Observable<RuleModel> {
+    return new Observable<RuleModel>(observable => {
+
+      var searchParams = {
+        //subId: `${environment.subscriptionId}`,
+        ruleId: rulID
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}Get`, requestOptions)
         .toPromise()
         .then(response => {
           observable.next(response.json());

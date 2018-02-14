@@ -6,11 +6,12 @@ import { DocumentsService } from '../../services/data/documents/documents.servic
 import { NodesService } from "../../services/data/nodes/nodes.service"
 
 import { DocumentModel, DocVersionModel } from '../../models/Documents';
-import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData } from "../../models/RuleTot";
+import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData, RulePlugin } from "../../models/RuleTot";
 import { ModalAlertComponent } from '../../modais/modal-alert/modal-alert.component';
 import { BsModalService } from 'ngx-bootstrap';
 import { NodeItem } from '../../models/Nodes';
 import { SelectAllCheckboxState, PageChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
+import isBodyOffset from '@progress/kendo-popup-common/dist/es/is-body-offset';
 
 @Component({
   selector: 'app-cad-rules',
@@ -24,16 +25,31 @@ export class CadRulesComponent implements OnInit {
   hasOpType: boolean = true;
   hasDocVersion: boolean = true;
   hasDesc: boolean = true;
+  hasValidationMsg: boolean = true;
+  hasValidationCondition: boolean = true;
+  hasValidationLevel: boolean = true;
+  hasValidationDtInit: boolean = true;
+  hasValidationDtFim: boolean = true;
+  hasTransformNode:boolean = true;
+  hasTransformVal:boolean = true;
+  hasValidationFields:boolean = true;
+  hasPlugin:boolean = true;
+
+  isTransformacao:boolean = false;
+  isPlugin: boolean = false;
+  isValidation: boolean = false;
 
   bsUtils: ServiceUtils;
   ruleObjt: RuleModel;
 
-  docRelId: string;
-  docVersionId: string;
+  docRelId: string = "";
+  docVersionId: string = "";
 
   @ViewChild('ValNodeSel') validNodeSel: ElementRef;
   @ViewChild('ValCndtSel') validCndtSel: ElementRef;
-  @ViewChild('ValRelacSel') validRelacSel: ElementRef;
+  @ViewChild('ValRelacSel') validRelacSel: ElementRef;  
+
+  @ViewChild('RuleTypeSel') selRuleType: ElementRef;
 
   public selectValidAllState:string = "unchecked";
   public selectedValidations:Array<string> = new Array<string>();
@@ -44,12 +60,14 @@ export class CadRulesComponent implements OnInit {
   _OperationTypeList: Array<OperationType> = new Array<OperationType>();
   _RelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
   _AvaibleRelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
+  _PluginsList:Array<RulePlugin> = new Array<RulePlugin>();
 
   _ListValidation:Array<RuleDetailData> = new Array<RuleDetailData>();
 
   @Input() ruleEditId: string;
 
   public newValidation:RuleDetailData;
+  public newTransformation:RuleDetailData;
 
   constructor(private bsRules: RuleService,
     public bsDocument: DocumentsService,
@@ -59,13 +77,27 @@ export class CadRulesComponent implements OnInit {
     this.ruleObjt = new RuleModel();
 
     this.ruleObjt.RuleID = this.bsUtils.GetNewGuidId();
+    this.ruleObjt.TypeId = "";
+    this.ruleObjt.OperationId = "";
+    this.ruleObjt.DetailId  = this.bsUtils.GetNewGuidId();
+    this.ruleObjt.DocId = "";
+    this.ruleObjt.VersionId = "";
+
+    this.ruleObjt.Detail = new RuleDetailModel();
+    this.ruleObjt.Detail.ConditionType = 0;
+    this.ruleObjt.Detail.LevelType = 0;
+    this.ruleObjt.Detail.PluginID = "";
+
     this.newValidation = new RuleDetailData();
     this.newValidation.ID = "";
-    this.ruleObjt.Detail = new RuleDetailModel();
-    //this.ruleEditId = "DDB2CF45-3EB4-4DBB-B230-0AD6180C91BA";//route.snapshot.params["Id"];
-  }
 
-  ngOnInit() {
+    this.newTransformation = new RuleDetailData();
+    this.newTransformation.ID = "";
+    this.newTransformation.Order = 0;
+    this.newTransformation.Type = 1;
+
+    this.ruleObjt.Detail = new RuleDetailModel(); 
+    
     this.bsDocument.GetDocumentsList(0, 1000).subscribe(a => {
       this._RelacDocsLst = a.Data;
     });
@@ -77,34 +109,143 @@ export class CadRulesComponent implements OnInit {
     this.bsRules.GetRuleTypes().subscribe(a => {
       this._RuleTypeList = a;
     });
+    this.bsRules.GetRulePlugins().subscribe(a => {
+      this._PluginsList = a;
+    });
+
+    this.ruleEditId = "0F2DE549-DE2C-58F8-C17B-689EF284731F";//route.snapshot.params["Id"];
   }
 
+  ngOnInit() {
+    if(this.ruleEditId!= null && this.ruleEditId != ""){
+      this.LoadEditRule();
+    }
+  }
+
+  LoadEditRule(){
+    this.bsRules.GetRuleById(this.ruleEditId).subscribe(a=> {
+      this.ruleObjt = a;
+      this.ruleObjt.Detail.InitValidity =a.Detail.InitValidity.split(' ')[0];
+      this.ruleObjt.Detail.EndValiditiy =a.Detail.EndValiditiy.split(' ')[0];
+      
+      if(a.Detail.TransformRule.length > 0){
+        this.newTransformation = a.Detail.TransformRule[0];
+        this.isTransformacao = true;
+      }
+
+      if(a.Detail.ValidationRule.length > 0){
+        this._ListValidation = a.Detail.ValidationRule;
+        this.GridValidationReload();
+      }
+
+      if(a.Detail.PluginID != null && a.Detail.PluginID != "")
+      {
+        this.isPlugin = true;
+      }
+
+      this.GetVersionList(true);
+                  
+    });
+  }
   private IsInputValid() {
     let isValid = true;
     this.hasName = this.ruleObjt.Summary != null && this.ruleObjt.Summary.trim() != "";
     this.hasDesc = this.ruleObjt.RuleDescription != null && this.ruleObjt.RuleDescription.trim() != "";
-    this.hasDocVersion = this.docVersionId != null && this.docVersionId.trim() != "";
+    this.hasDocVersion = this.ruleObjt.VersionId != null && this.ruleObjt.VersionId.trim() != "";
     this.hasOpType = this.ruleObjt.OperationId != null && this.ruleObjt.OperationId.trim() != "";
     this.hasType = this.ruleObjt.TypeId != null && this.ruleObjt.TypeId.trim() != "";
-    isValid = this.hasDesc && this.hasName && this.hasDocVersion && this.hasOpType && this.hasType;
+    this.hasValidationMsg = this.ruleObjt.Detail.ValidationMsg != null && this.ruleObjt.Detail.ValidationMsg.trim() != "";
+    this.hasValidationCondition = this.ruleObjt.Detail.ConditionType != null;
+    this.hasValidationLevel =  this.ruleObjt.Detail.LevelType != null;
+    this.hasValidationDtFim = this.ruleObjt.Detail.EndValiditiy != null;
+    this.hasValidationDtInit = this.ruleObjt.Detail.InitValidity != null;
+    this.hasTransformNode = !this.isTransformacao || (this.newTransformation.NodeID != null && this.newTransformation.NodeID != "")
+    this.hasTransformVal = !this.isTransformacao || (this.newTransformation.Value != null && this.newTransformation.Value != "");    
+    this.hasValidationFields = !this.isValidation || this._ListValidation.length > 0;
+    this.hasPlugin = !this.isPlugin || ( this.ruleObjt.Detail.PluginID != null && this.ruleObjt.Detail.PluginID != "");
+
+    isValid = this.hasDesc && this.hasName && this.hasDocVersion && this.hasOpType && this.hasType && this.hasValidationCondition && this.hasValidationLevel && this.hasValidationDtFim && this.hasValidationDtInit && this.hasValidationMsg 
+              && this.hasTransformNode && this.hasTransformVal && this.hasValidationFields && this.hasPlugin;
     return isValid;
   }
 
   onSubmit(): void {
     if (this.IsInputValid()) {
-      debugger;
+      let isEdit = this.ruleEditId != null && this.ruleEditId != "";
+
+      this.ruleObjt.Detail.ValidationRule = new Array<RuleDetailData>();
+      this.ruleObjt.Detail.TransformRule = new Array<RuleDetailData>();
+      
+      this.ruleObjt.Detail.ValidationRule = this._ListValidation;
+
+      if(this.isTransformacao){
+        if(!isEdit){
+          this.newTransformation.ID = this.bsUtils.GetNewGuidId();
+          this.newTransformation.isNew = true;
+        }
+        else{
+          this.newTransformation.isEdited = true;
+        }
+        
+        this.ruleObjt.Detail.TransformRule.push(this.newTransformation);
+      }
+
+      if(!this.isPlugin){
+        this.ruleObjt.Detail.PluginID = "";
+      }      
+
+      this.bsRules.SendRulePost(this.ruleObjt,isEdit).subscribe(a=> {
+        let alertState = {
+          Message: `O registro foi salvo com sucesso`,
+          title: "Alteração Efetuada!",
+          alertType: "success"
+        };
+
+        if (a != "OK") {
+          alertState.title = "Ops!!"
+          if (a.indexOf("23 - ") == 0) {
+            alertState.Message = a.replace("23 - ", "");
+            alertState.alertType = "info";
+          }
+          else {
+            if (a == "serverError" || a == "ERRO") {
+              alertState.Message = "Ocorreu um erro ao tentar salvar o item, tente novamente mais tarde!";
+            }
+            else {
+              alertState.Message = a;
+            }
+            alertState.alertType = "danger";
+          }
+        }
+
+        this.modalService.show(ModalAlertComponent, { initialState: alertState });
+      });
     }
   }
 
+  OnSelRuleTypeChange(){
+    
+    let selText:string = this.selRuleType.nativeElement.selectedOptions[0].text;
+
+    this.isTransformacao = selText.toLowerCase().trim() == "transformação";
+    this.isPlugin = selText.toLowerCase().trim() != "transformação" && selText.toLowerCase().trim() != "validação";
+    this.isValidation = selText.toLowerCase().trim() == "validação";
+  }
+  
   /*************************************Document******************************************/
+
   GetVersionList(isLoad: boolean) {
-    this.bsDocument.GetDocVersionList(this.docRelId, 0, 1000).subscribe(a => {
+    this.bsDocument.GetDocVersionList(this.ruleObjt.DocId, 0, 1000).subscribe(a => {
       this._RelacDocVersionLst = a.Data;
+
+      if(isLoad){
+        this.GetVersionListNodes(isLoad);
+      }
     });
   }
 
   GetVersionListNodes(isLoad: boolean) {
-    this.bsNode.GetVersionNodes(this.docVersionId).subscribe(a => {
+    this.bsNode.GetVersionNodes(this.ruleObjt.VersionId).subscribe(a => {
       this._RelacVersionNodList = a;
     });
   }

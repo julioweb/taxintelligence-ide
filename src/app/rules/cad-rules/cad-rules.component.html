@@ -26,7 +26,7 @@
               <label for="ryleType">
                 <strong>Tipo</strong>
               </label>
-              <select id="ryleType" class="form-control" name="ryleType" [(ngModel)]="ruleObjt.TypeId">
+              <select id="ryleType" class="form-control" name="ryleType" [(ngModel)]="ruleObjt.TypeId" #RuleTypeSel (change)="OnSelRuleTypeChange()">
                 <option value="" selected>Selecione...</option>
                 <option *ngFor="let type of _RuleTypeList" [value]="type.ID">{{type.Name}}</option>
               </select>
@@ -61,7 +61,7 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="docRelac">Documento</label>
-              <select id="docRelac" class="form-control" name="docRelac" [(ngModel)]="docRelId" (change)="GetVersionList(false)">
+              <select id="docRelac" class="form-control" name="docRelac" [(ngModel)]="ruleObjt.DocId" (change)="GetVersionList(false)">
                 <option value="" selected>Selecione...</option>
                 <option *ngFor="let doc of _RelacDocsLst" [value]="doc.ID">{{doc.Name}} </option>
               </select>
@@ -70,7 +70,7 @@
               <label for="verRelac">
                 <strong>Versão</strong>
               </label>
-              <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="docVersionId" (change)="GetVersionListNodes(false)">
+              <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="ruleObjt.VersionId" (change)="GetVersionListNodes(false)">
                 <option value="" selected>Selecione...</option>
                 <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
               </select>
@@ -81,11 +81,14 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasValidationMsg">
               <label for="detValMsg">Mensagem de Validação</label>
               <input type="text" maxlength="500" class="form-control" id="detValMsg" name="detValMsg" placeholder="Nome" [(ngModel)]="ruleObjt.Detail.ValidationMsg">
+              <div class="invalid-feedback">
+                Necessário informar uma mensagem de validação
+              </div>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationCondition">
               <label for="detCondition">
                 <strong>Condição</strong>
               </label>
@@ -93,8 +96,11 @@
                 <option value="1" selected>Igual</option>
                 <option value="2" selected>Contém</option>
               </select>
+              <div class="invalid-feedback">
+                Necessário informar uma condição de validação
+              </div>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationLevel">
               <label for="detLevel">
                 <strong>Nível</strong>
               </label>
@@ -102,20 +108,32 @@
                 <option value="1" selected>Alerta</option>
                 <option value="2" selected>Erro</option>
               </select>
+              <div class="invalid-feedback">
+                Necessário informar um nível de validação
+              </div>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationDtInit">
               <label for="detDtInit"> Data Início </label>
               <input type="date" class="form-control" id="detDtInit" name="detDtInit" placeholder="Data Início" [(ngModel)]="ruleObjt.Detail.InitValidity">
+              <div class="invalid-feedback">
+                Necessário informar uma data inicio
+              </div>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationDtFim">
               <label for="detDtFim"> Data Fim </label>
               <input type="date" class="form-control" id="detDtFim" name="detDtFim" placeholder="Data Fim" [(ngModel)]="ruleObjt.Detail.EndValiditiy">
+              <div class="invalid-feedback">
+                Necessário informar uma data fim
+              </div>
             </div>
           </div>
         </fieldset>
 
         <fieldset class="avalara-fieldset">
           <legend>Validação</legend>
+          <div class="alert alert-danger" role="alert" *ngIf="!hasValidationFields">
+            Necessário adicionar campos para a validação
+          </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-row">
@@ -142,12 +160,12 @@
                   <input type="text" maxlength="2000" class="form-control" id="valValue" name="valValue" placeholder="valor" [(ngModel)]="newValidation.Value">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="valRelation">Operação Lógica</label>
-                    <select id="valRelation" name="valRelation" class="form-control" [(ngModel)]="newValidation.Relation" #ValRelacSel>
-                      <option value="AND" selected>E</option>
-                      <option value="OR">OU</option>
-                    </select>
-                  </div>
+                  <label for="valRelation">Operação Lógica</label>
+                  <select id="valRelation" name="valRelation" class="form-control" [(ngModel)]="newValidation.Relation" #ValRelacSel>
+                    <option value="AND" selected>E</option>
+                    <option value="OR">OU</option>
+                  </select>
+                </div>
               </div>
 
               <div class="row avl-mgn-top-5">
@@ -166,39 +184,78 @@
 
           <div class="row avl-mgn-top-10">
             <div class="col-md-12">
-                <kendo-grid #grid="kendoGrid" [data]="GridVData" [pageSize]="GridVPageSize" [skip]="GridVSkip" [pageable]="{
+              <kendo-grid #grid="kendoGrid" [data]="GridVData" [pageSize]="GridVPageSize" [skip]="GridVSkip" [pageable]="{
                   buttonCount: 5,
                   info: true,
                   type: 'input',
                   pageSizes: [10,20,100,10000],
                   previousNext: true      
-                }" (pageChange)="pageVChange($event)"
-                [kendoGridSelectBy]="'ID'"
-                [selectedKeys]="selectedValidations"
-                [selectable]="{checkboxOnly:true,mode:'multiple'}"
-                >
-                
+                }" (pageChange)="pageVChange($event)" [kendoGridSelectBy]="'ID'" [selectedKeys]="selectedValidations" [selectable]="{checkboxOnly:true,mode:'multiple'}">
+
                 <kendo-grid-checkbox-column showSelectAll="true" width="30">
-                    <ng-template kendoGridHeaderTemplate>
-                        <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox
-                            [state]="selectValidAllState"
-                            (selectAllChange)="onSelectAllVldChange($event)">
-                        <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
-                    </ng-template>
+                  <ng-template kendoGridHeaderTemplate>
+                    <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox [state]="selectValidAllState" (selectAllChange)="onSelectAllVldChange($event)">
+                    <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+                  </ng-template>
                 </kendo-grid-checkbox-column>
-                  <kendo-grid-column field="" title="" width="50">
-                    <ng-template kendoGridCellTemplate let-dataItem>
-                      <span class="btn btn-avl-outline-dark" (click)="EditValidationItem(dataItem.ID)" title="Editar">
-                        <i class="fas fa-pencil-alt"></i>
-                      </span>
-                    </ng-template>
-                  </kendo-grid-column>
-                
-                  <kendo-grid-column field="NodeDesc" title="Campo" width="150"></kendo-grid-column>
-                  <kendo-grid-column field="ConditionDesc" title="Condição" width="150"></kendo-grid-column>
-                  <kendo-grid-column field="Value" title="Valor" width="250"></kendo-grid-column>
-                  <kendo-grid-column field="RelationDesc" title="Lógica" width="80"></kendo-grid-column>
-                </kendo-grid>
+                <kendo-grid-column field="" title="" width="50">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <span class="btn btn-avl-outline-dark" (click)="EditValidationItem(dataItem.ID)" title="Editar">
+                      <i class="fas fa-pencil-alt"></i>
+                    </span>
+                  </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column field="NodeDesc" title="Campo" width="150"></kendo-grid-column>
+                <kendo-grid-column field="ConditionDesc" title="Condição" width="150"></kendo-grid-column>
+                <kendo-grid-column field="Value" title="Valor" width="250"></kendo-grid-column>
+                <kendo-grid-column field="RelationDesc" title="Lógica" width="80"></kendo-grid-column>
+              </kendo-grid>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="avalara-fieldset" *ngIf="isTransformacao">
+          <legend>Transformação</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-row">
+                <div class="form-group col-md-4"  [class.avl-invalid-form]="!hasTransformNode">
+                  <label for="nodeTRel">Campo</label>
+                  <select id="nodeTRel" name="nodeTRel" class="form-control" [(ngModel)]="newTransformation.NodeID">
+                    <option value="">Selecione...</option>
+                    <option *ngFor="let node of _RelacVersionNodList" [value]="node.ID">{{node.Label}} </option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Necessário informar um campo para transformação
+                  </div>
+                </div>
+                <div class="form-group col-md-8"  [class.avl-invalid-form]="!hasTransformVal">
+                  <label for="trfValue">Valor</label>
+                  <input type="text" maxlength="2000" class="form-control" id="trfValue" name="trfValue" placeholder="valor" [(ngModel)]="newTransformation.Value">
+                  <div class="invalid-feedback">
+                    Necessário informar um valor de transformação
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="avalara-fieldset" *ngIf="isPlugin">
+          <legend>Plugin Externo</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group col-md-6"  [class.avl-invalid-form]="!hasPlugin">
+                <label for="pluginExt">Plugin</label>
+                <select id="pluginExt" name="nodepluginExtTRel" class="form-control" [(ngModel)]="this.ruleObjt.Detail.PluginID">
+                  <option value="">Selecione...</option>
+                  <option *ngFor="let plugin of _PluginsList" [value]="plugin.ID">{{plugin.Name}} </option>
+                </select>
+                <div class="invalid-feedback">
+                  Necessário informar um plugin
+                </div>
+              </div>
             </div>
           </div>
         </fieldset>

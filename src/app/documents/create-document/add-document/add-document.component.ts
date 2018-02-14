@@ -47,7 +47,7 @@ export class AddDocumentComponent implements OnInit {
 
     this.serviceUtils = new ServiceUtils();
 
-    this.docEditId = "281577B2-535D-1CBE-88F5-A06459BD0088";//route.snapshot.params["Id"];
+    this.docEditId = "9CD1598B-B0D4-468E-9941-828D3C9F0176";//route.snapshot.params["Id"];
     this.docObjt.ID = this.serviceUtils.GetNewGuidId();
   }
 
