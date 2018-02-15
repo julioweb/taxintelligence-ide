@@ -1,4 +1,19 @@
+<app-full-loading #fullLoading></app-full-loading>
+
 <div class="container">
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/rules">Regras</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Cadastro de Regras</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="row">
     <div class="row-same-height">
       <div class="col-md-10 col-sm-height">
@@ -220,7 +235,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-row">
-                <div class="form-group col-md-4"  [class.avl-invalid-form]="!hasTransformNode">
+                <div class="form-group col-md-4" [class.avl-invalid-form]="!hasTransformNode">
                   <label for="nodeTRel">Campo</label>
                   <select id="nodeTRel" name="nodeTRel" class="form-control" [(ngModel)]="newTransformation.NodeID">
                     <option value="">Selecione...</option>
@@ -230,7 +245,7 @@
                     Necessário informar um campo para transformação
                   </div>
                 </div>
-                <div class="form-group col-md-8"  [class.avl-invalid-form]="!hasTransformVal">
+                <div class="form-group col-md-8" [class.avl-invalid-form]="!hasTransformVal">
                   <label for="trfValue">Valor</label>
                   <input type="text" maxlength="2000" class="form-control" id="trfValue" name="trfValue" placeholder="valor" [(ngModel)]="newTransformation.Value">
                   <div class="invalid-feedback">
@@ -246,7 +261,7 @@
           <legend>Plugin Externo</legend>
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group col-md-6"  [class.avl-invalid-form]="!hasPlugin">
+              <div class="form-group col-md-6" [class.avl-invalid-form]="!hasPlugin">
                 <label for="pluginExt">Plugin</label>
                 <select id="pluginExt" name="nodepluginExtTRel" class="form-control" [(ngModel)]="this.ruleObjt.Detail.PluginID">
                   <option value="">Selecione...</option>

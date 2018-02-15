@@ -7,6 +7,7 @@ import { DocprcAprovacaoComponent } from './docprc-aprovacao/docprc-aprovacao.co
 import { DocumentsComponent } from './documents/documents.component';
 import { AddDocumentComponent } from './documents/create-document/add-document/add-document.component';
 import { RulesComponent } from './rules/rules.component';
+import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 import { RuleGroupComponent } from './rule-group/rule-group.component';
 import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
 
@@ -17,6 +18,8 @@ const APP_ROUTES: Routes = [
     { path: 'add-document', component: AddDocumentComponent },
     { path: 'edit-document', component: AddDocumentComponent },
     { path: 'rules', component: RulesComponent },
+    { path: 'add-rule', component: CadRulesComponent },
+    { path: 'edit-rule', component: CadRulesComponent },
     { path: 'rules-group', component: RuleGroupComponent },
     { path: 'add-rule-group', component: CadRuleGroupComponent },
     { path: 'edit-rule-group', component: CadRuleGroupComponent },
