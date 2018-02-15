@@ -1,3 +1,5 @@
+<app-full-loading #fullLoading></app-full-loading>
+
 <div class="container">
   <div class="row">
     <div class="row-same-height">
@@ -38,16 +40,16 @@
           </span>
         </ng-template>
 
-        <kendo-grid-column field="" title="" width="60">          
+        <kendo-grid-column field="" title="" width="60">
           <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="btn btn-avl-outline-dark" title="Editar">
+            <span class="btn btn-avl-outline-dark" title="Editar" (click)="EditarRuleItem(dataItem.RuleID)">
               <i class="fas fa-pencil-alt"></i>
             </span>
           </ng-template>
         </kendo-grid-column>
 
         <kendo-grid-column field="Summary" title="Nome" width="100"></kendo-grid-column>
-        <kendo-grid-column field="RuleDescription" title="Descrição" width="250" ></kendo-grid-column>
+        <kendo-grid-column field="RuleDescription" title="Descrição" width="250"></kendo-grid-column>
         <kendo-grid-column field="TypeDesc" title="Tipo" class="text-center" width="50"></kendo-grid-column>
         <kendo-grid-column field="OperationDesc" title="Operação" class="text-center" width="50"></kendo-grid-column>
       </kendo-grid>
