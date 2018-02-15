@@ -131,35 +131,11 @@
           </div>
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="col-md-5">
-          <div class="text-center">
-            <strong>Campos</strong>
-          </div>
-          <ul class="list-group list-group-flush avl-list-items rounded">
-            <li class="list-group-item" *ngFor="let item of _SelectedList;let i = index;" [value]="i">{{item.Label}}</li>
-          </ul>
-        </div>
-        <div class="col-md-2 text-center">
-          <div>
-            <button (click)="SelectItem(false)" type="button" class="btn btn-default btn-sm avl-mgn-btm-5" title="Selecionar">
-              <i class="fas fa-angle-right"></i>
-            </button>
-          </div>
-        </div>
-        <div class=col-md-5>
-          <div class="text-center">
-            <strong>Relação</strong>
-          </div>
-          <ul class="list-group list-group-flush avl-list-items rounded">
-            <li class="list-group-item" *ngFor="let item of _RelacVersionNodList;let i = index;" [value]="i">{{item.Label}}</li>
-          </ul>
-        </div>
-      </div> -->
     </fieldset>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="onConfirm()">Salvar</button>
-    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+    <button type="button" class="btn btn-default" (click)="onCancel()">Cancelar</button>
+    <!-- <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button> -->
   </div>
 </div>

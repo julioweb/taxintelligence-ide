@@ -168,9 +168,11 @@ export class DocumentVersionComponent implements OnInit {
   }
 
   private OpenAddModal() {
+    let modalId = this.serviceUtils.GetNewGuidId();
     this.ModalConfig.initialState = {
       _nodeList: this.nodeList,
-      curLevelType: this.ParentLevel
+      curLevelType: this.ParentLevel,
+      ModalId: modalId
     };
     this.bsModalRef = this.modalService.show(ModalVersionDocComponent, this.ModalConfig);
 
@@ -178,7 +180,7 @@ export class DocumentVersionComponent implements OnInit {
       if (result != null && result != "") {
         var mdlResult = JSON.parse(result)
 
-        if (mdlResult.Modal == "NewVersion") {
+        if (mdlResult.Modal == "NewVersion" && mdlResult.ModalId == modalId) {
           if (mdlResult.Data != null) {
             this.newVersion = mdlResult.Data;
             this.AddVersionToTable();
@@ -206,10 +208,12 @@ export class DocumentVersionComponent implements OnInit {
       this.newVersion.RelacItems = temp.RelacItems;
       this.newVersion.DocRelac = temp.DocRelac;
 
+      let modalId = this.serviceUtils.GetNewGuidId();
       let curMdlState = {
         newVersion: this.newVersion,
         _nodeList: this.nodeList,
-        curLevelType: this.ParentLevel
+        curLevelType: this.ParentLevel,
+        ModalId: modalId
       };
       this.ModalConfig.initialState = curMdlState
 
@@ -219,12 +223,12 @@ export class DocumentVersionComponent implements OnInit {
         if (result != null && result != "") {
 
           var mdlResult = JSON.parse(result)
-
-          if (mdlResult.Modal == "NewVersion") {
+          if (mdlResult.Modal == "NewVersion" && mdlResult.ModalId == modalId) {
             if (mdlResult.Data != null) {
               this.newVersion = mdlResult.Data;
               this.UpdateVersionTable();
             }
+            this.curSubscribe.unsubscribe();
           }
 
         }

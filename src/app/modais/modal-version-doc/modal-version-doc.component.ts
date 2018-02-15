@@ -39,6 +39,7 @@ export class ModalVersionDocComponent implements OnInit {
       versaoID: ""
     }
   }
+  ModalId: string;
   curLevelType: number;
   curSubscribe: Subscription;
   hasName = true;
@@ -151,12 +152,24 @@ export class ModalVersionDocComponent implements OnInit {
       }
       let hresult = {
         Modal: "NewVersion",
-        Data: this.newVersion
+        Data: this.newVersion,
+        ModalId: this.ModalId
       }
 
       this.bsModalService.setDismissReason(JSON.stringify(hresult));
       this.bsModalRef.hide();
     }
+  }
+
+  onCancel(): void {
+    let hresult = {
+      Modal: "NewVersion",
+      Data: null,
+      ModalId: this.ModalId
+    }
+
+    this.bsModalService.setDismissReason(JSON.stringify(hresult));
+    this.bsModalRef.hide();
   }
 
   SetItemSelected(event, typeClick) {
@@ -242,6 +255,7 @@ export class ModalVersionDocComponent implements OnInit {
     curSelect.RelNodId = "";
   }
   OpenRelacNodeModal(item: NodeItem, isEdit: boolean) {
+    
     let avaibleNodes = this._AvaibleRelacVersionNodList.filter(x => x.TypeId == item.TypeId).map(x => Object.assign({ Key: x.ID, Value: x.Label }));
     if (isEdit) {
       avaibleNodes.push({ Key: item.RelNodId, Value: item.RelNodDesc });

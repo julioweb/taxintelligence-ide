@@ -1,13 +1,20 @@
 <div class="form-row">
-  <div class="form-group col-md-4">
+  <div class="form-group col-md-6">
     <label for="nodName">Nome</label>
     <input type="text" maxlength="200" class="form-control" id="nodName" placeholder="Nome" [(ngModel)]="newNode.Name">
   </div>
-  <div class="form-group col-md-4">
+  <div class="form-group col-md-6">
     <label for="docLabel">Label</label>
     <input type="text" maxlength="200" class="form-control" id="docLabel" placeholder="Label" [(ngModel)]="newNode.Label">
   </div>
-  <div class="form-group col-md-4">
+  <div class="form-group col-md-6">
+    <label for="nodPai">Coluna Pai</label>
+    <select id="nodPai" class="form-control" [(ngModel)]="newNode.ParentID" #parentSel>
+      <option value="">Selecione...</option>
+      <option *ngFor="let parent of _NodePaiList" [value]="parent.ID">{{parent.DESC}} </option>
+    </select>
+  </div>
+  <div class="form-group col-md-6">
     <label for="docType">Tipo</label>
     <select id="docType" class="form-control" [(ngModel)]="newNode.Type" #typeSel>
       <option value="">Selecione...</option>
@@ -66,7 +73,7 @@
           <kendo-grid-column field="Label" title="Label" width="150"></kendo-grid-column>
           <kendo-grid-column field="Xpath" title="Caminho xml" width="250"></kendo-grid-column>
           <kendo-grid-column field="TypeDesc" title="Tipo" width="80"></kendo-grid-column>
-          
+          <kendo-grid-column field="NodParentName" title="Coluna Pai" width="150"></kendo-grid-column>
         
         </kendo-grid>
     </div>

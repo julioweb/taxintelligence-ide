@@ -94,10 +94,12 @@ export class GridDocVersionComponent implements OnInit {
   }
 
   OpenEditModal(nodeList: Array<NodeItem>) {
+    let modalId = this.serviceUtils.GetNewGuidId();
     this.ModalConfig.initialState = {
       _nodeList: nodeList,
       curLevelType: this.docPaiLevel,
-      newVersion: this.versionItem
+      newVersion: this.versionItem,
+      ModalId: modalId
     };
     this.bsModalRef = this.modalService.show(ModalVersionDocComponent, this.ModalConfig);
 
@@ -105,7 +107,7 @@ export class GridDocVersionComponent implements OnInit {
       if (result != null && result != "") {
         var mdlResult = JSON.parse(result)
 
-        if (mdlResult.Modal == "NewVersion") {
+        if (mdlResult.Modal == "NewVersion" && mdlResult.ModalId == modalId) {
           if (mdlResult.Data != null) {
             mdlResult.Data.DocID = this.docIdPai;
             mdlResult.Data.isEdited = true;

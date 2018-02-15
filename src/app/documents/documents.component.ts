@@ -113,17 +113,18 @@ export class DocumentsComponent implements OnInit {
   }
 
   OpenAddModal(nodeList: Array<NodeItem>) {
+    let modalId = this.serviceUtils.GetNewGuidId();
     this.ModalConfig.initialState = {
       _nodeList: nodeList,
-      curLevelType: this.curSelDocLevel
+      curLevelType: this.curSelDocLevel,
+      ModalId: modalId
     };
     this.bsModalRef = this.modalService.show(ModalVersionDocComponent, this.ModalConfig);
 
     this.curSubscribe = this.modalService.onHidden.subscribe(result => {
       if (result != null && result != "") {
         var mdlResult = JSON.parse(result)
-
-        if (mdlResult.Modal == "NewVersion") {
+        if (mdlResult.Modal == "NewVersion" && mdlResult.ModalId == modalId) {
           if (mdlResult.Data != null) {
             mdlResult.Data.DocID = this.curSelDocId;
             mdlResult.Data.isNew = true;
