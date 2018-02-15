@@ -12,6 +12,7 @@ import { BsModalService } from 'ngx-bootstrap';
 import { NodeItem } from '../../models/Nodes';
 import { SelectAllCheckboxState, PageChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import isBodyOffset from '@progress/kendo-popup-common/dist/es/is-body-offset';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cad-rules',
@@ -72,7 +73,8 @@ export class CadRulesComponent implements OnInit {
   constructor(private bsRules: RuleService,
     public bsDocument: DocumentsService,
     public bsNode: NodesService,
-    private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private router: Router) {
     this.bsUtils = new ServiceUtils();
     this.ruleObjt = new RuleModel();
 
@@ -219,6 +221,9 @@ export class CadRulesComponent implements OnInit {
         }
 
         this.modalService.show(ModalAlertComponent, { initialState: alertState });
+        if(a== "OK"){
+          this.router.navigate(['/rules']);
+        }
       });
     }
   }

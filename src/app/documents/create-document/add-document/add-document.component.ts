@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
 import { DocumentsService } from "../../../services/data/documents/documents.service";
@@ -46,7 +46,8 @@ export class AddDocumentComponent implements OnInit, OnDestroy {
 
   constructor(public docProcess: DocumentsService,
     private modalService: BsModalService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
     docProcess.GetDocLevelType().subscribe(a => {
       this.LevelData = a;
     });
@@ -122,10 +123,13 @@ export class AddDocumentComponent implements OnInit, OnDestroy {
           }
           alertState.alertType = "danger";
         }
-      }
+      }      
 
       this.fullLoading.hideLoading();
       this.modalService.show(ModalAlertComponent, { initialState: alertState });
+      if(a== "OK"){
+        this.router.navigate(['/documents']);
+      }
     });
 
   }

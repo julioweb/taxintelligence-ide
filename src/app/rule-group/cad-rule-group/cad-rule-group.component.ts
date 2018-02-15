@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RuleService } from "../../services/data/rules/rule.service";
@@ -42,7 +42,8 @@ export class CadRuleGroupComponent implements OnInit, OnDestroy {
   constructor(private bsRules: RuleService,
     public bsDocument: DocumentsService,
     private modalService: BsModalService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
     this.bsUtils = new ServiceUtils();
     this.grpObjt = new GroupRuleModel();
 
@@ -125,6 +126,9 @@ export class CadRuleGroupComponent implements OnInit, OnDestroy {
 
         this.fullLoading.hideLoading();
         this.modalService.show(ModalAlertComponent, { initialState: alertState });
+        if(a== "OK"){
+          this.router.navigate(['/rules-group']);
+        }
       });
     }
   }

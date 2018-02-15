@@ -156,9 +156,8 @@ export class DocumentVersionComponent implements OnInit {
       this.selectedVersions.push(tmpVersion.ID);
     }
 
-    //this.ClearVersionInput();
     this.GridReload();
-  }
+  }  
 
   private InitAddModal() {
     this.RequestUpdatedNodes("add");
@@ -167,6 +166,7 @@ export class DocumentVersionComponent implements OnInit {
   public SetDocumentLevel(newLevel: number) {
     this.ParentLevel = newLevel;
   }
+
   private OpenAddModal() {
     this.ModalConfig.initialState = {
       _nodeList: this.nodeList,
@@ -185,32 +185,7 @@ export class DocumentVersionComponent implements OnInit {
           }
 
           this.curSubscribe.unsubscribe();
-        }
-
-        // if (result == "true") {
-        //   this.docProcess.ApproveSingleItem(item.ID).subscribe(a => {
-
-        //     let alertState = {
-        //       Message: `A aprovação foi efetuada com sucesso.`,
-        //       title: "Aprovado!",
-        //       alertType: "success"
-        //     };
-
-        //     if (a != "OK") {
-        //       alertState.title = "Ops!!"
-        //       if (a == "serverError" || a == "ERRO") {
-        //         alertState.Message = "Ocorreu um erro ao tentar aprovar o item, tente novamente mais tarde!";
-        //       }
-        //       else {
-        //         alertState.Message = a;
-        //       }
-        //       alertState.alertType = "danger";
-        //     }
-
-        //     this.modalService.show(ModalAlertComponent, { initialState: alertState });
-        //     this.GridReload();
-        //   });
-        // }
+        }        
       }
     });
   }
@@ -303,14 +278,18 @@ export class DocumentVersionComponent implements OnInit {
         if (temp != null) {
           let idxItm = this.versionList.indexOf(temp);
           this.versionList[idxItm].isDeleted = true;
-
-          //if (this.versionList[idxItm].isNew) {
-            this.versionList.splice(idxItm, 1);
-          //}
+          
+          this.versionList.splice(idxItm, 1);
         }
       }
     }
     this.selectAllState = "unchecked";
+
+    let curPage = (this.GridPageSize+this.GridSkip)/this.GridPageSize;
+    let MaxPage = Math.floor(this.versionList.length/this.GridPageSize)+1;
+    if((curPage > MaxPage) || this.versionList.length == this.GridPageSize){
+      this.GridSkip = 0;
+    }    
     this.GridReload();
   }
 }
