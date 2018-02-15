@@ -101,3 +101,25 @@ export class RulePlugin{
     public Description:string;
     public SubId:string;
 }
+
+export class RuleProcessList {
+    public Total: number;
+    public Data: Array<RuleProcess>
+}
+
+export class RuleProcess{
+    public ID:string;
+    public ProcessID:string;
+    public RuleID:string;
+    public RuleDesc:string;
+    public RuleType:string;
+    public Status:number;
+    public StatusDesc:string;
+    public InitDate:string;
+    public EndDate:string;
+    public Message:string;
+    public Order:number;
+    public StartValue:string;
+    public EndValue:string;
+    public NodeName:string;
+}

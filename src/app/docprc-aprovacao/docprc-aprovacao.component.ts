@@ -18,6 +18,7 @@ import { ModalConfirmComponent } from "../modais/modal-confirm/modal-confirm.com
 import { ModalApproveDocComponent } from "../modais/modal-approve-doc/modal-approve-doc.component";
 import { FiltrosTelaAprovacaoStorage, FiltrosTelaAprovacaoHabilitadoStorage } from "../services/business/aprovacao/FiltrosGridAprovacao";
 import { KeyValue } from "../models/KeyValue";
+import { Router } from '@angular/router';
 
 
 
@@ -48,7 +49,8 @@ export class DocprcAprovacaoComponent implements OnInit {
     private storage: LocalStorageService,
     private userService:UsersService,
     private svcUtils: ServiceUtils,
-    private empresaService: EmpresaService  ) {
+    private empresaService: EmpresaService,
+    private router: Router  ) {
 
       docProcess.GetDocProcessStatusTypeList().subscribe(a => {
             this.StatusData = a;
@@ -128,6 +130,17 @@ export class DocprcAprovacaoComponent implements OnInit {
         total: a.Total
       }
     });
+  }
+
+  VisualizarProcesso(itemID){
+    this.router.navigate(
+      ['/doc-process'],
+      {
+        queryParams: {
+          'id': itemID
+        }
+      }
+    );
   }
 
   /************************************************************************** Aprovação dos Itens **************************************************************************/

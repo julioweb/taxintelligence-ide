@@ -54,6 +54,8 @@ import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-grou
 import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 import { routing } from './app.routing';
 import { FullLoadingComponent } from './modais/full-loading/full-loading.component';
+import { DocumentProcessComponent } from './document-process/document-process.component';
+import { RulesExecutedComponent } from './rules-executed/rules-executed.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { FullLoadingComponent } from './modais/full-loading/full-loading.compone
     RuleGroupComponent,
     CadRuleGroupComponent,
     CadRulesComponent,
-    FullLoadingComponent
+    FullLoadingComponent,
+    DocumentProcessComponent,
+    RulesExecutedComponent
   ],
   imports: [
     BrowserModule,

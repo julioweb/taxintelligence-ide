@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/doc-aprovacao">Painel de Aprovação</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Processo</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-same-height">
+      <div class="col-md-10 col-sm-height">
+        <h1 class="avalara-title">Detalhes do Processo</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row avl-mgn-top-15">
+    <div class="col-md-12">
+      <fieldset class="avalara-fieldset">
+        <legend>Propriedades</legend>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="docID">
+              <strong>Chave</strong>
+            </label>
+            <input type="text" class="form-control" id="docID" name="docID" placeholder="Chave" [ngModel]="prcObj.DocumentID" readonly>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="numNF">
+              <strong>Número NF</strong>
+            </label>
+            <input type="text" class="form-control" id="numNF" name="numNF" placeholder="Número NF" [ngModel]="prcObj.DocumentNumber"
+              readonly>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="statusNF">
+              <strong>Status NF</strong>
+            </label>
+            <input type="text" class="form-control" id="statusNF" name="statusNF" placeholder="Status NF" [ngModel]="prcObj.DocumentStatus"
+              readonly>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="dtEmissao">
+              <strong>Data Emissão</strong>
+            </label>
+            <input type="date" class="form-control" id="dtEmissao" name="dtEmissao" placeholder="" [ngModel]="prcObj.CompetenceDate"
+              readonly>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="valNF">
+              <strong>Valor</strong>
+            </label>
+            <input type="text" class="form-control" id="valNF" name="valNF" placeholder="Valor" [ngModel]="prcObj.TotalValue | myCurrency"
+              readonly>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="cnpj">
+              <strong>CNPJ Destinatário</strong>
+            </label>
+            <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="CNPJ Destinatário" [ngModel]="prcObj.CNPJ" readonly>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="avalara-fieldset">
+        <legend>Processamento</legend>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="prcStatus">
+              <strong>Status</strong>
+            </label>
+            <input type="text" class="form-control" id="prcStatus" name="prcStatus" placeholder="Chave" [ngModel]="prcObj.StatusDesc"
+              readonly>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="dtInit">
+              <strong>Inicio Execução</strong>
+            </label>
+            <input type="date" class="form-control" id="dtInit" name="dtInit" placeholder="" [ngModel]="prcObj.DtInit" readonly>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="dtFim">
+              <strong>Fim Excecução</strong>
+            </label>
+            <input type="date" class="form-control" id="dtFim" name="dtFim" placeholder="" [ngModel]="prcObj.DtFim" readonly>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="dtAprv">
+              <strong>Data Aprovação</strong>
+            </label>
+            <input type="date" class="form-control" id="dtAprv" name="dtAprv" placeholder="" [ngModel]="prcObj.ApprovalDate" readonly>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="usrAprv">
+              <strong>Aprovado Por</strong>
+            </label>
+            <input type="text" class="form-control" id="usrAprv" name="usrAprv" placeholder="Aprovado por" [(ngModel)]="prcObj.ApprovalUser"
+              readonly>
+          </div>
+        </div>
+      </fieldset>
+      <div class="row avl-mgn-top-5">
+        <div class="col-md-12">
+          <button class="btn btn-primary btn-sm float-right avl-mgn-right-5" title="Baixar XML" (click)="DownloadItem('xml')" [disabled]="!hasUrl('xml')"> <i class="fas fa-download"></i> XML</button>
+          <button class="btn btn-info btn-sm float-right avl-mgn-right-5" title="Baixar JSON" (click)="DownloadItem('json')" [disabled]="!hasUrl('json')"> <i class="fas fa-download"></i> JSON</button>
+        </div>
+      </div>
+
+      <fieldset class="avalara-fieldset">
+          <legend>Regras</legend>  
+          
+          <div class="row avl-mgn-top-15">
+            <div class="col-md-12">
+                <rules-executed #execRules></rules-executed>
+            </div>
+          </div>          
+      </fieldset>
+    </div>
+  </div>
+</div>

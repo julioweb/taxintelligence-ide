@@ -6,7 +6,7 @@ import { environment } from "../../../../environments/environment";
 import { AuthService } from "../../auth/auth.service";
 import { FiltrosTelaAprovacaoStorage,FiltrosTelaAprovacaoTools } from "../../../services/business/aprovacao/FiltrosGridAprovacao";
 import { ServiceUtils } from "../../Utils/Utils";
-import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel } from "../../../models/Documents";
+import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel, DocProcess } from "../../../models/Documents";
 import { KeyValue } from "../../../models/KeyValue";
 
 @Injectable()
@@ -135,6 +135,31 @@ export class DocumentsService {
     });
   }
 
+  GetDocProcessByID(prcID:string): Observable<DocProcess> {
+
+    return new Observable<DocProcess>(observable => {
+
+      var searchParams = {
+        subId: `${environment.subscriptionId}`,
+        id: prcID
+      };
+
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+      requestOptions.headers = new Headers({ 'Accept': 'application/json' });
+
+        this.http.get(`${this._docmentSvcUrl}GetDocProcess`,requestOptions)
+            .toPromise()
+            .then(response => {
+                observable.next(response.json());
+                observable.complete();
+            })
+            .catch(error => {
+                observable.error(error);
+            });
+    });
+  }
   /*****************************************************Home Index************************************************************** */
   GetDocProcessBrief(Skip: number, PageSize: number): Observable<DocBriefList>{
     return new Observable<DocBriefList>(observable => {

@@ -156,7 +156,7 @@
                 <div class="dropdown float-right">
                   <span class="btn btn-info float-right btn-sm avl-mgn-left-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
                     id="bMenosFiltros">
-                    <i class="fas fa-eye"></i> Filtros</span>
+                    <i class="fas fa-filter"></i> Filtros</span>
                   <ul class="dropdown-menu" aria-labelledby="bMenosFiltros">
                     <li *ngFor="let Item of filtrosHabilitados.Captions" class="p-1">
 
@@ -217,8 +217,8 @@
           <ng-template kendoGridCellTemplate let-dataItem>
             <!--<input type="checkbox" [checked]="dataItem.Discontinued"/>-->
             <!-- <span class="btn btn-link" routerLink="../Editar/{{dataItem.ID}}"><i class="fas fa-pencil-alt"></i></span> -->
-            <span class="btn btn-avl-outline-dark" title="Editar">
-              <i class="fas fa-pencil-alt"></i>
+            <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
+                <i class="fas fa-eye"></i>
             </span>
             <span class="btn btn-avl-outline-dark" title="Aprovar" *ngIf="dataItem.Status != 1 && dataItem.Status != 0" (click)="AprovarItem($event,dataItem)">
               <i class="fas fa-sign-in-alt"></i>

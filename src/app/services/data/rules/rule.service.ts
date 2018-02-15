@@ -4,7 +4,7 @@ import { Http, RequestOptions, URLSearchParams, QueryEncoder, Headers } from "@a
 import { environment } from "../../../../environments/environment";
 
 import { AuthService } from "../../auth/auth.service";
-import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel } from "../../../models/RuleTot";
+import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel, RuleProcessList,RuleProcess } from "../../../models/RuleTot";
 import { ServiceUtils } from "../../Utils/Utils";
 
 
@@ -253,6 +253,31 @@ export class RuleService {
       requestOptions.params = Parametros;
 
       this.http.get(`${this._groupRuleSvcUrl}Get`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  /******************************************Process Rules************************************************************/
+  GetRuleProcessList(Skip: number, PageSize: number, prcID:string): Observable<RuleProcessList> {
+    return new Observable<RuleProcessList>(observable => {
+      var searchParams = {
+        //subId: `${environment.subscriptionId}`,
+        skip: Skip,
+        take: PageSize,
+        prcID: prcID
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}GetExecProcessRule`, requestOptions)
         .toPromise()
         .then(response => {
           observable.next(response.json());

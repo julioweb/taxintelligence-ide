@@ -67,7 +67,7 @@ export class AddDocumentComponent implements OnInit, OnDestroy {
 
     if (this.docEditId != null && this.docEditId != "") {
       this.LoadDocument();
-    }
+    }    
   }
 
   ngOnDestroy() {

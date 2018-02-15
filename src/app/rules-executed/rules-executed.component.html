@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-md-12">
+    <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+                      buttonCount: 5,
+                      info: true,
+                      type: 'input',
+                      pageSizes: [10,20,100,10000],
+                      previousNext: true
+                    }" (pageChange)="pageChange($event)">
+
+      <ng-template kendoGridToolbarTemplate>
+        <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()">
+          <span class="btn btn-primary btn-sm">
+            <i class="fas fa-download"></i>
+          </span>
+          <span class="btn">Excel</span>
+        </span>
+        <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AtualizaGrid()">
+          <span class="btn btn-primary btn-sm">
+            <i class="fas fa-sync"></i>
+          </span>
+          <span class="btn">Atualizar</span>
+        </span>
+      </ng-template>
+
+      <kendo-grid-column field="StatusDesc" title="STATUS" width="80">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span class="container" [ngSwitch]="dataItem.Status">
+            <span *ngSwitchCase="0" class="avl-grid-icon text-info" title="Executando">
+              <i class="fas fa-cogs"></i>
+            </span>
+            <span *ngSwitchCase="1" class="avl-grid-icon text-success" title="Aprovado">
+              <i class="fas fa-check"></i>
+            </span>
+            <span *ngSwitchCase="2" class="avl-grid-icon text-danger" title="Erro">
+              <i class="far fa-times-circle"></i>
+            </span>
+            <span *ngSwitchCase="3" class="avl-grid-icon text-warning" title="Alerta">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Message" title="Mensagem" width="180"></kendo-grid-column>
+      <kendo-grid-column field="RuleDesc" title="Regra" width="180"></kendo-grid-column>
+      <kendo-grid-column field="RuleType" title="Tipo de Regra" width="180"></kendo-grid-column>
+      <kendo-grid-column title="Data início" width="150">
+        <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.InitDate | date: 'dd/MM/yyyy'}}</ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column title="Data fim" width="150">
+        <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.EndDate | date: 'dd/MM/yyyy'}}</ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="NodeName" title="Campo Alterado" width="180"></kendo-grid-column>
+      <kendo-grid-column field="StartValue" title="Valor Inicio" width="180"></kendo-grid-column>
+      <kendo-grid-column field="EndValue" title="Valor Final" width="180"></kendo-grid-column>      
+
+      <kendo-grid-excel fileName="Lista.xlsx"></kendo-grid-excel>
+    </kendo-grid>

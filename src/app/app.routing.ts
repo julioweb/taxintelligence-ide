@@ -10,6 +10,7 @@ import { RulesComponent } from './rules/rules.component';
 import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 import { RuleGroupComponent } from './rule-group/rule-group.component';
 import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
+import {DocumentProcessComponent} from "./document-process/document-process.component";
 
 const APP_ROUTES: Routes = [
     { path: 'login', component: LoginComponent },
@@ -23,6 +24,7 @@ const APP_ROUTES: Routes = [
     { path: 'rules-group', component: RuleGroupComponent },
     { path: 'add-rule-group', component: CadRuleGroupComponent },
     { path: 'edit-rule-group', component: CadRuleGroupComponent },
+    {path: 'doc-process', component:DocumentProcessComponent},
     { path: '', component: HomeComponent }
 ];
 
