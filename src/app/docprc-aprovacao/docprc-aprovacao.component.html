@@ -212,11 +212,8 @@
           </span>
         </ng-template>
 
-        <kendo-grid-column field="" title="" width="120">
-          <!-- [locked]="true" -->
-          <ng-template kendoGridCellTemplate let-dataItem>
-            <!--<input type="checkbox" [checked]="dataItem.Discontinued"/>-->
-            <!-- <span class="btn btn-link" routerLink="../Editar/{{dataItem.ID}}"><i class="fas fa-pencil-alt"></i></span> -->
+        <kendo-grid-column field="" title="" width="120">          
+          <ng-template kendoGridCellTemplate let-dataItem>            
             <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
                 <i class="fas fa-eye"></i>
             </span>
