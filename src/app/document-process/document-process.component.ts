@@ -5,7 +5,12 @@ import { DocumentsService } from "../services/data/documents/documents.service";
 import { ServiceUtils } from "../services/Utils/Utils";
 import { Subscription } from 'rxjs/Subscription';
 import { DocProcess } from '../models/Documents';
+
+import { ModalAlertComponent } from "../modais/modal-alert/modal-alert.component";
+import { ModalConfirmComponent } from "../modais/modal-confirm/modal-confirm.component";
+
 import { RulesExecutedComponent } from '../rules-executed/rules-executed.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'document-process',
@@ -19,10 +24,14 @@ export class DocumentProcessComponent implements OnInit, OnDestroy {
   inscricao: Subscription;
 
   prcObj: DocProcess;
-  public svcUtils: ServiceUtils
+  public svcUtils: ServiceUtils;
+  
+  bsModalRef: BsModalRef;
+  private curSubscribe: Subscription;
 
   constructor(public bsDocument: DocumentsService,
     private route: ActivatedRoute,
+    private modalService: BsModalService,
     private router: Router) {
     this.prcObj = new DocProcess();
     this.svcUtils = new ServiceUtils();
@@ -112,6 +121,49 @@ export class DocumentProcessComponent implements OnInit, OnDestroy {
 
   FormatCnpjItem(item: string) {
     return this.svcUtils.ConvertStringToCNPJ(item);
+  }
+
+  public AprovarItem() {
+    const initialState = {
+      Message: `Você tem certeza que deseja aprovar este item ?`,
+      title: "Confirmar Aprovação",
+      alertType: 'primary'
+    };
+
+    this.bsModalRef = this.modalService.show(ModalConfirmComponent, { initialState });
+
+    this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+      if (result != null && result != "") {
+        if (result == "true") {
+          this.bsDocument.ApproveSingleItem(this.prcEditId).subscribe(a => {
+
+            let alertState = {
+              Message: `A aprovação foi efetuada com sucesso.`,
+              title: "Aprovado!",
+              alertType: "success"
+            };
+
+            if (a != "OK") {
+              alertState.title = "Ops!!"
+              if (a == "serverError" || a == "ERRO") {
+                alertState.Message = "Ocorreu um erro ao tentar aprovar o item, tente novamente mais tarde!";
+              }
+              else {
+                alertState.Message = a;
+              }
+              alertState.alertType = "danger";
+            }
+
+            this.modalService.show(ModalAlertComponent, { initialState: alertState });
+            if(a == "OK")
+            {
+              window.location.reload();
+            }            
+          });
+        }
+      }
+      this.curSubscribe.unsubscribe();
+    });
   }
 
 }

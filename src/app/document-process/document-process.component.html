@@ -106,19 +106,23 @@
       </fieldset>
       <div class="row avl-mgn-top-5">
         <div class="col-md-12">
-          <button class="btn btn-primary btn-sm float-right avl-mgn-right-5" title="Baixar XML" (click)="DownloadItem('xml')" [disabled]="!hasUrl('xml')"> <i class="fas fa-download"></i> XML</button>
-          <button class="btn btn-info btn-sm float-right avl-mgn-right-5" title="Baixar JSON" (click)="DownloadItem('json')" [disabled]="!hasUrl('json')"> <i class="fas fa-download"></i> JSON</button>
+          <button class="btn btn-primary btn-sm float-right avl-mgn-right-5" title="Baixar XML" (click)="DownloadItem('xml')" [disabled]="!hasUrl('xml')">
+            <i class="fas fa-download"></i> XML</button>
+          <button class="btn btn-info btn-sm float-right avl-mgn-right-5" title="Baixar JSON" (click)="DownloadItem('json')" [disabled]="!hasUrl('json')">
+            <i class="fas fa-download"></i> JSON</button>
+            <button class="btn btn-success btn-sm float-right avl-mgn-left-10" title="Aprovar Item" (click)="AprovarItem()" *ngIf="prcObj.Status == 3">
+              <i class="fas fa-sign-in-alt"></i> Aprovar Item</button>
         </div>
       </div>
 
       <fieldset class="avalara-fieldset">
-          <legend>Regras</legend>  
-          
-          <div class="row avl-mgn-top-15">
-            <div class="col-md-12">
-                <rules-executed #execRules></rules-executed>
-            </div>
-          </div>          
+        <legend>Regras</legend>
+
+        <div class="row avl-mgn-top-15">
+          <div class="col-md-12">
+            <rules-executed #execRules></rules-executed>
+          </div>
+        </div>
       </fieldset>
     </div>
   </div>

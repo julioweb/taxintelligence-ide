@@ -220,7 +220,7 @@
             <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
                 <i class="fas fa-eye"></i>
             </span>
-            <span class="btn btn-avl-outline-dark" title="Aprovar" *ngIf="dataItem.Status != 1 && dataItem.Status != 0" (click)="AprovarItem($event,dataItem)">
+            <span class="btn btn-avl-outline-dark" title="Aprovar" *ngIf="dataItem.Status==3" (click)="AprovarItem($event,dataItem)">
               <i class="fas fa-sign-in-alt"></i>
             </span>
           </ng-template>
