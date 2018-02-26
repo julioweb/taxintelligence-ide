@@ -77,6 +77,14 @@
                 Necessário informar uma Versão
               </div>
             </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="groupActive" [checked]="grpObjt.GroupActive" (change)="grpObjt.GroupActive = !grpObjt.GroupActive">
+                <label class="form-check-label" for="groupActive">
+                  Grupo Ativo
+                </label>
+              </div>
+            </div>
           </div>
 
         </fieldset>

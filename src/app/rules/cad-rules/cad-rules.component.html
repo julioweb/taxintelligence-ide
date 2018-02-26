@@ -141,6 +141,26 @@
                 Necessário informar uma data fim
               </div>
             </div>
+            <div class="form-group col-md-6" [class.avl-invalid-form]="!hasDocVersion">
+              <label for="ruleSub">
+                <strong>Assinatura</strong>
+              </label>
+              <select id="ruleSub" class="form-control" name="ruleSub" [(ngModel)]="ruleObjt.SubID">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let sub of _SubscriptionID" [value]="sub.ID">{{sub.Text}} </option>
+              </select>
+              <div class="invalid-feedback">
+                Necessário informar uma Versão
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ruleActive" [checked]="ruleObjt.RuleActive" (change)="ruleObjt.RuleActive = !ruleObjt.RuleActive">
+                <label class="form-check-label" for="ruleActive">
+                  Regra Ativa
+                </label>
+              </div>
+            </div>
           </div>
         </fieldset>
 

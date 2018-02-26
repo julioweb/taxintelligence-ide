@@ -31,6 +31,8 @@ export class RuleModel {
     public Detail:RuleDetailModel;    
     public DocId: string;
     public VersionId: string;
+    public RuleActDesc: string;
+    public RuleActive: boolean;
 }
 
 export class RuleDetailModel {
@@ -81,6 +83,8 @@ export class GroupRuleModel {
     public CNPJ: string;
     public Order: number;
     public RelacRules: Array<string>;
+    public GroupActive:boolean;
+    public GroupActDesc:string;
 }
 
 export class RuleType {

@@ -65,6 +65,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   _RelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
   _AvaibleRelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
   _PluginsList: Array<RulePlugin> = new Array<RulePlugin>();
+  _SubscriptionID :Array<any>= new Array<any>();
 
   _ListValidation: Array<RuleDetailData> = new Array<RuleDetailData>();
 
@@ -89,6 +90,8 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.ruleObjt.DetailId = this.bsUtils.GetNewGuidId();
     this.ruleObjt.DocId = '';
     this.ruleObjt.VersionId = '';
+    this.ruleObjt.RuleActive = true;
+    this.ruleObjt.SubID = '';
 
     this.ruleObjt.Detail = new RuleDetailModel();
     this.ruleObjt.Detail.ConditionType = 0;
@@ -119,7 +122,8 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.bsRules.GetRulePlugins().subscribe(a => {
       this._PluginsList = a;
     });
-
+    this._SubscriptionID.push({ID: 'C56A1737-6076-4BA7-B006-C4F79E98F96E'.toLowerCase(), Text:'Atlantica'});
+    this._SubscriptionID.push({ID: '86E367C8-D900-410E-BA73-D92C234C52CD'.toLowerCase(), Text:'Carrefour'});
     // this.ruleEditId = '0F2DE549-DE2C-58F8-C17B-689EF284731F'; // route.snapshot.params["Id"];
   }
 
@@ -141,7 +145,12 @@ export class CadRulesComponent implements OnInit, OnDestroy {
 
   LoadEditRule() {
     this.bsRules.GetRuleById(this.ruleEditId).subscribe(a => {
+      
       this.ruleObjt = a;
+      if(this.ruleObjt.SubID == null){
+        this.ruleObjt.SubID = '';
+      }
+      
       this.ruleObjt.Detail.InitValidity = a.Detail.InitValidity.split(' ')[0];
       this.ruleObjt.Detail.EndValiditiy = a.Detail.EndValiditiy.split(' ')[0];
 
