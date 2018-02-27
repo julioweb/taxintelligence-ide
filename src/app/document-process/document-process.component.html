@@ -110,7 +110,7 @@
             <i class="fas fa-download"></i> XML</button>
           <button class="btn btn-info btn-sm float-right avl-mgn-right-5" title="Baixar JSON" (click)="DownloadItem('json')" [disabled]="!hasUrl('json')">
             <i class="fas fa-download"></i> JSON</button>
-            <button type="button" class="btn btn-secondary float-right btn-sm avl-mgn-left-5" [disabled]="CanEditDocument()" (click)="ShowModalEditDoc()" id="BEdit" value="Edtiar">
+            <button type="button" class="btn btn-secondary float-right btn-sm avl-mgn-left-5" [disabled]="CanEditDocument()" *ngIf="prcObj.Status == 3 || prcObj.Status == 2" (click)="ShowModalEditDoc()" id="BEdit" value="Edtiar">
                 <i class="far fa-edit"></i> Editar
               </button>
           <button class="btn btn-success btn-sm float-right avl-mgn-left-10" title="Aprovar Item" (click)="AprovarItem()" *ngIf="prcObj.Status == 3">

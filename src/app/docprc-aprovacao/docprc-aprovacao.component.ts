@@ -1,5 +1,5 @@
 import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
-import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
+import { GridDataResult, PageChangeEvent, RowArgs } from '@progress/kendo-angular-grid';
 import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { LocalStorage, SessionStorage, LocalStorageService } from 'ngx-webstorage';
 import { debug } from 'util';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { DocProcessList, DocProcess, DocumentModel } from "../models/Documents";
+import { DocProcessList, DocProcess, DocumentModel, DocVersionModel } from "../models/Documents";
 import { DocumentsService } from "../services/data/documents/documents.service";
 import { UsersService } from "../services/data/users/users.service";
 import { EmpresaService } from  "../services/data/empresas/empresa.service";
@@ -19,8 +19,9 @@ import { ModalApproveDocComponent } from "../modais/modal-approve-doc/modal-appr
 import { FiltrosTelaAprovacaoStorage, FiltrosTelaAprovacaoHabilitadoStorage } from "../services/business/aprovacao/FiltrosGridAprovacao";
 import { KeyValue } from "../models/KeyValue";
 import { Router } from '@angular/router';
+import { ModalDocApvEditComponent } from '../modais/modal-doc-apv-edit/modal-doc-apv-edit.component';
 
-
+import { FullLoadingComponent } from '../modais/full-loading/full-loading.component';
 
 @Component({
   selector: 'app-docprc-aprovacao',
@@ -43,8 +44,11 @@ export class DocprcAprovacaoComponent implements OnInit {
   public CNPJDATA: Array<KeyValue> = null;
 
   public _DocFilterList:Array<DocumentModel> = new Array<DocumentModel>();
+  public selectedProcess:Array<string> = new Array<string>();
+  public _RelacDocVersionLst: Array<DocVersionModel> = new Array<DocVersionModel>();
 
   @ViewChild('filterDocument') selDocFilter: ElementRef;
+  @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
 
   public canEditDoc:boolean = false;
 
@@ -58,6 +62,7 @@ export class DocprcAprovacaoComponent implements OnInit {
     private empresaService: EmpresaService,
     private router: Router  ) {
 
+      this.Filtros.VersionID = "";
       docProcess.GetDocProcessStatusTypeList().subscribe(a => {
             this.StatusData = a;
       });
@@ -84,7 +89,7 @@ export class DocprcAprovacaoComponent implements OnInit {
 
       this.GridSkip = 0;
 
-      docProcess.GetDocumentsList(0,800).subscribe(a=> {
+      docProcess.GetDocumentsList(0,800,0).subscribe(a=> {
         this._DocFilterList = a.Data;
         if(this._DocFilterList.length > 0){
           this.Filtros.DocID = this._DocFilterList[0].ID;
@@ -99,6 +104,15 @@ export class DocprcAprovacaoComponent implements OnInit {
   FormatCnpjItem(item:string)
   {
     return this.svcUtils.ConvertStringToCNPJ(item);
+  }
+
+  GetVersionList(item){
+    this.docProcess.GetDocVersionList(this.Filtros.DocID, 0, 1000).subscribe(a => {
+      this._RelacDocVersionLst = a.Data;
+      if(this._DocFilterList.length > 0){
+        this.Filtros.VersionID = this._RelacDocVersionLst[0].ID;
+      }
+    });
   }
 
   /************************************************************************** Operações do Filtro **************************************************************************/
@@ -137,6 +151,7 @@ export class DocprcAprovacaoComponent implements OnInit {
 
   public GridReload() {
     let curFiltros = this.Filtros;
+    this.selectedProcess = [];
     this.docProcess.GetExecDocumentProcess(this.GridSkip, this.GridPageSize,this.Filtros).subscribe(a => {
       this.GridData = {
         data: a.Data,
@@ -151,10 +166,19 @@ export class DocprcAprovacaoComponent implements OnInit {
       }
     });
   }
-  
-  public CanEditDocument(){
-    return !this.canEditDoc;
-  }
+
+  public mySelectionKey(context) {
+    
+    let tmpSelitem = this.GridData.data.filter(x=> context.indexOf(x.ID) >= 0);
+
+    let letEditDoc = true
+    for(var i =0; i< tmpSelitem.length; i++){
+      if(letEditDoc && tmpSelitem[i].Status != 2 &&  tmpSelitem[i].Status != 3){
+        letEditDoc = false;
+      }
+    }
+    this.canEditDoc = letEditDoc
+}
 
   VisualizarProcesso(itemID){
     this.router.navigate(
@@ -180,8 +204,10 @@ export class DocprcAprovacaoComponent implements OnInit {
     this.curSubscribe = this.modalService.onHidden.subscribe(result => {
       if (result != null && result != "") {
         if (result == "true") {
+          this.fullLoading.showLoading();
           this.docProcess.ApproveSingleItem(item.ID).subscribe(a => {
-
+            this.fullLoading.hideLoading();
+            
             let alertState = {
               Message: `A aprovação foi efetuada com sucesso.`,
               title: "Aprovado!",
@@ -220,8 +246,9 @@ export class DocprcAprovacaoComponent implements OnInit {
     this.curSubscribe = this.modalService.onHidden.subscribe(result => {
       if (result != null && result != "") {
         if (result == "true") {
+          this.fullLoading.showLoading();
           this.docProcess.ApproveAllPendentItems().subscribe(a => {
-
+            this.fullLoading.hideLoading();
             let alertState = {
               Message: `A aprovação foi efetuada com sucesso.`,
               title: "Aprovado!",
@@ -252,5 +279,64 @@ export class DocprcAprovacaoComponent implements OnInit {
       }
       this.curSubscribe.unsubscribe();
     });
+  }  
+
+  /************************************************************************** Edição de documento **************************************************************************/
+
+  public CanEditDocument(){
+    return !this.canEditDoc;
+  }
+
+  public ShowModalEditDoc(){
+    
+    if(this.selectedProcess != null && this.selectedProcess.length > 0 && this.Filtros.VersionID != null && this.Filtros.VersionID != ""){
+      let modalId = this.svcUtils.GetNewGuidId();
+
+      let modalConfig = {
+        keyboard: false,
+        ignoreBackdropClick: true,
+        modalService: this.modalService,
+        initialState:{
+          ModalID: modalId,
+          DocVersionId: this.Filtros.VersionID,
+          IsMultiple:true,
+          lstProcessID: this.selectedProcess
+        },
+        class: "avl-modal-form"
+      };
+  
+      this.bsModalRef = this.modalService.show(ModalDocApvEditComponent, modalConfig);     
+  
+      this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+        if (result != null && result != "") {
+          var mdlResult = JSON.parse(result);
+  
+          if(mdlResult.ModalId == modalId){
+            
+            if(mdlResult.Result == "OK"){
+              this.selectedProcess = [];
+              this.GridReload();
+            }
+            this.curSubscribe.unsubscribe();
+          }
+        }
+      });
+    }  
+    else{
+      let alertState = {
+        Message: '',
+        title: "Atenção!",
+        alertType: "warning"
+      };
+
+      if (this.selectedProcess != null || this.selectedProcess.length <= 0) {
+        alertState.Message = "Necessário selecionar ao menos um documento para edição!";
+      }
+      else if(this.Filtros.VersionID != null || this.Filtros.VersionID != ""){
+        alertState.Message = "Necessário selecionar uma versão de documento";
+      }
+
+      this.modalService.show(ModalAlertComponent, { initialState: alertState });
+    }  
   }
 }

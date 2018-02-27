@@ -172,32 +172,36 @@ export class DocumentProcessComponent implements OnInit, OnDestroy {
   }
 
   public ShowModalEditDoc(){
-    // let modalId = this.svcUtils.GetNewGuidId();
+    let modalId = this.svcUtils.GetNewGuidId();
 
-    // let modalConfig = {
-    //   keyboard: false,
-    //   ignoreBackdropClick: true,
-    //   modalService: this.modalService,
-    //   initialState:{
-    //     ModalID: modalId,
-    //     DocVersionId: this.prcObj.DocVersionID,
-    //     IsMultiple:false,
-    //     ProcessID: this.prcObj.ID
-    //   }
-    // };
+    let modalConfig = {
+      keyboard: false,
+      ignoreBackdropClick: true,
+      modalService: this.modalService,
+      initialState:{
+        ModalID: modalId,
+        DocVersionId: this.prcObj.DocVersionID,
+        IsMultiple:false,
+        ProcessID: this.prcObj.ID
+      },
+      class: "avl-modal-form"
+    };
 
-    // this.bsModalRef = this.modalService.show(ModalDocApvEditComponent, modalConfig);     
+    this.bsModalRef = this.modalService.show(ModalDocApvEditComponent, modalConfig);     
 
-    // this.curSubscribe = this.modalService.onHidden.subscribe(result => {
-    //   if (result != null && result != "") {
-    //     var mdlResult = JSON.parse(result);
+    this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+      if (result != null && result != "") {
+        var mdlResult = JSON.parse(result);
 
-    //     if(mdlResult.ModalId == modalId){
-    //       //this.LoadNodeGroup(mdlResult.GrpID);
-    //       this.curSubscribe.unsubscribe();
-    //     }
-    //   }
-    // });
+        if(mdlResult.ModalId == modalId){
+          
+          if(mdlResult.Result == "OK"){
+            window.location.reload();
+          }
+          this.curSubscribe.unsubscribe();
+        }
+      }
+    });
   }
 
 }

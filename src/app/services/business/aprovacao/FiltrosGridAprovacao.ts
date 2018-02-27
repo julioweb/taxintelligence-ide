@@ -28,6 +28,7 @@ export class FiltrosTelaAprovacaoTO implements IFiltrosTelaAprovacaoTO {
     public Rules: Array<string>;
 
     public DocID:string;
+    public VersionID: string;    
 
     public Clear() {
         throw new Error("Method not implemented.");
@@ -51,6 +52,7 @@ export class FiltroAprocaoObj {
     public DataCompetenciaAte: Date;
     public CNPJ: Array<string>;
     public DocID: string;
+    public VersionID: string;
 }
 
 
@@ -114,6 +116,9 @@ export class FiltrosTelaAprovacaoStorage implements IFiltrosTelaAprovacaoTO {
     @SessionStorage("FiltrosTelaAprovacaoStorage.DocID")
     public DocID:string;
 
+    @SessionStorage("FiltrosTelaAprovacaoStorage.VersionID")
+    public VersionID: string;
+
 
     public Clear(): void {
         this.Empresa = null;
@@ -133,6 +138,7 @@ export class FiltrosTelaAprovacaoStorage implements IFiltrosTelaAprovacaoTO {
         this.Rules = [];
         this.CNPJ = null;
         this.DocID = null;
+        this.VersionID = "";
     }
 }
 
@@ -208,6 +214,7 @@ export class FiltrosTelaAprovacaoTools {
         result.DocumentNumber = Filtro.DocumentNumber;
         result.DocumentoId = Filtro.DocumentoId;
         result.DocID = Filtro.DocID;
+        result.VersionID = Filtro.VersionID;
         result.DocumentSeries = Filtro.DocumentSeries;
         result.Aprovador = Filtro.Aprovador!= null ? Filtro.Aprovador.map(a => a.Key): new Array<string>();
         result.CNPJ = Filtro.CNPJ!= null ? Filtro.CNPJ.map(a => a.Key): new Array<string>();

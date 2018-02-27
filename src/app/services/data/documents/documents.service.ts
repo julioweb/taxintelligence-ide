@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Observable } from "rxjs/Rx";
 import { Http, RequestOptions, URLSearchParams, QueryEncoder,Headers } from "@angular/http";
 import { environment } from "../../../../environments/environment";
@@ -6,7 +6,7 @@ import { environment } from "../../../../environments/environment";
 import { AuthService } from "../../auth/auth.service";
 import { FiltrosTelaAprovacaoStorage,FiltrosTelaAprovacaoTools } from "../../../services/business/aprovacao/FiltrosGridAprovacao";
 import { ServiceUtils } from "../../Utils/Utils";
-import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel, DocProcess, DocPrcEditData } from "../../../models/Documents";
+import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel, DocProcess, DocPrcEditData, DocPrcEditNode } from "../../../models/Documents";
 import { KeyValue } from "../../../models/KeyValue";
 
 @Injectable()
@@ -185,6 +185,32 @@ export class DocumentsService {
             });
     });
   }
+
+  SendDocProcessEditData(version:string, lstPrc:Array<string>,lstNodes:Array<DocPrcEditNode>){
+    return new Observable<string>(observable => {
+      var searchParams = {
+        subID: `${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        versionID: version,
+        lstPrcs: lstPrc,
+        lstEditNodes:lstNodes
+      };
+      
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let requestOptions = new RequestOptions();
+      requestOptions.headers = headers;
+
+      this.http.post(`${this._docmentSvcUrl}EditProcessDocument`,searchParams, requestOptions)
+        .toPromise()
+        .then(response => {          
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {          
+          observable.next('serverError');          
+          observable.complete();
+        });
+    });
+  }
   /*****************************************************Home Index************************************************************** */
   GetDocProcessBrief(Skip: number, PageSize: number): Observable<DocBriefList>{
     return new Observable<DocBriefList>(observable => {
@@ -331,13 +357,14 @@ export class DocumentsService {
     });
   }
 
-  GetDocumentsList(Skip: number, PageSize:number): Observable<DocumentList>{
+  GetDocumentsList(Skip: number, PageSize:number, docLevel?:number): Observable<DocumentList>{
     return new Observable<DocumentList>(observable => {
       
       var searchParams = {
         subId: `${environment.subscriptionId}`,
         skip: Skip,
-        take: PageSize
+        take: PageSize,
+        docLevel: docLevel
       };      
       let requestOptions = new RequestOptions();
       let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);

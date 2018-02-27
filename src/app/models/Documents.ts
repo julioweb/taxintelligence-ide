@@ -65,6 +65,9 @@ export class DocPrcEditNode{
     public NodeId:string;
     public NodeLabel:string;
     public Value:string;
+    public isEdited: boolean;
+    public InitValue:string;
+    public nodeType:string;
 }
 
 export class DocumentList{

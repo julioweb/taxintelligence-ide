@@ -22,6 +22,7 @@ export interface IFiltrosTelaAprovacaoTO {
 
     Rules: Array<string>;
     DocID:string;
+    VersionID: string;
 
     Clear();
 }

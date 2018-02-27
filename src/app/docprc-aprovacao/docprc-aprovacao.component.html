@@ -1,3 +1,5 @@
+<app-full-loading #fullLoading></app-full-loading>
+
 <div class="container" id="approveCtn">
 
   <div class="row">
@@ -18,14 +20,24 @@
         </div>
         <div class="card-body p-3 collapse show" id="approvFilter" aria-labelledby="headingOne" data-parent="#approveCtn">
           <form>
-            <div class="row">
-
+            <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="docType">Documento</label>
-                <select id="docType" name="docType" class="form-control" [(ngModel)]="Filtros.DocID" #filterDocument>
+                <select id="docType" name="docType" class="form-control" [(ngModel)]="Filtros.DocID" #filterDocument (change)="GetVersionList(false)">
                   <option *ngFor="let document of _DocFilterList" [attr.data-canedit]="document.CanEdit" [value]="document.ID">{{document.Name}} </option>
                 </select>
               </div>
+              <div class="form-group col-md-6">
+                <label for="verRelac">
+                  <strong>Versão</strong>
+                </label>                
+                <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="Filtros.VersionID" >
+                  <option value="" selected>Selecione...</option>
+                  <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
 
               <div class="col-md-3" *ngIf="filtrosHabilitados.Empresa">
                 <label for="ex2" id="lEmpresa">Empresa</label>
@@ -130,9 +142,10 @@
                   </ul>
                 </div>
 
-                <button type="button" class="btn btn-secondary float-right btn-sm avl-mgn-left-5" [disabled]="CanEditDocument()" id="BEdit" value="Edtiar">
-                    <i class="far fa-edit"></i> Editar
-                  </button>
+                <button type="button" class="btn btn-secondary float-right btn-sm avl-mgn-left-5" [disabled]="CanEditDocument()" (click)="ShowModalEditDoc()"
+                  id="BEdit" value="Edtiar">
+                  <i class="far fa-edit"></i> Editar
+                </button>
 
                 <button type="button" (click)="GridReload()" class="btn btn-success float-right btn-sm avl-mgn-left-5" id="BPesquisa" value="Pesquisar">
                   <i class="fas fa-search"></i> Pesquisar
@@ -153,7 +166,8 @@
                       type: 'input',
                       pageSizes: [10,20,100,10000],
                       previousNext: true
-                    }" (pageChange)="pageChange($event)">
+                    }" (pageChange)="pageChange($event)" [kendoGridSelectBy]="'ID'" (selectedKeysChange)="mySelectionKey($event)"
+        [selectedKeys]="selectedProcess" [selectable]="{checkboxOnly:true,mode:'multiple'}">
 
         <ng-template kendoGridToolbarTemplate>
           <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()">
@@ -175,7 +189,12 @@
             <span class="btn">Atualizar</span>
           </span>
         </ng-template>
-
+        <kendo-grid-checkbox-column width="30">
+          <!-- <ng-template kendoGridHeaderTemplate>
+              <input class="k-checkbox" id="selectAllCheckboxId">
+              <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+            </ng-template> -->
+        </kendo-grid-checkbox-column>
         <kendo-grid-column field="" title="" width="120">
           <ng-template kendoGridCellTemplate let-dataItem>
             <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
@@ -201,6 +220,9 @@
               </span>
               <span *ngSwitchCase="3" class="avl-grid-icon text-warning" title="Aguardando Aprovação">
                 <i class="fas fa-exclamation-triangle"></i>
+              </span>
+              <span *ngSwitchCase="4" class="avl-grid-icon text-secundary" title="Na fila de processamento">
+                <i class="fas fa-stopwatch"></i>
               </span>
             </span>
           </ng-template>
