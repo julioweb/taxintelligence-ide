@@ -1,0 +1,15 @@
+<div class="modal-body">
+  <div class="form-row">
+    <div class="form-group col-md-12" [class.avl-invalid-form]="!hasName">
+      <label for="groupName">Nome do Grupo</label>
+      <input type="text" maxlength="40" class="form-control" id="groupName" placeholder="Nome do Grupo" [(ngModel)]="groupName" />
+      <div class="invalid-feedback">
+        Necessário informar um nome
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onConfirm()">Salvar</button>
+  <button type="button" class="btn btn-default" (click)="onCancel()">Cancelar</button>
+</div>

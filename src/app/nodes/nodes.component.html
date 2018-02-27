@@ -29,52 +29,80 @@
     />
   </div>
 </div>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="nodgroup">Agrupar por</label>
+    <div class="input-group mb-2">
+      <select id="nodgroup" class="form-control" [(ngModel)]="newNode.groupID" #nodeGroupSel>
+        <option value="">Selecione...</option>
+        <option *ngFor="let nodeGroup of _NodeGroupList" [value]="nodeGroup.ID">{{nodeGroup.Name}} </option>
+      </select>
+      <div class="input-group-prepend avl-cursor-pointer" (click)="AddNewNodeGroup()">
+        <div class="input-group-text bg-primary text-white">
+          <i class="fas fa-plus"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group col-md-4">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="editableNode" [checked]="newNode.isEditable" (change)="newNode.isEditable = !newNode.isEditable">
+      <label class="form-check-label" for="editableNode">
+        Campo Editável
+      </label>
+    </div>
+  </div>
+</div>
 
 <div class="row avl-mgn-top-5">
   <div class="col-md-12">
-    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''"  (click)="DeleteNodeTable()">Remover</button>
-    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''" [disabled]="!IsInputValid()" (click)="AddNodeToTable()">Adicionar</button>    
-    <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()" (click)="ClearNodeInput()">Cancelar</button>
-    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()" (click)="UpdateNodeTable()">Alterar</button>
+    <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''" (click)="DeleteNodeTable()">Remover</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID != ''" [disabled]="!IsInputValid()"
+      (click)="AddNodeToTable()">Adicionar</button>
+    <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()"
+      (click)="ClearNodeInput()">Cancelar</button>
+    <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newNode.ID == ''" [disabled]="!IsInputValid()"
+      (click)="UpdateNodeTable()">Alterar</button>
   </div>
 </div>
 
 <div class="row avl-mgn-top-10">
-    <div class="col-md-12">
-        <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
+  <div class="col-md-12">
+    <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
           buttonCount: 5,
           info: true,
           type: 'input',
           pageSizes: [10,20,100,10000],
           previousNext: true      
-        }" (pageChange)="pageChange($event)"
-        [kendoGridSelectBy]="'ID'"
-        [selectedKeys]="selectedNodes"
-        [selectable]="{checkboxOnly:true,mode:'multiple'}"
-        >
-        
-        <kendo-grid-checkbox-column showSelectAll="true" width="30">
-            <ng-template kendoGridHeaderTemplate>
-                <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox
-                    [state]="selectAllState"
-                    (selectAllChange)="onSelectAllChange($event)">
-                <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
-            </ng-template>
-        </kendo-grid-checkbox-column>
-          <kendo-grid-column field="" title="" width="50">
-            <ng-template kendoGridCellTemplate let-dataItem>
-              <span class="btn btn-avl-outline-dark" (click)="EditNodeItem(dataItem.ID)" title="Editar">
-                <i class="fas fa-pencil-alt"></i>
-              </span>
-            </ng-template>
-          </kendo-grid-column>
-        
-          <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
-          <kendo-grid-column field="Label" title="Label" width="150"></kendo-grid-column>
-          <kendo-grid-column field="Xpath" title="Caminho xml" width="250"></kendo-grid-column>
-          <kendo-grid-column field="TypeDesc" title="Tipo" width="80"></kendo-grid-column>
-          <kendo-grid-column field="NodParentName" title="Coluna Pai" width="150"></kendo-grid-column>
-        
-        </kendo-grid>
-    </div>
+        }" (pageChange)="pageChange($event)" [kendoGridSelectBy]="'ID'" [selectedKeys]="selectedNodes" [selectable]="{checkboxOnly:true,mode:'multiple'}">
+
+      <kendo-grid-checkbox-column showSelectAll="true" width="30">
+        <ng-template kendoGridHeaderTemplate>
+          <input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox [state]="selectAllState" (selectAllChange)="onSelectAllChange($event)">
+          <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+        </ng-template>
+      </kendo-grid-checkbox-column>
+      <kendo-grid-column field="" title="" width="50">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span class="btn btn-avl-outline-dark" (click)="EditNodeItem(dataItem.ID)" title="Editar">
+            <i class="fas fa-pencil-alt"></i>
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+
+
+      <kendo-grid-column field="Name" title="Nome" width="150"></kendo-grid-column>
+      <kendo-grid-column field="Label" title="Label" width="150"></kendo-grid-column>
+      <kendo-grid-column field="Xpath" title="Caminho xml" width="250"></kendo-grid-column>
+      <kendo-grid-column field="TypeDesc" title="Tipo" width="80"></kendo-grid-column>      
+      <kendo-grid-column field="NodParentName" title="Coluna Pai" width="150"></kendo-grid-column>
+      <kendo-grid-column field="" title="Editável?" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.isEditable ? "Sim":"Não"}}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="groupDesc" title="Grupo" width="80"></kendo-grid-column>
+
+    </kendo-grid>
+  </div>
 </div>

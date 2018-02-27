@@ -8,6 +8,7 @@ import { DocProcess } from '../models/Documents';
 
 import { ModalAlertComponent } from "../modais/modal-alert/modal-alert.component";
 import { ModalConfirmComponent } from "../modais/modal-confirm/modal-confirm.component";
+import {ModalDocApvEditComponent} from "../modais/modal-doc-apv-edit/modal-doc-apv-edit.component"
 
 import { RulesExecutedComponent } from '../rules-executed/rules-executed.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -25,7 +26,7 @@ export class DocumentProcessComponent implements OnInit, OnDestroy {
 
   prcObj: DocProcess;
   public svcUtils: ServiceUtils;
-  
+
   bsModalRef: BsModalRef;
   private curSubscribe: Subscription;
 
@@ -164,6 +165,39 @@ export class DocumentProcessComponent implements OnInit, OnDestroy {
       }
       this.curSubscribe.unsubscribe();
     });
+  }
+
+  public CanEditDocument(){
+    return !this.prcObj.CanEditDoc;
+  }
+
+  public ShowModalEditDoc(){
+    // let modalId = this.svcUtils.GetNewGuidId();
+
+    // let modalConfig = {
+    //   keyboard: false,
+    //   ignoreBackdropClick: true,
+    //   modalService: this.modalService,
+    //   initialState:{
+    //     ModalID: modalId,
+    //     DocVersionId: this.prcObj.DocVersionID,
+    //     IsMultiple:false,
+    //     ProcessID: this.prcObj.ID
+    //   }
+    // };
+
+    // this.bsModalRef = this.modalService.show(ModalDocApvEditComponent, modalConfig);     
+
+    // this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+    //   if (result != null && result != "") {
+    //     var mdlResult = JSON.parse(result);
+
+    //     if(mdlResult.ModalId == modalId){
+    //       //this.LoadNodeGroup(mdlResult.GrpID);
+    //       this.curSubscribe.unsubscribe();
+    //     }
+    //   }
+    // });
   }
 
 }

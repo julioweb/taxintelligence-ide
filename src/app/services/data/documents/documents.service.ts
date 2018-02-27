@@ -6,7 +6,7 @@ import { environment } from "../../../../environments/environment";
 import { AuthService } from "../../auth/auth.service";
 import { FiltrosTelaAprovacaoStorage,FiltrosTelaAprovacaoTools } from "../../../services/business/aprovacao/FiltrosGridAprovacao";
 import { ServiceUtils } from "../../Utils/Utils";
-import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel, DocProcess } from "../../../models/Documents";
+import{ DocBriefList, DocProcessList,DocPostObject, DocumentList,DocVersionList, DocumentModel, DocVersionModel, DocProcess, DocPrcEditData } from "../../../models/Documents";
 import { KeyValue } from "../../../models/KeyValue";
 
 @Injectable()
@@ -110,7 +110,6 @@ export class DocumentsService {
 
   GetExecDocumentProcess(Skip: number, PageSize:number,Filtros:FiltrosTelaAprovacaoStorage): Observable<DocProcessList>{
     return new Observable<DocProcessList>(observable => {
-      
       var curFiltro = this.filtroGridTool.GetFiltroObject(Filtros);
       var searchParams = {
         subId: `${environment.subscriptionId}`,
@@ -150,6 +149,32 @@ export class DocumentsService {
       requestOptions.headers = new Headers({ 'Accept': 'application/json' });
 
         this.http.get(`${this._docmentSvcUrl}GetDocProcess`,requestOptions)
+            .toPromise()
+            .then(response => {
+                observable.next(response.json());
+                observable.complete();
+            })
+            .catch(error => {
+                observable.error(error);
+            });
+    });
+  }
+
+  GetDocProcessEditData(versionID:string,prcID:string, isMultiple:boolean): Observable<Array<DocPrcEditData>>{
+    return new Observable<Array<DocPrcEditData>>(observable => {
+
+      var searchParams = {
+        versionID:versionID,
+        isMultiple: isMultiple,
+        PrcID:prcID
+      };
+
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+      requestOptions.headers = new Headers({ 'Accept': 'application/json' });
+
+        this.http.get(`${this._docmentSvcUrl}GetDocProcessEditData`,requestOptions)
             .toPromise()
             .then(response => {
                 observable.next(response.json());

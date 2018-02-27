@@ -56,6 +56,8 @@ import { routing } from './app.routing';
 import { FullLoadingComponent } from './modais/full-loading/full-loading.component';
 import { DocumentProcessComponent } from './document-process/document-process.component';
 import { RulesExecutedComponent } from './rules-executed/rules-executed.component';
+import { ModalNodeGroupComponent } from './modais/modal-node-group/modal-node-group.component';
+import { ModalDocApvEditComponent } from './modais/modal-doc-apv-edit/modal-doc-apv-edit.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,9 @@ import { RulesExecutedComponent } from './rules-executed/rules-executed.componen
     CadRulesComponent,
     FullLoadingComponent,
     DocumentProcessComponent,
-    RulesExecutedComponent
+    RulesExecutedComponent,
+    ModalNodeGroupComponent,
+    ModalDocApvEditComponent
   ],
   imports: [
     BrowserModule,
@@ -118,7 +122,9 @@ import { RulesExecutedComponent } from './rules-executed/rules-executed.componen
     ModalApproveDocComponent,
     ModalVersionDocComponent,
     ModalNewRelacComponent,
-    FullLoadingComponent
+    FullLoadingComponent,
+    ModalNodeGroupComponent,
+    ModalDocApvEditComponent
   ],
   bootstrap: [AppComponent]
 })

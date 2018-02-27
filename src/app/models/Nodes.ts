@@ -17,4 +17,12 @@ export class NodeItem{
     public RelNodDesc:string;
     public NodParentId:string;
     public NodParentName:string;
+    public isEditable:boolean;
+    public groupID:string;
+    public groupDesc:string;
+}
+
+export class NodeGroup{
+    public ID:string;
+    public Name:string;
 }

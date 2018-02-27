@@ -1,11 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { GridDataResult, PageChangeEvent, SelectAllCheckboxState } from '@progress/kendo-angular-grid';
 
 import { ServiceUtils } from "../services/Utils/Utils";
 import { NodesService } from "../services/data/nodes/nodes.service";
 
-import { NodeType, NodeItem } from "../models/Nodes";
+import { NodeType, NodeItem, NodeGroup } from "../models/Nodes";
 import { KeyValue } from "../models/KeyValue";
+import { ModalNodeGroupComponent } from '../modais/modal-node-group/modal-node-group.component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nodes',
@@ -20,10 +23,14 @@ export class NodesComponent implements OnInit {
     Xpath: "",
     Type: "",
     ID: "",
-    ParentID: ""
+    ParentID: "",
+    isEditable: false,
+    groupID: ""
   }
 
   nodeList: Array<NodeItem>;
+
+  curSubscribe: Subscription;
 
   public GridData: GridDataResult = null;
   public GridPageSize: number = 5;
@@ -35,13 +42,21 @@ export class NodesComponent implements OnInit {
 
   public _NodePaiList: Array<any> = new Array();
   public _NodePaiListBKP: Array<any> = new Array();
+  
+  public _NodeGroupList: Array<NodeGroup> = new Array<NodeGroup>();
 
   @ViewChild('typeSel') selectedtype: ElementRef;
   @ViewChild('parentSel') selectedParent: ElementRef;
+  @ViewChild('nodeGroupSel') selectedNodgroup: ElementRef;
 
   public NodesType: Array<NodeType> = new Array<NodeType>();
 
-  constructor(private nodService: NodesService) {
+  bsModalRef: BsModalRef;
+
+  @Input('docID') documentID: string = "";
+
+  constructor(private nodService: NodesService,
+    public _bsModalService: BsModalService) {
 
     this.serviceUtils = new ServiceUtils();
 
@@ -50,9 +65,31 @@ export class NodesComponent implements OnInit {
     });
 
     this.nodeList = new Array<NodeItem>();
-  }
+  }  
 
   ngOnInit() {
+    this.LoadNodeGroup("");
+  }
+
+  public SetDocumentID(docParent:string){
+    this.documentID = docParent;
+    this.LoadNodeGroup("");
+
+  }
+  
+  public LoadNodeGroup(selGroup:string){
+    
+    
+    if(this.newNode.ID != null && this.newNode.ID != ""){
+      this.newNode.groupID = selGroup;
+    }
+
+    if(this.documentID != ""){
+      this.nodService.GetNodesGroup(this.documentID).subscribe(a=> {
+        this._NodeGroupList = a;
+      });
+    }
+    
   }
 
   public RetrieveNodeList() {
@@ -103,6 +140,8 @@ export class NodesComponent implements OnInit {
     this.newNode.Type = "";
     this.newNode.ID = "";
     this.newNode.ParentID = "";
+    this.newNode.isEditable = false;
+    this.newNode.groupID = "";
   }
 
   private AddNodeToTable() {
@@ -120,11 +159,18 @@ export class NodesComponent implements OnInit {
       RelNodDesc: "",
       RelNodId: "",
       NodParentId: this.newNode.ParentID,
-      NodParentName:""
+      NodParentName:"",      
+      isEditable: this.newNode.isEditable,
+      groupID: this.newNode.groupID,
+      groupDesc: ""
     };
 
     if(this.newNode.ParentID != null && this.newNode.ParentID != ""){
-      tmpNode.NodParentName = this.selectedParent.nativeElement.selectedOptions[0].text
+      tmpNode.NodParentName = this.selectedParent.nativeElement.selectedOptions[0].text;
+    }
+
+    if(this.newNode.groupID != null && this.newNode.groupID != ""){
+      tmpNode.groupDesc = this.selectedNodgroup.nativeElement.selectedOptions[0].text;
     }
 
     if (tmpNode.TypeDesc.toLowerCase() == "lista") {
@@ -155,7 +201,9 @@ export class NodesComponent implements OnInit {
       this.newNode.ID = temp.ID;
       this.newNode.Type = temp.TypeId;
       this.newNode.Xpath = temp.Xpath;
-      this.newNode.ParentID = temp.NodParentId
+      this.newNode.ParentID = temp.NodParentId;
+      this.newNode.isEditable = temp.isEditable;
+      this.newNode.groupID = temp.groupID;
     }
 
     if (temp.TypeDesc.toLowerCase() == "lista") {
@@ -181,11 +229,16 @@ export class NodesComponent implements OnInit {
       this.nodeList[idxUpdt].Xpath = this.newNode.Xpath;
       this.nodeList[idxUpdt].TypeDesc = this.selectedtype.nativeElement.selectedOptions[0].text;
       this.nodeList[idxUpdt].NodParentId = this.newNode.ParentID;
+      this.nodeList[idxUpdt].isEditable = this.newNode.isEditable;
+      this.nodeList[idxUpdt].groupID = this.newNode.groupID;
       
       if(this.newNode.ParentID != null && this.newNode.ParentID != ""){
         this.nodeList[idxUpdt].NodParentName = this.selectedParent.nativeElement.selectedOptions[0].text;
       }
       
+      if(this.newNode.groupID != null && this.newNode.groupID != ""){
+        this.nodeList[idxUpdt].groupDesc = this.selectedNodgroup.nativeElement.selectedOptions[0].text;
+      }
 
       if (!this.nodeList[idxUpdt].isNew) {
         this.nodeList[idxUpdt].isEdited = true;
@@ -247,4 +300,32 @@ export class NodesComponent implements OnInit {
     this.GridReload();
   }
 
+  /*******************************************Criação de um Grupo Novo**********************************************/
+  private AddNewNodeGroup(){
+    
+    let modalId = this.serviceUtils.GetNewGuidId();
+
+    let modalConfig = {
+      keyboard: false,
+      ignoreBackdropClick: true,
+      modalService: this._bsModalService,
+      initialState:{
+        ModalID: modalId,
+        DocId: this.documentID
+      }
+    };
+
+    this.bsModalRef = this._bsModalService.show(ModalNodeGroupComponent, modalConfig);     
+
+    this.curSubscribe = this._bsModalService.onHidden.subscribe(result => {
+      if (result != null && result != "") {
+        var mdlResult = JSON.parse(result);
+
+        if(mdlResult.Modal == "NodeGroup" && mdlResult.ModalId == modalId){
+          this.LoadNodeGroup(mdlResult.GrpID);
+          this.curSubscribe.unsubscribe();
+        }
+      }
+    });
+  }
 }

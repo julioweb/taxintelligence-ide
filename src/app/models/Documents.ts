@@ -52,6 +52,19 @@ export class DocProcess{
     public UrlXml: string;
     public UrlJson: string;
     public TotalValue: string;
+    public CanEditDoc:boolean;
+}
+
+export class DocPrcEditData{
+    public GroupID:string;
+    public GrpName:string;
+    public Nodes:Array<DocPrcEditNode>;
+}
+
+export class DocPrcEditNode{
+    public NodeId:string;
+    public NodeLabel:string;
+    public Value:string;
 }
 
 export class DocumentList{
@@ -64,6 +77,7 @@ export class DocumentModel{
     public Name: string;
     public Description:string;
     public Level:number;
+    public CanEdit:boolean;
 }
 
 export class DocVersionList

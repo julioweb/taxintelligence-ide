@@ -5,7 +5,7 @@ import { environment } from "../../../../environments/environment";
 
 import { AuthService } from "../../auth/auth.service";
 import { ServiceUtils } from "../../Utils/Utils";
-import { NodeType, NodeItem } from "../../../models/Nodes";
+import { NodeType, NodeItem, NodeGroup } from "../../../models/Nodes";
 import { KeyValue } from "../../../models/KeyValue";
 
 @Injectable()
@@ -55,7 +55,7 @@ export class NodesService {
                     observable.error(error);
                 });
         });
-    }
+    }    
 
     GetVersionNodes(versionID:string): Observable<Array<NodeItem>>{
         return new Observable<Array<NodeItem>>(observable => {
@@ -78,5 +78,53 @@ export class NodesService {
                 });
         });
     }
+
+    /*************************************************Node Group****************************************************/
+    GetNodesGroup(docID:string): Observable<Array<NodeGroup>>{
+        return new Observable<Array<NodeGroup>>(observable => {
+            var searchParams = {
+                docId:docID
+              };      
+              let requestOptions = new RequestOptions();
+              let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+              requestOptions.params = Parametros;
+              requestOptions.headers = new Headers({ 'Accept': 'application/json' });
+
+              this.http.get(`${this._docmentSvcUrl}GetNodeGroup`,requestOptions)
+                .toPromise()
+                .then(response => {
+                    observable.next(response.json() as Array<NodeGroup>);
+                    observable.complete();
+                })
+                .catch(error => {
+                    observable.error(error);
+                });
+        });
+    }
+
+    SendNodeGroup(nodeDesc: NodeGroup, docID:string) {
+        return new Observable<string>(observable => {      
+          var searchParams = {
+            ID: nodeDesc.ID,
+            Name: nodeDesc.Name,
+            DocID: docID
+          };
+    
+          let headers = new Headers({ 'Content-Type': 'application/json' });
+          let requestOptions = new RequestOptions();
+          requestOptions.headers = headers;
+    
+          this.http.post(`${this._docmentSvcUrl}AddNodeGroup`, searchParams, requestOptions)
+            .toPromise()
+            .then(response => {
+              observable.next(response.json());
+              observable.complete();
+            })
+            .catch(error => {
+              observable.next('serverError');
+              observable.complete();
+            });
+        });
+      }
 
 }

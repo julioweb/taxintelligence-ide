@@ -21,6 +21,7 @@ export interface IFiltrosTelaAprovacaoTO {
     CNPJ: Array<KeyValue>;
 
     Rules: Array<string>;
+    DocID:string;
 
     Clear();
 }

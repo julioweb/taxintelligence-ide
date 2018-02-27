@@ -31,7 +31,8 @@ export class AddDocumentComponent implements OnInit, OnDestroy {
     Name: "",
     Description: "",
     Level: 0,
-    ID: ""
+    ID: "",
+    CanEdit:false
   }
 
   @ViewChild('nodeChild') nodesChild: NodesComponent;
@@ -79,6 +80,7 @@ export class AddDocumentComponent implements OnInit, OnDestroy {
       this.docObjt = a;
 
       this.nodesChild.LoadNodesFromServe(this.docObjt.ID);
+      this.nodesChild.SetDocumentID(this.docObjt.ID);
       this.docVersion.LoadVersionsFromServer(this.docObjt.ID);
     });
   }

@@ -20,131 +20,91 @@
           <form>
             <div class="row">
 
-                <div class="col-md-3" *ngIf="filtrosHabilitados.Empresa">
-                    <label for="ex2" id="lEmpresa">Empresa</label>
-                    <kendo-multiselect [data]="EmpresaData"
-                                       [placeholder]="'Empresa'"
-                                       name="Empresa"
-                                       [(ngModel)]="Filtros.Empresa"
-                                       [textField]="'Value'"
-                                       [valueField]="'Key'"
-                                       (ngModelChange)="EmpresaMudou($event)"
-                                       ngModel></kendo-multiselect>
+              <div class="form-group col-md-6">
+                <label for="docType">Documento</label>
+                <select id="docType" name="docType" class="form-control" [(ngModel)]="Filtros.DocID" #filterDocument>
+                  <option *ngFor="let document of _DocFilterList" [attr.data-canedit]="document.CanEdit" [value]="document.ID">{{document.Name}} </option>
+                </select>
+              </div>
+
+              <div class="col-md-3" *ngIf="filtrosHabilitados.Empresa">
+                <label for="ex2" id="lEmpresa">Empresa</label>
+                <kendo-multiselect [data]="EmpresaData" [placeholder]="'Empresa'" name="Empresa" [(ngModel)]="Filtros.Empresa" [textField]="'Value'"
+                  [valueField]="'Key'" (ngModelChange)="EmpresaMudou($event)" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-3" *ngIf="filtrosHabilitados.Filial">
+
+                <label for="ex2" id="LFilial">Filial</label>
+                <kendo-multiselect [data]="FilialData" [placeholder]="'Filial'" name="Filial" [(ngModel)]="Filtros.Filial" [textField]="'Value'"
+                  [valueField]="'Key'" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-3" *ngIf="filtrosHabilitados.DataDaAprovacao">
+                <label for="DataDaAprovacao" id="lDataAprovacao">Data da Aprovação</label>
+                <div>
+                  <kendo-datepicker name="DataDaAprovacaoDe" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataDaAprovacaoDe" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
+                  <kendo-datepicker name="DataDaAprovacaoAte" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataDaAprovacaoAte" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
                 </div>
+              </div>
 
-                <div class="col-md-3" *ngIf="filtrosHabilitados.Filial">
-
-                    <label for="ex2" id="LFilial">Filial</label>
-                    <kendo-multiselect [data]="FilialData"
-                                       [placeholder]="'Filial'"
-                                       name="Filial"
-                                       [(ngModel)]="Filtros.Filial"
-                                       [textField]="'Value'"
-                                       [valueField]="'Key'"
-                                       ngModel></kendo-multiselect>
+              <div class="col-md-3" *ngIf="filtrosHabilitados.DataDeProcessamento">
+                <label for="DataDoProcessamento" id="lDataProcessamento">Data do Processamento</label>
+                <div>
+                  <kendo-datepicker name="DataDeProcessamentoDe" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataDeProcessamentoDe" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
+                  <kendo-datepicker name="DataDeProcessamentoAte" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataDeProcessamentoAte" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
                 </div>
+              </div>
 
-                <div class="col-md-3" *ngIf="filtrosHabilitados.DataDaAprovacao">
-                  <label for="DataDaAprovacao" id="lDataAprovacao">Data da Aprovação</label>
-                  <div>
-                    <kendo-datepicker name="DataDaAprovacaoDe"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataDaAprovacaoDe"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                    <kendo-datepicker name="DataDaAprovacaoAte"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataDaAprovacaoAte"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                  </div>
+              <div class="col-md-4 " *ngIf="filtrosHabilitados.DocumentoId">
+                <label for="ex1" id="LDocumentoId">DOCUMENTO ID (CHAVE)</label>
+                <input class="form-control" type="text" placeholder="Documento Id" name="DocumentoId" [(ngModel)]="Filtros.DocumentoId" style="max-height: 30px;"
+                  ngModel>
+              </div>
+
+              <div class="col-md-3 " *ngIf="filtrosHabilitados.Status">
+                <label for="ex2" id="lStatus">STATUS</label>
+                <kendo-multiselect [data]="StatusData" [placeholder]="'STATUS'" name="Status" [(ngModel)]="Filtros.Status" [textField]="'Value'"
+                  [valueField]="'Key'" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-3" *ngIf="filtrosHabilitados.StatusDocumento">
+                <label for="ex2" id="lStatusDocumento">STATUS DOC</label>
+                <kendo-multiselect [data]="StatusDocumentoData" [placeholder]="'STATUS DOC'" name="StatusDocumento" [(ngModel)]="Filtros.StatusDocumento"
+                  [textField]="'Value'" [valueField]="'Key'" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-4" *ngIf="filtrosHabilitados.Aprovador">
+                <label for="ex2" id="lAprovador">Aprovador</label>
+
+                <kendo-multiselect [data]="AprovadorData" [placeholder]="'Aprovador'" name="Aprovador" [(ngModel)]="Filtros.Aprovador" [textField]="'Value'"
+                  [valueField]="'Key'" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-3" *ngIf="filtrosHabilitados.CNPJ">
+                <label for="ex2" id="lCNPJ">CNPJ</label>
+                <kendo-multiselect [data]="CNPJDATA" [placeholder]="'CNPJ'" name="CNPJ" [(ngModel)]="Filtros.CNPJ" [textField]="'Value'"
+                  [valueField]="'Key'" ngModel></kendo-multiselect>
+              </div>
+
+              <div class="col-md-3 " *ngIf="filtrosHabilitados.DataCompetencia">
+                <label for="DataVigenciaDe" id="lCompetencia">Data de emissão</label>
+                <div>
+                  <kendo-datepicker name="DataVigenciaDe" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataCompetenciaDe" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
+                  <kendo-datepicker name="DataVigenciaAte" [format]="'dd/MM/yyyy'" [(ngModel)]="Filtros.DataCompetenciaAte" [ngStyle]="{'width': '120px'}"></kendo-datepicker>
                 </div>
+              </div>
 
-                <div class="col-md-3" *ngIf="filtrosHabilitados.DataDeProcessamento">
-                  <label for="DataDoProcessamento" id="lDataProcessamento">Data do Processamento</label>
-                  <div>
-                    <kendo-datepicker name="DataDeProcessamentoDe"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataDeProcessamentoDe"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                    <kendo-datepicker name="DataDeProcessamentoAte"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataDeProcessamentoAte"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                  </div>
-                </div>
+              <div class="col-md-2 " *ngIf="filtrosHabilitados.DocumentNumber">
+                <label for="DocumentNumber" id="lDocumentNumber">Número da NF</label>
+                <input class="form-control form-control-avl" type="text" placeholder="Número da NF" name="DocumentNumber" [(ngModel)]="Filtros.DocumentNumber"
+                  ngModel>
+              </div>
 
-                <div class="col-md-4 " *ngIf="filtrosHabilitados.DocumentoId">
-                    <label for="ex1" id="LDocumentoId">DOCUMENTO ID (CHAVE)</label>
-                    <input class="form-control" type="text" placeholder="Documento Id" name="DocumentoId" [(ngModel)]="Filtros.DocumentoId" style="max-height: 30px;" ngModel>
-                </div>
-
-                <div class="col-md-3 " *ngIf="filtrosHabilitados.Status">
-                  <label for="ex2" id="lStatus">STATUS</label>
-                  <kendo-multiselect [data]="StatusData"
-                                     [placeholder]="'STATUS'"
-                                     name="Status"
-                                     [(ngModel)]="Filtros.Status"
-                                     [textField]="'Value'"
-                                     [valueField]="'Key'"
-                                     ngModel></kendo-multiselect>
-                </div>
-
-                <div class="col-md-3" *ngIf="filtrosHabilitados.StatusDocumento">
-                  <label for="ex2" id="lStatusDocumento">STATUS DOC</label>
-                  <kendo-multiselect [data]="StatusDocumentoData"
-                                     [placeholder]="'STATUS DOC'"
-                                     name="StatusDocumento"
-                                     [(ngModel)]="Filtros.StatusDocumento"
-                                     [textField]="'Value'"
-                                     [valueField]="'Key'"
-                                     ngModel></kendo-multiselect>
-                </div>
-
-                <div class="col-md-4" *ngIf="filtrosHabilitados.Aprovador">
-                  <label for="ex2" id="lAprovador">Aprovador</label>
-
-                  <kendo-multiselect [data]="AprovadorData"
-                                     [placeholder]="'Aprovador'"
-                                     name="Aprovador"
-                                     [(ngModel)]="Filtros.Aprovador"
-                                     [textField]="'Value'"
-                                     [valueField]="'Key'"
-                                     ngModel></kendo-multiselect>
-                </div>
-
-                <div class="col-md-3" *ngIf="filtrosHabilitados.CNPJ">
-                    <label for="ex2" id="lCNPJ">CNPJ</label>
-                    <kendo-multiselect [data]="CNPJDATA"
-                                       [placeholder]="'CNPJ'"
-                                       name="CNPJ"
-                                       [(ngModel)]="Filtros.CNPJ"
-                                       [textField]="'Value'"
-                                       [valueField]="'Key'"
-                                       ngModel></kendo-multiselect>
-                </div>
-
-                <div class="col-md-3 " *ngIf="filtrosHabilitados.DataCompetencia">
-                  <label for="DataVigenciaDe" id="lCompetencia">Data de emissão</label>
-                  <div>
-                    <kendo-datepicker name="DataVigenciaDe"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataCompetenciaDe"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                    <kendo-datepicker name="DataVigenciaAte"
-                                      [format]="'dd/MM/yyyy'"
-                                      [(ngModel)]="Filtros.DataCompetenciaAte"
-                                      [ngStyle]="{'width': '120px'}"></kendo-datepicker>
-                  </div>
-                </div>
-
-                <div class="col-md-2 " *ngIf="filtrosHabilitados.DocumentNumber">
-                    <label for="DocumentNumber" id="lDocumentNumber">Número da NF</label>
-                    <input class="form-control form-control-avl" type="text" placeholder="Número da NF" name="DocumentNumber" [(ngModel)]="Filtros.DocumentNumber" ngModel>
-                </div>
-
-                <div class="col-md-2 " *ngIf="filtrosHabilitados.DocumentSeries">
-                  <label for="DocumentSeries" id="lDocumentSeries">Série</label>
-                  <input class="form-control" type="text" placeholder="Série" name="DocumentSeries" [(ngModel)]="Filtros.DocumentSeries" ngModel>
-                </div>
+              <div class="col-md-2 " *ngIf="filtrosHabilitados.DocumentSeries">
+                <label for="DocumentSeries" id="lDocumentSeries">Série</label>
+                <input class="form-control" type="text" placeholder="Série" name="DocumentSeries" [(ngModel)]="Filtros.DocumentSeries" ngModel>
+              </div>
 
             </div>
             <div class="row avl-mgn-top-15">
@@ -169,6 +129,10 @@
                     </li>
                   </ul>
                 </div>
+
+                <button type="button" class="btn btn-secondary float-right btn-sm avl-mgn-left-5" [disabled]="CanEditDocument()" id="BEdit" value="Edtiar">
+                    <i class="far fa-edit"></i> Editar
+                  </button>
 
                 <button type="button" (click)="GridReload()" class="btn btn-success float-right btn-sm avl-mgn-left-5" id="BPesquisa" value="Pesquisar">
                   <i class="fas fa-search"></i> Pesquisar
@@ -212,10 +176,10 @@
           </span>
         </ng-template>
 
-        <kendo-grid-column field="" title="" width="120">          
-          <ng-template kendoGridCellTemplate let-dataItem>            
+        <kendo-grid-column field="" title="" width="120">
+          <ng-template kendoGridCellTemplate let-dataItem>
             <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
-                <i class="fas fa-eye"></i>
+              <i class="fas fa-eye"></i>
             </span>
             <span class="btn btn-avl-outline-dark" title="Aprovar" *ngIf="dataItem.Status==3" (click)="AprovarItem($event,dataItem)">
               <i class="fas fa-sign-in-alt"></i>
@@ -254,7 +218,7 @@
 
 
         <kendo-grid-column field="CNPJ" title="CNPJ Destinatário" width="150">
-            <ng-template kendoGridCellTemplate let-dataItem>{{FormatCnpjItem(dataItem.CNPJ)}}</ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>{{FormatCnpjItem(dataItem.CNPJ)}}</ng-template>
         </kendo-grid-column>
 
         <kendo-grid-column field="DocumentStatus" title="STATUS DOC" width="130"></kendo-grid-column>

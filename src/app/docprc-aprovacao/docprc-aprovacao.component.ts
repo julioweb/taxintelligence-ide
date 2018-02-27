@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { LocalStorage, SessionStorage, LocalStorageService } from 'ngx-webstorage';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { DocProcessList, DocProcess } from "../models/Documents";
+import { DocProcessList, DocProcess, DocumentModel } from "../models/Documents";
 import { DocumentsService } from "../services/data/documents/documents.service";
 import { UsersService } from "../services/data/users/users.service";
 import { EmpresaService } from  "../services/data/empresas/empresa.service";
@@ -41,6 +41,12 @@ export class DocprcAprovacaoComponent implements OnInit {
   public StatusDocumentoData: Array<KeyValue> = null;
   public AprovadorData: Array<KeyValue> = null;
   public CNPJDATA: Array<KeyValue> = null;
+
+  public _DocFilterList:Array<DocumentModel> = new Array<DocumentModel>();
+
+  @ViewChild('filterDocument') selDocFilter: ElementRef;
+
+  public canEditDoc:boolean = false;
 
   constructor(public docProcess: DocumentsService,
     private modalService: BsModalService,
@@ -77,7 +83,15 @@ export class DocprcAprovacaoComponent implements OnInit {
       });
 
       this.GridSkip = 0;
-      this.GridReload();
+
+      docProcess.GetDocumentsList(0,800).subscribe(a=> {
+        this._DocFilterList = a.Data;
+        if(this._DocFilterList.length > 0){
+          this.Filtros.DocID = this._DocFilterList[0].ID;
+        }
+        this.GridReload();
+      })
+      
   }
 
   ngOnInit() { }
@@ -123,13 +137,23 @@ export class DocprcAprovacaoComponent implements OnInit {
 
   public GridReload() {
     let curFiltros = this.Filtros;
-    
     this.docProcess.GetExecDocumentProcess(this.GridSkip, this.GridPageSize,this.Filtros).subscribe(a => {
       this.GridData = {
         data: a.Data,
         total: a.Total
       }
+      
+      let doc = this.selDocFilter;
+      this.canEditDoc = false;
+
+      if(doc.nativeElement.selectedOptions[0].getAttribute("data-canedit") == "true" && a.Data.length > 0){
+        this.canEditDoc = true;
+      }
     });
+  }
+  
+  public CanEditDocument(){
+    return !this.canEditDoc;
   }
 
   VisualizarProcesso(itemID){
