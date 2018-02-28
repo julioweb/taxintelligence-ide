@@ -43,6 +43,10 @@ export class RuleDetailModel {
     public InitValidity: string;// Date;
     public EndValiditiy: string;// Date;
     public PluginID: string;
+    public UrlValidation:string
+    public UrlTransformation:string
+    public IsUrlValidation:boolean;
+    public IsUrlTransform:boolean;
     public TransformRule:Array<RuleDetailData>;
     public ValidationRule:Array<RuleDetailData>;
 }

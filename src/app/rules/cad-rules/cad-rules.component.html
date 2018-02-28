@@ -141,7 +141,7 @@
                 Necessário informar uma data fim
               </div>
             </div>
-            <div class="form-group col-md-6" [class.avl-invalid-form]="!hasDocVersion">
+            <div class="form-group col-md-6">
               <label for="ruleSub">
                 <strong>Assinatura</strong>
               </label>
@@ -149,9 +149,6 @@
                 <option value="" selected>Selecione...</option>
                 <option *ngFor="let sub of _SubscriptionID" [value]="sub.ID">{{sub.Text}} </option>
               </select>
-              <div class="invalid-feedback">
-                Necessário informar uma Versão
-              </div>
             </div>
             <div class="col-md-4">
               <div class="form-check">
@@ -171,7 +168,21 @@
           </div>
           <div class="row">
             <div class="col-md-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="ruleObjt.Detail.IsUrlValidation" (change)="CheckValidationUrlChange()"
+                  id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  Chamar Url
+                </label>
+              </div>
               <div class="form-row">
+                <div class="form-group col-md-12" *ngIf="ruleObjt.Detail.IsUrlValidation" [class.avl-invalid-form]="!hasValidationUrl">
+                  <label for="valUrl">Url</label>
+                  <input type="text" maxlength="2000" class="form-control" id="valUrl" name="valUrl" placeholder="Url" [(ngModel)]="ruleObjt.Detail.UrlValidation">
+                  <div class="invalid-feedback">
+                    Necessário informar uma URL
+                  </div>
+                </div>
                 <div class="form-group col-md-4">
                   <label for="nodeRel">Campo</label>
                   <select id="nodeRel" name="nodeRel" class="form-control" [(ngModel)]="newValidation.NodeID" #ValNodeSel>
@@ -179,7 +190,7 @@
                     <option *ngFor="let node of _RelacVersionNodList" [value]="node.ID">{{node.Label}} </option>
                   </select>
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-2" *ngIf="!ruleObjt.Detail.IsUrlValidation">
                   <label for="valCondition">Condição</label>
                   <select id="valCondition" name="valCondition" class="form-control" [(ngModel)]="newValidation.Condition" #ValCndtSel>
                     <option value="eq" selected>Igual</option>
@@ -191,10 +202,11 @@
                   </select>
                 </div>
                 <div class="form-group col-md-4">
-                  <label for="valValue">Valor</label>
+                  <label for="valValue" *ngIf="!ruleObjt.Detail.IsUrlValidation">Valor</label>
+                  <label for="valValue" *ngIf="ruleObjt.Detail.IsUrlValidation">Parâmetro</label>
                   <input type="text" maxlength="2000" class="form-control" id="valValue" name="valValue" placeholder="valor" [(ngModel)]="newValidation.Value">
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-2" *ngIf="!ruleObjt.Detail.IsUrlValidation">
                   <label for="valRelation">Operação Lógica</label>
                   <select id="valRelation" name="valRelation" class="form-control" [(ngModel)]="newValidation.Relation" #ValRelacSel>
                     <option value="AND" selected>E</option>
@@ -242,9 +254,10 @@
                 </kendo-grid-column>
 
                 <kendo-grid-column field="NodeDesc" title="Campo" width="150"></kendo-grid-column>
-                <kendo-grid-column field="ConditionDesc" title="Condição" width="150"></kendo-grid-column>
-                <kendo-grid-column field="Value" title="Valor" width="250"></kendo-grid-column>
-                <kendo-grid-column field="RelationDesc" title="Lógica" width="80"></kendo-grid-column>
+                <kendo-grid-column field="ConditionDesc" title="Condição" width="150" *ngIf="!ruleObjt.Detail.IsUrlValidation"></kendo-grid-column>
+                <kendo-grid-column field="Value" title="Valor" width="250" *ngIf="!ruleObjt.Detail.IsUrlValidation"></kendo-grid-column>
+                <kendo-grid-column field="Value" title="Parâmetro" width="250" *ngIf="ruleObjt.Detail.IsUrlValidation"></kendo-grid-column>
+                <kendo-grid-column field="RelationDesc" title="Lógica" width="80" *ngIf="!ruleObjt.Detail.IsUrlValidation"></kendo-grid-column>
               </kendo-grid>
             </div>
           </div>
@@ -254,6 +267,22 @@
           <legend>Transformação</legend>
           <div class="row">
             <div class="col-md-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="ruleObjt.Detail.IsUrlTransform" (change)="CheckTransformationUrlChange()"
+                  id="trfChkUrl">
+                <label class="form-check-label" for="trfChkUrl">
+                  Chamar Url
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12" *ngIf="ruleObjt.Detail.IsUrlTransform" [class.avl-invalid-form]="!hasTransformUrl">
+                  <label for="trfUrl">Url</label>
+                  <input type="text" maxlength="2000" class="form-control" id="trfUrl" name="trfUrl" placeholder="Url" [(ngModel)]="ruleObjt.Detail.UrlTransformation">
+                  <div class="invalid-feedback">
+                    Necessário informar uma URL
+                  </div>
+                </div>
+              </div>
               <div class="form-row">
                 <div class="form-group col-md-4" [class.avl-invalid-form]="!hasTransformNode">
                   <label for="nodeTRel">Campo</label>
@@ -266,7 +295,8 @@
                   </div>
                 </div>
                 <div class="form-group col-md-8" [class.avl-invalid-form]="!hasTransformVal">
-                  <label for="trfValue">Valor</label>
+                  <label for="trfValue" *ngIf="!ruleObjt.Detail.IsUrlTransform">Valor</label>
+                  <label for="trfValue" *ngIf="ruleObjt.Detail.IsUrlTransform">Parâmetro</label>
                   <input type="text" maxlength="2000" class="form-control" id="trfValue" name="trfValue" placeholder="valor" [(ngModel)]="newTransformation.Value">
                   <div class="invalid-feedback">
                     Necessário informar um valor de transformação

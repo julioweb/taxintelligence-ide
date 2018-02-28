@@ -38,6 +38,9 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   hasValidationFields: boolean = true;
   hasPlugin: boolean = true;
 
+  hasTransformUrl:boolean = true;
+  hasValidationUrl:boolean = true;
+
   isTransformacao: boolean = false;
   isPlugin: boolean = false;
   isValidation: boolean = false;
@@ -189,9 +192,12 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.hasValidationFields = !this.isValidation || this._ListValidation.length > 0;
     this.hasPlugin = !this.isPlugin || (this.ruleObjt.Detail.PluginID != null && this.ruleObjt.Detail.PluginID != '');
 
+    this.hasTransformUrl = !this.ruleObjt.Detail.IsUrlTransform || (this.ruleObjt.Detail.UrlTransformation != null && this.ruleObjt.Detail.UrlTransformation != "");
+    this.hasValidationUrl = !this.ruleObjt.Detail.IsUrlValidation || (this.ruleObjt.Detail.UrlValidation != null && this.ruleObjt.Detail.UrlValidation != "");
+
     isValid = this.hasDesc && this.hasName && this.hasDocVersion && this.hasOpType && this.hasType && this.hasValidationCondition
       && this.hasValidationLevel && this.hasValidationDtFim && this.hasValidationDtInit && this.hasValidationMsg
-      && this.hasTransformNode && this.hasTransformVal && this.hasValidationFields && this.hasPlugin;
+      && this.hasTransformNode && this.hasTransformVal && this.hasValidationFields && this.hasPlugin && this.hasTransformUrl && this.hasValidationUrl;
     return isValid;
   }
 
@@ -300,9 +306,18 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   }
 
   IsValidationInputValid() {
-    return this.newValidation.NodeID != null && this.newValidation.NodeID != ''
+    if(this.ruleObjt.Detail.IsUrlValidation)
+    {
+      return this.ruleObjt.Detail.UrlValidation != null && this.ruleObjt.Detail.UrlValidation.trim() != "" 
+      && this.newValidation.NodeID != null && this.newValidation.NodeID != ''
+      && this.newValidation.Value != null && this.newValidation.Value.trim() != ''
+    }
+    else{
+      return this.newValidation.NodeID != null && this.newValidation.NodeID != ''
       && this.newValidation.Condition != null && this.newValidation.Condition != ''
       && this.newValidation.Relation != null && this.newValidation.Relation != '';
+    }
+    
   }
 
   onSelectAllVldChange(checkedState: SelectAllCheckboxState) {
@@ -328,7 +343,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     let tmpValidation: RuleDetailData = {
       ID: this.bsUtils.GetNewGuidId(),
       Condition: this.newValidation.Condition,
-      ConditionDesc: this.validCndtSel.nativeElement.selectedOptions[0].text,
+      ConditionDesc:"",
       isNew: true,
       isDeleted: false,
       isEdited: false,
@@ -336,12 +351,17 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       NodeID: this.newValidation.NodeID,
       NodeDesc: this.validNodeSel.nativeElement.selectedOptions[0].text,
       Relation: this.newValidation.Relation,
-      RelationDesc: this.validRelacSel.nativeElement.selectedOptions[0].text,
+      RelationDesc:""      ,
       Type: 0,
       Value: this.newValidation.Value == null ? "" : this.newValidation.Value,
       Order: this._ListValidation.length
     };
 
+    if(!this.ruleObjt.Detail.IsUrlValidation){
+      tmpValidation.ConditionDesc = this.validCndtSel.nativeElement.selectedOptions[0].text;
+      tmpValidation.RelationDesc= this.validRelacSel.nativeElement.selectedOptions[0].text;
+
+    }
     this._ListValidation.push(tmpValidation);
 
     if (this.selectValidAllState == 'checked') {
@@ -418,4 +438,18 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.GridValidationReload();
   }
 
+  private CheckValidationUrlChange(){
+    this.ruleObjt.Detail.IsUrlValidation = !this.ruleObjt.Detail.IsUrlValidation
+
+    this._ListValidation = new Array<RuleDetailData>();
+    this.ruleObjt.Detail.UrlValidation = null;
+    this.GridValidationReload();
+  }
+
+  /***************************************Regras de Transformação*********************************************/
+  private CheckTransformationUrlChange(){
+    this.ruleObjt.Detail.IsUrlTransform = !this.ruleObjt.Detail.IsUrlTransform
+
+    this.ruleObjt.Detail.UrlTransformation = null;
+  }
 }
