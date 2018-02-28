@@ -28,9 +28,9 @@ export const environment = {
         Usuario: "adm.keeptrueprojeto",
         Senha:"adm123!"
     },
-    //UrlApiTaxIntelligence: "http://localhost:52737/api/", //localhost
-    UrlApiTaxIntelligence: "http://taxintelligenceapi.azurewebsites.net/api/",  //api
-    
+    UrlApiTaxIntelligence: "http://localhost:52737/api/", //localhost
+    //UrlApiTaxIntelligence: "http://taxintelligenceapi.azurewebsites.net/api/",  //api
+
     subscriptionId:'86E367C8-D900-410E-BA73-D92C234C52CD',
     userName:'Bruno Lima'
     //subscriptionId: '9fe9c37a-1da8-4b8e-9d1b-21207b21e9f9' // Avalara Brasil
