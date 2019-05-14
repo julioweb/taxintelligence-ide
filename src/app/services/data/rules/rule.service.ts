@@ -141,8 +141,10 @@ export class RuleService {
     });
   }
 
-  SendRulePost(rule: RuleModel, isEdit: boolean) {
-    return new Observable<string>(observable => {      
+  SendRulePost(rule: RuleModel, isEdit: boolean, tmpFile: FormData) {
+    let fileUpload = tmpFile;
+    return new Observable<string>(observable => {
+      debugger;
       var searchParams = {
         SubID: "",//`${environment.subscriptionId}`, //this.authService.SubscriptionId,
         CreationUser: 'bruno.lima', //`${environment.userName}`
@@ -152,9 +154,15 @@ export class RuleService {
 
       let headers = new Headers({ 'Content-Type': 'application/json' });
       let requestOptions = new RequestOptions();
-      requestOptions.headers = headers;
+      //requestOptions.headers = headers;
+      //requestOptions = searchParams;
+      var sendObj = {
+        searchParams,tmpFile
+      };
 
-      this.http.post(`${this._ruleSvcUrl}InsertUpdateRule`, searchParams, requestOptions)
+      tmpFile.append("ruleObj",JSON.stringify(searchParams));
+
+      this.http.post(`${this._ruleSvcUrl}InsertUpdateRule`, tmpFile)
         .toPromise()
         .then(response => {
           observable.next(response.json());

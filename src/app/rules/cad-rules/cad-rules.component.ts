@@ -51,6 +51,8 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   docRelId: string = '';
   docVersionId: string = '';
 
+  fileUpload: File;
+
   @ViewChild('ValNodeSel') validNodeSel: ElementRef;
   @ViewChild('ValCndtSel') validCndtSel: ElementRef;
   @ViewChild('ValRelacSel') validRelacSel: ElementRef;
@@ -146,6 +148,18 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.inscricao.unsubscribe();
   }
 
+  FileUploaded(event){
+    if(event.target.files.length>0)
+    {
+      this.fileUpload = event.target.files[0];
+    }
+    else
+    {
+      this.fileUpload = undefined;
+    }
+    
+  }
+
   LoadEditRule() {
     this.bsRules.GetRuleById(this.ruleEditId).subscribe(a => {
       
@@ -228,7 +242,10 @@ export class CadRulesComponent implements OnInit, OnDestroy {
         this.ruleObjt.Detail.PluginID = "";
       }
 
-      this.bsRules.SendRulePost(this.ruleObjt, isEdit).subscribe(a => {
+      let formData: FormData = new FormData();
+      formData.append("uploadFile", this.fileUpload, this.fileUpload.name);
+
+      this.bsRules.SendRulePost(this.ruleObjt, isEdit,formData).subscribe(a => {
         let alertState = {
           Message: `O registro foi salvo com sucesso`,
           title: 'Alteração Efetuada!',

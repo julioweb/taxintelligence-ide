@@ -28,6 +28,12 @@
         <fieldset class="avalara-fieldset">
           <legend>Propriedades</legend>
           <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="exampleFormControlFile1">Example file input</label>
+              <input type="file" class="form-control-file" id="exampleFormControlFile1" (change)="FileUploaded($event)" >
+            </div>
+          </div>
+          <div class="form-row">
             <div class="form-group col-md-4" [class.avl-invalid-form]="!hasName">
               <label for="ruleName">
                 <strong>Nome</strong>
