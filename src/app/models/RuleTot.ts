@@ -32,6 +32,14 @@ export class RuleModel {
     public DocId: string;
     public VersionId: string;
     public RuleActDesc: string;
+    public Sugestao:string;
+    public Fundamentacao:string;
+    public TipoEstabelecimento:Array<any>;
+    public TipoSegEstabelecimento:Array<any>;
+    public TipoTributacao:Array<any>;
+    public OperEntGov:boolean;
+    public IndRegEspecial:boolean;
+    public IndIPI:boolean;
     public RuleActive: boolean;
 }
 
@@ -130,4 +138,23 @@ export class RuleProcess{
     public StartValue:string;
     public EndValue:string;
     public NodeName:string;
+}
+
+export class TipoEstabelecimento{
+    public ID:string;
+    public EstabID:string;
+    public Nome:string;
+    public Codigo:string;
+}
+
+export class TipoSegmentoEstabelecimento {
+    public ID:string;
+    public Nome:string;
+    public Codigo:string;
+}
+
+export class TipoTributacao {
+    public ID:string;
+    public Nome:string;
+    public Codigo:string;
 }

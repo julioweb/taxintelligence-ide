@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
@@ -30,7 +30,8 @@ export class DocumentsComponent implements OnInit {
 
   @ViewChild('docVersion') docVersion: GridDocVersionComponent;
   @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
-
+  @ViewChild('xlsNewDocument') xlsNewDocument:ElementRef;
+  
   public GridData: GridDataResult = null;
   public GridPageSize: number = 10;
   public GridSkip: number = 0;
@@ -173,6 +174,57 @@ export class DocumentsComponent implements OnInit {
 
   AddNewDocument() {
     this.router.navigate(['/add-document']);
+  }
+
+  AddFromXls(){
+    let event = new MouseEvent('click', {bubbles: false});
+    this.xlsNewDocument.nativeElement.dispatchEvent(event);
+  }
+
+  NewDocXlsSelected(event: any) {
+    if (event.target.files != null && event.target.files.length > 0) {
+      this.fullLoading.showLoading();
+      let file: File = event.target.files[0];
+      if (file.name.endsWith("xlsx") || file.name.endsWith("xlx")) {
+        this.docProcess.SendNewDocXlsToApi(file).subscribe(a => {
+          if (a.Status) {
+            this.AtualizaGrid();
+          }
+          else {
+            let alertState = {
+              Message: "Deu um erro no servidor",
+              title: "Opsss!!! ¬¬",
+              alertType: "danger"
+            };
+
+            if(a != undefined)
+            {
+              alertState.Message = a.Message;
+            }
+            this.modalService.show(ModalAlertComponent, { initialState: alertState });
+          }
+
+          this.fullLoading.hideLoading();
+        }, err => {
+          let alertState = {
+            Message: "Não foi possível, pegamos um erro não tratado!",
+            title: "Opsss!!! ¬¬",
+            alertType: "danger"
+          };
+          this.modalService.show(ModalAlertComponent, { initialState: alertState });
+          this.fullLoading.hideLoading();
+        });
+      }
+      else{
+        let alertState = {
+          Message: "Arquivo não suportado, selecione .xlx,.xlsx",
+          title: "Aí não né !!!",
+          alertType: "info"
+        };
+        this.modalService.show(ModalAlertComponent, { initialState: alertState });
+        this.fullLoading.hideLoading();
+      }
+    }
   }
 
   EditarItem(id) {

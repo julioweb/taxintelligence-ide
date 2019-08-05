@@ -212,6 +212,31 @@ export class DocumentsService {
     });
   }
   /*****************************************************Home Index************************************************************** */
+  ReprocessDocument(tdpID: string): Observable<string>{
+    return new Observable<string>(observable => {
+      
+      var searchParams = {
+        subID: `${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        tdpID: tdpID
+      };
+      
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let requestOptions = new RequestOptions();
+      requestOptions.headers = headers;
+
+      this.http.post(`${this._docmentSvcUrl}ReprocessDocument`,searchParams, requestOptions)
+        .toPromise()
+        .then(response => {          
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {          
+          observable.next('serverError');          
+          observable.complete();
+        });
+    });
+  }
+
   GetDocProcessBrief(Skip: number, PageSize: number): Observable<DocBriefList>{
     return new Observable<DocBriefList>(observable => {
       var searchParams = {
@@ -308,6 +333,26 @@ export class DocumentsService {
           observable.complete();
         })
         .catch(error => {          
+          observable.next('serverError');          
+          observable.complete();
+        });
+    });
+  }
+
+  SendNewDocXlsToApi(xlsDoc:File):Observable<any>{
+    return new Observable<any>(observable => {
+      let formData: FormData = new FormData();  
+      formData.append('uploadFile', xlsDoc, xlsDoc.name);  
+      let headers = new Headers()
+      let requestOptions = new RequestOptions({ headers: headers }); 
+      this.http.post(`${this._docmentSvcUrl}CreateDocumentFromXls`,formData, requestOptions)
+      //this.http.post(`http://localhost:5200/api/Documents/CreateDocumentFromXls`,formData, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
           observable.next('serverError');          
           observable.complete();
         });

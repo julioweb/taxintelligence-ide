@@ -4,7 +4,7 @@ import { Http, RequestOptions, URLSearchParams, QueryEncoder, Headers } from "@a
 import { environment } from "../../../../environments/environment";
 
 import { AuthService } from "../../auth/auth.service";
-import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel, RuleProcessList,RuleProcess } from "../../../models/RuleTot";
+import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel, RuleProcessList,RuleProcess, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao } from "../../../models/RuleTot";
 import { ServiceUtils } from "../../Utils/Utils";
 
 
@@ -92,6 +92,78 @@ export class RuleService {
         });
     });
   }
+
+  GetEstabelecimentoType(): Observable<Array<TipoEstabelecimento>> {
+    return new Observable<Array<TipoEstabelecimento>>(observable => {
+
+      var searchParams = {
+        // subId: `${environment.subscriptionId}`,
+        // skip: Skip,
+        // take: PageSize
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}GetTipoEstabelecimento`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  GetSegmentoEstabelecimentoType(): Observable<Array<TipoSegmentoEstabelecimento>> {
+    return new Observable<Array<TipoSegmentoEstabelecimento>>(observable => {
+
+      var searchParams = {
+        // subId: `${environment.subscriptionId}`,
+        // skip: Skip,
+        // take: PageSize
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}TinSegmentoEstabelecimento`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  GetTributacaoTypes(): Observable<Array<TipoTributacao>> {
+    return new Observable<Array<TipoTributacao>>(observable => {
+
+      var searchParams = {
+        // subId: `${environment.subscriptionId}`,
+        // skip: Skip,
+        // take: PageSize
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}GetTipoTributacao`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
   /******************************************Rules************************************************************/
   GetRuleTotCount(Skip: number, PageSize: number): Observable<RuleTotList> {
     return new Observable<RuleTotList>(observable => {
@@ -144,9 +216,8 @@ export class RuleService {
   SendRulePost(rule: RuleModel, isEdit: boolean, tmpFile: FormData) {
     let fileUpload = tmpFile;
     return new Observable<string>(observable => {
-      debugger;
       var searchParams = {
-        SubID: "",//`${environment.subscriptionId}`, //this.authService.SubscriptionId,
+        SubID: `${environment.subscriptionId}`, //this.authService.SubscriptionId,
         CreationUser: 'bruno.lima', //`${environment.userName}`
         RuleItem: rule,
         IsEdit: isEdit

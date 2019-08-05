@@ -69,6 +69,62 @@
             </div>
           </div>
           <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="ruleEstab">
+                <strong>Tipo Estabelecimento</strong>
+              </label>
+              <kendo-multiselect autoClose="false" name="ruleEstab" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstEstabelecimento" [(ngModel)]="ruleObjt.TipoEstabelecimento"></kendo-multiselect>
+              <!-- <select id="ruleEstab" class="form-control" name="ruleEstab" [(ngModel)]="ruleObjt.TipoEstabelecimento">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let type of _LstEstabelecimento" [value]="type.ID">{{type.Nome}}</option>
+              </select> -->
+            </div>
+            <div class="form-group col-md-4">
+              <label for="ruleSegEstab">
+                <strong>Tipo de Segmento do Estabelecimento</strong>
+              </label>
+              <kendo-multiselect autoClose="false" name="ruleSegEstab" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstSegmentoEstab" [(ngModel)]="ruleObjt.TipoSegEstabelecimento"></kendo-multiselect>
+              <!-- <select id="ruleSegEstab" class="form-control" name="ruleSegEstab" [(ngModel)]="ruleObjt.TipoSegEstabelecimento">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let type of _LstSegmentoEstab" [value]="type.ID">{{type.Nome}}</option>
+              </select> -->
+            </div>
+            <div class="form-group col-md-4">
+              <label for="ruleTipoTrib">
+                <strong>Tipo  de Tributação</strong>
+              </label>
+              <kendo-multiselect autoClose="false"  name="ruleTipoTrib" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstTipoTributacao" [(ngModel)]="ruleObjt.TipoTributacao"></kendo-multiselect>
+              <!-- <select id="ruleTipoTrib" class="form-control" name="ruleTipoTrib" [(ngModel)]="ruleObjt.TipoTributacao">
+                <option value="" selected>Selecione...</option>
+                <option *ngFor="let type of _LstTipoTributacao" [value]="type.ID">{{type.Nome}}</option>
+              </select> -->
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ruleIPI" [checked]="ruleObjt.IndIPI" (change)="ruleObjt.IndIPI = !ruleObjt.IndIPI">
+                <label class="form-check-label" for="ruleIPI">
+                  Contribuinte do IPI
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ruleEspecRegime" [checked]="ruleObjt.IndRegEspecial" (change)="ruleObjt.IndRegEspecial = !ruleObjt.IndRegEspecial">
+                <label class="form-check-label" for="ruleEspecRegime">
+                  Faz Uso de Regime Especial?
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ruleOpeEnt" [checked]="ruleObjt.OperEntGov" (change)="ruleObjt.OperEntGov = !ruleObjt.OperEntGov">
+                <label class="form-check-label" for="ruleOpeEnt">
+                  Opera com Órgãos Públicos, Instituições Assistenciais ou de Ensino, Autarquias ou afins?
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
             <div class="form-group col-md-12 " [class.avl-invalid-form]="!hasDesc">
               <label for="ruleDesc">
                 <strong>Descrição</strong>
@@ -77,6 +133,22 @@
               <div class="invalid-feedback">
                 Necessário informar uma Descrição
               </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12 ">
+              <label for="ruleSugestion">
+                <strong>Sugestão</strong>
+              </label>
+              <textarea id="ruleSugestion" class="form-control" name="Sugestion" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.Sugestao"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12 ">
+              <label for="legalBase">
+                <strong>Base Legal</strong>
+              </label>
+              <textarea id="legalBase" class="form-control" name="LegalBase" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.Fundamentacao"></textarea>
             </div>
           </div>
           <div class="form-row">
@@ -199,12 +271,15 @@
                 <div class="form-group col-md-2" *ngIf="!ruleObjt.Detail.IsUrlValidation">
                   <label for="valCondition">Condição</label>
                   <select id="valCondition" name="valCondition" class="form-control" [(ngModel)]="newValidation.Condition" #ValCndtSel>
-                    <option value="eq" selected>Igual</option>
+                    <option value="diff">Diferente de</option>
+                    <option value="startWith">Começa Com</option>
                     <option value="lk">Contém</option>
+                    <option value="eq" selected>Igual</option>
                     <option value="gt">Maior</option>
                     <option value="gtEq">Maior ou Igual</option>
                     <option value="lt">Menor</option>
                     <option value="ltEq">Menor ou Igual</option>
+                    <option value="endsWith">Termina Com</option>
                   </select>
                 </div>
                 <div class="form-group col-md-4">

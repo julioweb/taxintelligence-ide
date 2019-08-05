@@ -28,7 +28,10 @@ export const environment = {
     Usuario: "adm.keeptrueprojeto",
     Senha: "adm123!"
   },
-  UrlApiTaxIntelligence: "http://apitaxia.onetech.com.br/api/", //localhost
+  //UrlApiTaxIntelligence: "http://192.168.15.42/txi.api/api/",
+  UrlApiTaxIntelligence: "https://txiapi.azurewebsites.net/api/",
+  //UrlApiTaxIntelligence: "http://localhost:5200/api/",
+  //UrlApiTaxIntelligence: "https://txiapi.azurewebsites.net/api/", //"http://apitaxia.onetech.com.br/api/", //localhost
   //UrlApiTaxIntelligence: "http://taxintelligenceapi.azurewebsites.net/api/",  //api
 
   subscriptionId: '86E367C8-D900-410E-BA73-D92C234C52CD',

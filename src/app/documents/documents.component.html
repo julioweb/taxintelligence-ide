@@ -11,6 +11,7 @@
 
   <div class="row">
     <div class="col-md-12">
+      <input type="file" hidden #xlsNewDocument (change)="NewDocXlsSelected($event)" />
       <kendo-grid #grid="kendoGrid" [data]="GridData" [pageSize]="GridPageSize" [skip]="GridSkip" [pageable]="{
             buttonCount: 5,
             info: true,
@@ -25,6 +26,12 @@
               <i class="far fa-file"></i>
             </span>
             <span class="btn">Adicionar</span>
+          </span>
+          <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="AddFromXls()">
+            <span class="btn btn-primary btn-sm">
+              <i class="far fa-file"></i>
+            </span>
+            <span class="btn">Criar Utilizando Excel</span>
           </span>
           <span type="button" class="btn float-right avl-grid-btn avl-mgn-left-5" (click)="grid.saveAsExcel()">
             <span class="btn btn-primary btn-sm">

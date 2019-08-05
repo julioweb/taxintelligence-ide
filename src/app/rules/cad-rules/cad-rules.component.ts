@@ -8,7 +8,7 @@ import { DocumentsService } from '../../services/data/documents/documents.servic
 import { NodesService } from '../../services/data/nodes/nodes.service';
 
 import { DocumentModel, DocVersionModel } from '../../models/Documents';
-import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData, RulePlugin } from '../../models/RuleTot';
+import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData, RulePlugin, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao } from '../../models/RuleTot';
 import { ModalAlertComponent } from '../../modais/modal-alert/modal-alert.component';
 import { BsModalService } from 'ngx-bootstrap';
 import { NodeItem } from '../../models/Nodes';
@@ -66,6 +66,9 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   _RelacDocsLst: Array<DocumentModel> = new Array<DocumentModel>();
   _RelacDocVersionLst: Array<DocVersionModel> = new Array<DocVersionModel>();
   _RuleTypeList: Array<RuleType> = new Array<RuleType>();
+  _LstEstabelecimento: Array<TipoEstabelecimento> = new Array<TipoEstabelecimento>();
+  _LstSegmentoEstab: Array<TipoSegmentoEstabelecimento> = new Array<TipoSegmentoEstabelecimento>();
+  _LstTipoTributacao: Array<TipoTributacao> = new Array<TipoTributacao>();
   _OperationTypeList: Array<OperationType> = new Array<OperationType>();
   _RelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
   _AvaibleRelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
@@ -124,11 +127,27 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.bsRules.GetRuleTypes().subscribe(a => {
       this._RuleTypeList = a;
     });
+
     this.bsRules.GetRulePlugins().subscribe(a => {
       this._PluginsList = a;
     });
+
+    this.bsRules.GetEstabelecimentoType().subscribe(a => {
+      this._LstEstabelecimento = a;
+    });
+
+    this.bsRules.GetSegmentoEstabelecimentoType().subscribe(a => {
+      this._LstSegmentoEstab = a;
+    });
+
+    this.bsRules.GetTributacaoTypes().subscribe(a => {
+      this._LstTipoTributacao = a;
+    });
+
+    //TODO ISSO DEVE SER REVISTO
     this._SubscriptionID.push({ID: 'C56A1737-6076-4BA7-B006-C4F79E98F96E'.toLowerCase(), Text:'Atlantica'});
     this._SubscriptionID.push({ID: '86E367C8-D900-410E-BA73-D92C234C52CD'.toLowerCase(), Text:'Carrefour'});
+    this._SubscriptionID.push({ID: 'fcb04a56-2a94-4618-bdd8-b6e6951779f5'.toLowerCase(), Text:'Onetech'});
     // this.ruleEditId = '0F2DE549-DE2C-58F8-C17B-689EF284731F'; // route.snapshot.params["Id"];
   }
 
@@ -189,6 +208,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
 
     });
   }
+  
   private IsInputValid() {
     let isValid = true;
     this.hasName = this.ruleObjt.Summary != null && this.ruleObjt.Summary.trim() != '';
@@ -216,7 +236,16 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.IsInputValid()) {
+    if(this.fileUpload == undefined){
+      let alertState = {
+        Message: `Por favor adicione um arquivo de exemplo`,
+        title: 'Arquivo Pendente',
+        alertType: 'info'
+      };
+      this.modalService.show(ModalAlertComponent, { initialState: alertState });
+    }
+    else if (this.IsInputValid()) {
+      
       this.fullLoading.showLoading();
 
       let isEdit = this.ruleEditId != null && this.ruleEditId != '';
@@ -244,7 +273,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
 
       let formData: FormData = new FormData();
       formData.append("uploadFile", this.fileUpload, this.fileUpload.name);
-
+      
       this.bsRules.SendRulePost(this.ruleObjt, isEdit,formData).subscribe(a => {
         let alertState = {
           Message: `O registro foi salvo com sucesso`,
@@ -279,12 +308,11 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   }
 
   OnSelRuleTypeChange() {
-
     let selText: string = this.selRuleType.nativeElement.selectedOptions[0].text;
 
     this.isTransformacao = selText.toLowerCase().trim() == 'transformação';
-    this.isPlugin = selText.toLowerCase().trim() != 'transformação' && selText.toLowerCase().trim() != 'validação';
-    this.isValidation = selText.toLowerCase().trim() == 'validação';
+    this.isPlugin = selText.toLowerCase().trim() == 'Plugin';// selText.toLowerCase().trim() != 'transformação' && selText.toLowerCase().trim() != 'validação';
+    this.isValidation = selText.toLowerCase().trim() != 'Plugin' && selText.toLowerCase().trim() != 'transformação' //== 'validação';
   }
 
   /*************************************Document******************************************/
