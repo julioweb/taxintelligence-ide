@@ -8,7 +8,7 @@ import { DocumentsService } from '../../services/data/documents/documents.servic
 import { NodesService } from '../../services/data/nodes/nodes.service';
 
 import { DocumentModel, DocVersionModel } from '../../models/Documents';
-import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData, RulePlugin, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao } from '../../models/RuleTot';
+import { RuleModel, RuleType, OperationType, RuleDetailModel, RuleDetailData, RulePlugin, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao, TipoRegimeEspecial } from '../../models/RuleTot';
 import { ModalAlertComponent } from '../../modais/modal-alert/modal-alert.component';
 import { BsModalService } from 'ngx-bootstrap';
 import { NodeItem } from '../../models/Nodes';
@@ -68,6 +68,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   _RuleTypeList: Array<RuleType> = new Array<RuleType>();
   _LstEstabelecimento: Array<TipoEstabelecimento> = new Array<TipoEstabelecimento>();
   _LstSegmentoEstab: Array<TipoSegmentoEstabelecimento> = new Array<TipoSegmentoEstabelecimento>();
+  _LstRegimeEspecial:Array<TipoRegimeEspecial>= new Array<TipoRegimeEspecial>();
   _LstTipoTributacao: Array<TipoTributacao> = new Array<TipoTributacao>();
   _OperationTypeList: Array<OperationType> = new Array<OperationType>();
   _RelacVersionNodList: Array<NodeItem> = new Array<NodeItem>();
@@ -144,6 +145,10 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       this._LstTipoTributacao = a;
     });
 
+    this.bsRules.GetRegimeEspecialType().subscribe(a => {
+      this._LstRegimeEspecial = a;
+    });
+
     //TODO ISSO DEVE SER REVISTO
     this._SubscriptionID.push({ID: 'C56A1737-6076-4BA7-B006-C4F79E98F96E'.toLowerCase(), Text:'Atlantica'});
     this._SubscriptionID.push({ID: '86E367C8-D900-410E-BA73-D92C234C52CD'.toLowerCase(), Text:'Carrefour'});
@@ -177,6 +182,14 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       this.fileUpload = undefined;
     }
     
+  }
+
+  ChangeContribuinteIpi(){
+    this.ruleObjt.IndIPI = !this.ruleObjt.IndIPI;
+    if(!this.ruleObjt.IndIPI){
+      this.ruleObjt.IpiFranca = false;
+      this.ruleObjt.IpiInsumos = false;
+    }
   }
 
   LoadEditRule() {

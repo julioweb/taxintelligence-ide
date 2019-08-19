@@ -4,7 +4,7 @@ import { Http, RequestOptions, URLSearchParams, QueryEncoder, Headers } from "@a
 import { environment } from "../../../../environments/environment";
 
 import { AuthService } from "../../auth/auth.service";
-import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel, RuleProcessList,RuleProcess, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao } from "../../../models/RuleTot";
+import { RuleTotList, RuleModelList, GroupRuleModelList, GroupRuleModel, RuleType, OperationType, RulePlugin, RuleModel, RuleProcessList,RuleProcess, TipoEstabelecimento, TipoSegmentoEstabelecimento, TipoTributacao, TipoRegimeEspecial } from "../../../models/RuleTot";
 import { ServiceUtils } from "../../Utils/Utils";
 
 
@@ -129,7 +129,31 @@ export class RuleService {
       let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
       requestOptions.params = Parametros;
 
-      this.http.get(`${this._ruleSvcUrl}TinSegmentoEstabelecimento`, requestOptions)
+      this.http.get(`${this._ruleSvcUrl}GetSegmentoEstabelecimento`, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.error(error);
+        });
+    });
+  }
+
+  GetRegimeEspecialType(): Observable<Array<TipoRegimeEspecial>> {
+    return new Observable<Array<TipoRegimeEspecial>>(observable => {
+
+      var searchParams = {
+        // subId: `${environment.subscriptionId}`,
+        // skip: Skip,
+        // take: PageSize
+      };
+      let requestOptions = new RequestOptions();
+      let Parametros = this.serviceUtils.ObjTOURLSearchParams(searchParams);
+      requestOptions.params = Parametros;
+
+      this.http.get(`${this._ruleSvcUrl}GetRegimeEspecial`, requestOptions)
         .toPromise()
         .then(response => {
           observable.next(response.json());

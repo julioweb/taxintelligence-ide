@@ -35,11 +35,13 @@ export class RuleModel {
     public Sugestao:string;
     public Fundamentacao:string;
     public TipoEstabelecimento:Array<any>;
-    public TipoSegEstabelecimento:Array<any>;
+    public TipoSegmentoEstab:Array<any>;
+    public IndRegEspecial:Array<any>;
     public TipoTributacao:Array<any>;
     public OperEntGov:boolean;
-    public IndRegEspecial:boolean;
     public IndIPI:boolean;
+    public IpiFranca:boolean;
+    public IpiInsumos:boolean;
     public RuleActive: boolean;
 }
 
@@ -154,6 +156,12 @@ export class TipoSegmentoEstabelecimento {
 }
 
 export class TipoTributacao {
+    public ID:string;
+    public Nome:string;
+    public Codigo:string;
+}
+
+export class TipoRegimeEspecial {
     public ID:string;
     public Nome:string;
     public Codigo:string;
