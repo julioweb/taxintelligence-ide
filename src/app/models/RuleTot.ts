@@ -73,9 +73,11 @@ export class RuleDetailData {
     public RelationDesc: string;
     public DetailID: string;
     public isNew:boolean;
+    public isMethod: boolean;
     public isDeleted:boolean;
     public isEdited:boolean;
     public Order:number;
+    public MethodParams: Array<string>;
 }
 
 export class GroupRuleModelList {

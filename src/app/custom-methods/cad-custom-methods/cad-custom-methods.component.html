@@ -1,0 +1,97 @@
+<app-full-loading #fullLoading></app-full-loading>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/custom-method">Queries Customizadas</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Cadastro de Queries Customizadas</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-same-height">
+      <div class="col-md-10 col-sm-height">
+        <h1 class="avalara-title">Cadastro de Queries Customizadas</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row avl-mgn-top-15">
+    <div class="col-md-12">
+      <form #frmCustomQuery="ngForm" (ngSubmit)="onSubmit(frmCustomQuery)">
+        <fieldset class="avalara-fieldset">
+          <legend>Propriedades</legend>
+          <div class="form-row">
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasName">
+              <label for="cqrName">
+                <strong>Nome</strong>
+              </label>
+              <input type="text" maxlength="50" class="form-control" id="cqrName" name="Name" placeholder="Nome"
+                [(ngModel)]="cqrObjt.Name">
+              <div class="invalid-feedback">
+                Necessário informar um nome
+              </div>
+            </div>
+            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasParams">
+              <label for="cqrTotParams">Total de Parâmetros</label>
+              <input type="number" min="0" step="1" class="form-control" id="cqrTotParams" name="TotParams"
+                placeholder="Total de Parâmetros" [(ngModel)]="cqrObjt.TotParams">
+              <div class="invalid-feedback">
+                Campo Obrigatório
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="cqrActive" [checked]="cqrObjt.Active"
+                  (change)="cqrObjt.Active = !cqrObjt.Active">
+                <label class="form-check-label" for="cqrActive">
+                  Query Ativa
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12" [class.avl-invalid-form]="!hasDesc">
+              <label for="cqrDesc">
+                <strong>Descrição</strong>
+              </label>
+              <textarea class="form-control" id="cqrDesc" name="Desc" placeholder="Descrição" [(ngModel)]="cqrObjt.Desc"
+                rows="4" maxlength="250" style="resize: none;"></textarea>
+              <div class="invalid-feedback">
+                Necessário informar uma Descrição
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="avalara-fieldset">
+          <legend>Query</legend>
+          <div class="form-row">
+            <div class="form-group col-md-12" [class.avl-invalid-form]="!hasQuery">
+              <label for="cqrQuery">
+                <strong>Query</strong>
+              </label>
+              <textarea class="form-control" id="cqrQuery" name="Query" placeholder="Query"
+                [(ngModel)]="cqrObjt.StrQuery" rows="6" style="resize: none;"></textarea>
+              <div class="invalid-feedback">
+                Necessário informar a query.
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="row avl-mgn-top-5">
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-success float-right" title="Salvar">
+              <i class="fas fa-save"></i> Salvar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

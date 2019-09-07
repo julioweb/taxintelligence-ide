@@ -11,6 +11,8 @@ import { CadRulesComponent } from './rules/cad-rules/cad-rules.component';
 import { RuleGroupComponent } from './rule-group/rule-group.component';
 import { CadRuleGroupComponent } from './rule-group/cad-rule-group/cad-rule-group.component';
 import {DocumentProcessComponent} from "./document-process/document-process.component";
+import { CustomMethodsComponent } from './custom-methods/custom-methods.component';
+import { CadCustomMethodsComponent } from './custom-methods/cad-custom-methods/cad-custom-methods.component';
 
 const APP_ROUTES: Routes = [
     { path: 'login', component: LoginComponent },
@@ -24,6 +26,9 @@ const APP_ROUTES: Routes = [
     { path: 'rules-group', component: RuleGroupComponent },
     { path: 'add-rule-group', component: CadRuleGroupComponent },
     { path: 'edit-rule-group', component: CadRuleGroupComponent },
+    { path: 'custom-method', component: CustomMethodsComponent },
+    { path: 'add-custom-method', component: CadCustomMethodsComponent },
+    { path: 'edit-custom-method', component: CadCustomMethodsComponent },
     {path: 'doc-process', component:DocumentProcessComponent},
     { path: '', component: HomeComponent }
 ];

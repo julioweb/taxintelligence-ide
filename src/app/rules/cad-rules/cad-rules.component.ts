@@ -15,6 +15,8 @@ import { NodeItem } from '../../models/Nodes';
 import { SelectAllCheckboxState, PageChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import isBodyOffset from '@progress/kendo-popup-common/dist/es/is-body-offset';
 import { FullLoadingComponent } from '../../modais/full-loading/full-loading.component';
+import { CustomMethodsService } from '../../services/data/custom-methods/custom-methods.service';
+import { ModalMethodComponent } from '../../modais/modal-method/modal-method.component';
 
 @Component({
   selector: 'app-cad-rules',
@@ -53,6 +55,11 @@ export class CadRulesComponent implements OnInit, OnDestroy {
 
   fileUpload: File;
 
+  contribiIpi:string = '';
+  ipiFranca:string = '';
+  ipiInsumos:string = '';
+  opeEntGov:string = '';
+
   @ViewChild('ValNodeSel') validNodeSel: ElementRef;
   @ViewChild('ValCndtSel') validCndtSel: ElementRef;
   @ViewChild('ValRelacSel') validRelacSel: ElementRef;
@@ -62,7 +69,8 @@ export class CadRulesComponent implements OnInit, OnDestroy {
 
   public selectValidAllState: string = 'unchecked';
   public selectedValidations: Array<string> = new Array<string>();
-
+  
+  curSubscribe: Subscription;
   _RelacDocsLst: Array<DocumentModel> = new Array<DocumentModel>();
   _RelacDocVersionLst: Array<DocVersionModel> = new Array<DocVersionModel>();
   _RuleTypeList: Array<RuleType> = new Array<RuleType>();
@@ -89,6 +97,7 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     public bsNode: NodesService,
     private modalService: BsModalService,
     private route: ActivatedRoute,
+    private bsCustomMethods: CustomMethodsService,
     private router: Router) {
     this.bsUtils = new ServiceUtils();
     this.ruleObjt = new RuleModel();
@@ -185,10 +194,18 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   }
 
   ChangeContribuinteIpi(){
-    this.ruleObjt.IndIPI = !this.ruleObjt.IndIPI;
+     this.ipiFranca= '';
+      this.ipiInsumos = '';
+
+      if(this.contribiIpi !=""){
+        this.ruleObjt.IndIPI = this.contribiIpi =="1";
+      }
+      else{
+        this.ruleObjt.IndIPI = null;
+      }
     if(!this.ruleObjt.IndIPI){
-      this.ruleObjt.IpiFranca = false;
-      this.ruleObjt.IpiInsumos = false;
+      this.ruleObjt.IpiFranca = null;
+      this.ruleObjt.IpiInsumos = null;
     }
   }
 
@@ -199,6 +216,44 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       if(this.ruleObjt.SubID == null){
         this.ruleObjt.SubID = '';
       }
+
+      if(this.ruleObjt.IndIPI == null)
+      {
+        this.contribiIpi = "";
+      }
+      else
+      {
+        this.contribiIpi =  this.ruleObjt.IndIPI? "1":"0";
+      }
+
+      if(this.ruleObjt.IpiFranca == null)
+      {
+        this.ipiFranca = "";
+      }
+      else
+      {
+        this.ipiFranca =  this.ruleObjt.IpiFranca? "1":"0";
+      }
+
+      if(this.ruleObjt.IpiInsumos == null)
+      {
+        this.ipiInsumos = "";
+      }
+      else
+      {
+        this.ipiInsumos =  this.ruleObjt.IpiInsumos? "1":"0";
+      }
+
+      if(this.ruleObjt.OperEntGov == null)
+      {
+        this.opeEntGov = "";
+      }
+      else
+      {
+        this.opeEntGov =  this.ruleObjt.OperEntGov? "1":"0";
+      }
+
+     
       
       this.ruleObjt.Detail.InitValidity = a.Detail.InitValidity.split(' ')[0];
       this.ruleObjt.Detail.EndValiditiy = a.Detail.EndValiditiy.split(' ')[0];
@@ -262,6 +317,11 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       this.fullLoading.showLoading();
 
       let isEdit = this.ruleEditId != null && this.ruleEditId != '';
+
+      this.ruleObjt.IndIPI = this.contribiIpi == ""? null:this.contribiIpi == "1" ? true:false;
+      this.ruleObjt.IpiInsumos = this.ipiInsumos == ""? null:this.ipiInsumos == "1" ? true:false;
+      this.ruleObjt.IpiFranca = this.ipiFranca == ""? null:this.ipiFranca == "1" ? true:false;
+      this.ruleObjt.OperEntGov = this.opeEntGov == ""? null:this.opeEntGov == "1" ? true:false;
 
       this.ruleObjt.Detail.ValidationRule = new Array<RuleDetailData>();
       this.ruleObjt.Detail.TransformRule = new Array<RuleDetailData>();
@@ -397,12 +457,59 @@ export class CadRulesComponent implements OnInit, OnDestroy {
     this.newValidation.ID = '';
   }
 
+  private AddMethodToTable(editItem){
+    let modalConfig = {
+      keyboard: false,
+      ignoreBackdropClick: true,
+      modalService: this.modalService,
+      initialState: {
+        RelacVersionNodList: this._RelacVersionNodList,
+        ItemOrder: this._ListValidation.length,
+        ItemToEdit: editItem
+      }
+    };
+
+    this.modalService.show(ModalMethodComponent, modalConfig);
+
+    this.curSubscribe = this.modalService.onHidden.subscribe(result => {
+      if (result != undefined && result != "") {
+        let methodValidattion = JSON.parse(result);
+        
+        var temp = this._ListValidation.find(x => x.ID == methodValidattion.ID);
+
+        if (temp != null) {
+
+          let idxUpdt = this._ListValidation.indexOf(temp);
+
+          this._ListValidation[idxUpdt].Condition = methodValidattion.Condition;
+          this._ListValidation[idxUpdt].ConditionDesc = methodValidattion.ConditionDesc;
+          this._ListValidation[idxUpdt].Value = methodValidattion.Value;
+          this._ListValidation[idxUpdt].ID = methodValidattion.ID;
+          this._ListValidation[idxUpdt].Relation = methodValidattion.Relation;
+          this._ListValidation[idxUpdt].RelationDesc = methodValidattion.RelationDesc;
+          this._ListValidation[idxUpdt].NodeID = methodValidattion.NodeID;
+          this._ListValidation[idxUpdt].NodeDesc = methodValidattion.NodeDesc;
+          this._ListValidation[idxUpdt].MethodParams = methodValidattion.MethodParams;
+
+          if (!this._ListValidation[idxUpdt].isNew)
+            this._ListValidation[idxUpdt].isEdited = true;
+        }
+        else {
+          this._ListValidation.push(methodValidattion);
+        }
+        this.GridValidationReload();
+      }
+      this.curSubscribe.unsubscribe();
+    });
+  }
+  
   private AddValidationToTable() {
     let tmpValidation: RuleDetailData = {
       ID: this.bsUtils.GetNewGuidId(),
       Condition: this.newValidation.Condition,
       ConditionDesc:"",
       isNew: true,
+      isMethod:false,
       isDeleted: false,
       isEdited: false,
       DetailID: "",
@@ -412,7 +519,8 @@ export class CadRulesComponent implements OnInit, OnDestroy {
       RelationDesc:""      ,
       Type: 0,
       Value: this.newValidation.Value == null ? "" : this.newValidation.Value,
-      Order: this._ListValidation.length
+      Order: this._ListValidation.length,
+      MethodParams: []
     };
 
     if(!this.ruleObjt.Detail.IsUrlValidation){
@@ -433,11 +541,16 @@ export class CadRulesComponent implements OnInit, OnDestroy {
   private EditValidationItem(itemID: string) {
     var temp = this._ListValidation.find(x => x.ID == itemID);
     if (temp != null) {
-      this.newValidation.Condition = temp.Condition;
-      this.newValidation.NodeID = temp.NodeID;
-      this.newValidation.ID = temp.ID;
-      this.newValidation.Relation = temp.Relation;
-      this.newValidation.Value = temp.Value;
+      if(temp.isMethod){
+        this.AddMethodToTable(temp);
+      }
+      else{
+        this.newValidation.Condition = temp.Condition;
+        this.newValidation.NodeID = temp.NodeID;
+        this.newValidation.ID = temp.ID;
+        this.newValidation.Relation = temp.Relation;
+        this.newValidation.Value = temp.Value;
+      }
     }
   }
 

@@ -58,6 +58,10 @@ import { DocumentProcessComponent } from './document-process/document-process.co
 import { RulesExecutedComponent } from './rules-executed/rules-executed.component';
 import { ModalNodeGroupComponent } from './modais/modal-node-group/modal-node-group.component';
 import { ModalDocApvEditComponent } from './modais/modal-doc-apv-edit/modal-doc-apv-edit.component';
+import { CustomMethodsComponent } from './custom-methods/custom-methods.component';
+import { CustomMethodsService } from './services/data/custom-methods/custom-methods.service';
+import { CadCustomMethodsComponent } from './custom-methods/cad-custom-methods/cad-custom-methods.component';
+import { ModalMethodComponent } from './modais/modal-method/modal-method.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +90,10 @@ import { ModalDocApvEditComponent } from './modais/modal-doc-apv-edit/modal-doc-
     DocumentProcessComponent,
     RulesExecutedComponent,
     ModalNodeGroupComponent,
-    ModalDocApvEditComponent
+    ModalDocApvEditComponent,
+    CustomMethodsComponent,
+    CadCustomMethodsComponent,
+    ModalMethodComponent
   ],
   imports: [
     BrowserModule,
@@ -114,7 +121,8 @@ import { ModalDocApvEditComponent } from './modais/modal-doc-apv-edit/modal-doc-
     RuleService,
     UsersService,
     EmpresaService,
-    NodesService
+    NodesService,
+    CustomMethodsService
   ],
   entryComponents: [
     ModalAlertComponent,
@@ -124,7 +132,8 @@ import { ModalDocApvEditComponent } from './modais/modal-doc-apv-edit/modal-doc-
     ModalNewRelacComponent,
     FullLoadingComponent,
     ModalNodeGroupComponent,
-    ModalDocApvEditComponent
+    ModalDocApvEditComponent,
+    ModalMethodComponent
   ],
   bootstrap: [AppComponent]
 })

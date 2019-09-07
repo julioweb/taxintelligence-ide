@@ -105,14 +105,14 @@
               </label>
               <kendo-multiselect autoClose="false"  name="rule1regimeEspecial" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstRegimeEspecial" [(ngModel)]="ruleObjt.IndRegEspecial"></kendo-multiselect>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="ruleIPI" [checked]="ruleObjt.IndIPI" (change)="ChangeContribuinteIpi()">
                 <label class="form-check-label" for="ruleIPI">
                   Contribuinte do IPI
                 </label>
               </div>
-            </div>
+            </div> 
             <div class="col-md-4" *ngIf="ruleObjt.IndIPI" >
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="LojaFranca" [checked]="ruleObjt.IpiFranca" (change)="ruleObjt.IpiFranca = !ruleObjt.IpiFranca">
@@ -129,21 +129,82 @@
                 </label>
               </div>
             </div>
-            <!-- <div class="col-md-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="ruleEspecRegime" [checked]="ruleObjt.IndRegEspecial" (change)="ruleObjt.IndRegEspecial = !ruleObjt.IndRegEspecial">
-                <label class="form-check-label" for="ruleEspecRegime">
-                  Faz Uso de Regime Especial?
-                </label>
-              </div>
-            </div> -->
             <div class="col-md-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="ruleOpeEnt" [checked]="ruleObjt.OperEntGov" (change)="ruleObjt.OperEntGov = !ruleObjt.OperEntGov">
-                <label class="form-check-label" for="ruleOpeEnt">
-                  Opera com Órgãos Públicos, Instituições Assistenciais ou de Ensino, Autarquias ou afins?
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="ruleOpeEnt" [checked]="ruleObjt.OperEntGov" (change)="ruleObjt.OperEntGov = !ruleObjt.OperEntGov">
+                  <label class="form-check-label" for="ruleOpeEnt">
+                    Opera com Órgãos Públicos, Instituições Assistenciais ou de Ensino, Autarquias ou afins?
+                  </label>
+                </div>
+              </div>-->
+
+            <div class="col-md-4">
+                <label class="col-md-12" >
+                  Contribuinte do IPI 
                 </label>
-              </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions"  id="inlineRadio1" value="1" [(ngModel)]="contribiIpi" (change)="ChangeContribuinteIpi()">
+                    <label class="form-check-label" for="inlineRadio1">Sim</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="0" [(ngModel)]="contribiIpi" (change)="ChangeContribuinteIpi()">
+                    <label class="form-check-label" for="inlineRadio2">Não</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="" [(ngModel)]="contribiIpi" (change)="ChangeContribuinteIpi()">
+                    <label class="form-check-label" for="inlineRadio3">Opcional</label>
+                  </div>
+            </div>
+            <div class="col-md-4" *ngIf="ruleObjt.IndIPI">
+                <label class="col-md-12" >
+                    Vende Prod para Loja Franca? 
+                </label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ipiFrancaOptions"  id="ipiFranca1" value="1" [(ngModel)]="ipiFranca">
+                    <label class="form-check-label" for="ipiFranca1">Sim</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ipiFrancaOptions" id="ipiFranca2" value="0" [(ngModel)]="ipiFranca">
+                    <label class="form-check-label" for="ipiFranca2">Não</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ipiFrancaOptions" id="ipiFranca3" value="" [(ngModel)]="ipiFranca">
+                    <label class="form-check-label" for="ipiFranca3">Opcional</label>
+                  </div>
+            </div>
+            <div class="col-md-4" *ngIf="ruleObjt.IndIPI">
+                <label class="col-md-12" >
+                    Vende Insumos para as Inds: Alimentícia, Alimentícia Agro,  Química,  Farmaceutica,  Fertilizantes,  Calçados,  Aeroespacial e ou Exportadora
+                </label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="insumosOptions"  id="insumos1" value="1" [(ngModel)]="ipiInsumos">
+                    <label class="form-check-label" for="insumos1">Sim</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="insumosOptions" id="insumos2" value="0" [(ngModel)]="ipiInsumos">
+                    <label class="form-check-label" for="insumos2">Não</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="insumosOptions" id="insumos3" value="" [(ngModel)]="ipiInsumos">
+                    <label class="form-check-label" for="insumos3">Opcional</label>
+                  </div>
+            </div>
+            <div class="col-md-4">
+                <label class="col-md-12" >
+                    Opera com Órgãos Públicos, Instituições Assistenciais ou de Ensino, Autarquias ou afins?
+                </label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="opeEntGovOptions"  id="opeEntGov1" value="1" [(ngModel)]="opeEntGov">
+                    <label class="form-check-label" for="opeEntGov1">Sim</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="opeEntGovOptions" id="opeEntGov2" value="0" [(ngModel)]="opeEntGov">
+                    <label class="form-check-label" for="opeEntGov2">Não</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="opeEntGovOptions" id="opeEntGov3" value="" [(ngModel)]="opeEntGov">
+                    <label class="form-check-label" for="opeEntGov3">Opcional</label>
+                  </div>
             </div>
           </div>
           <div class="form-row">
@@ -293,9 +354,11 @@
                 <div class="form-group col-md-2" *ngIf="!ruleObjt.Detail.IsUrlValidation">
                   <label for="valCondition">Condição</label>
                   <select id="valCondition" name="valCondition" class="form-control" [(ngModel)]="newValidation.Condition" #ValCndtSel>
-                    <option value="diff">Diferente de</option>
-                    <option value="startWith">Começa Com</option>
                     <option value="lk">Contém</option>
+                    <option value="startWith">Começa Com</option>
+                    <option value="inLst">Dentro da Lista</option>
+                    <option value="diff">Diferente de</option>
+                    <option value="outLst">Fora da Lista</option>
                     <option value="eq" selected>Igual</option>
                     <option value="gt">Maior</option>
                     <option value="gtEq">Maior ou Igual</option>
@@ -323,6 +386,8 @@
                   <button type="button" class="btn btn-danger btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID != ''" (click)="DeleteValidationTable()">Remover</button>
                   <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID != ''" [disabled]="!IsValidationInputValid()"
                     (click)="AddValidationToTable()">Adicionar</button>
+                  <button type="button" class="btn btn-secondary btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID != ''" [disabled]=""
+                    (click)="AddMethodToTable()">Adicionar Método</button>
                   <button type="button" class="btn btn-default btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID== ''" [disabled]="!IsValidationInputValid()"
                     (click)="ClearValidationInput()">Cancelar</button>
                   <button type="button" class="btn btn-primary btn-sm float-right avl-mgn-right-5" [hidden]="newValidation.ID == ''" [disabled]="!IsValidationInputValid()"

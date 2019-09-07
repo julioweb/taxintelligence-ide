@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h5 class="modal-title" *ngIf="!isEdit">Adicionar Método</h5>
+  <h5 class="modal-title" *ngIf="isEdit">Editar Método</h5>
+</div>
+<div class="modal-body">
+  <form #frmMethod="ngForm">
+    <div class="form-row">
+      <div class="form-group col-md-12" [class.avl-invalid-form]="!hasMethod">
+        <label for="selMethod">
+          <strong>Método</strong>
+        </label>
+        <select id="selMethod" class="form-control" name="selMethod" [(ngModel)]="finalObjt.MethodID"
+          (change)="OnMethodChange($event)">
+          <option value="" selected>Selecione...</option>
+          <option *ngFor="let meth of _MethodsList" [value]="meth.ID">{{meth.Name}}</option>
+        </select>
+        <div class="invalid-feedback">
+          Necessário selecionar
+        </div>
+      </div>
+      <div class="form-group col-md-12 ">
+        <label for="methDesc">
+          <strong>Descrição</strong>
+        </label>
+        <textarea id="methDesc" class="form-control" disbled readonly name="Description" rows="4" maxlength="250"
+          style="resize: none;" [(ngModel)]="finalObjt.MethDesc"></textarea>
+      </div>
+    </div>
+    <fieldset class="avalara-fieldset" *ngIf="finalObjt.MethodID">
+      <legend>Lista de Parâmetros</legend>
+      <div [class.avl-invalid-form]="!hasAllParams">
+        <div class="invalid-feedback">
+          Por favor selecione todos os campos disponíveis.
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12" *ngFor="let param of finalObjt.Params; let i = index">
+          <label for="nodeRel{{i}}">Parâmetro {{i+1}}</label>
+          <select id="nodeRel{{i}}" name="nodeRel{{i}}" class="form-control" [(ngModel)]="param.NodeID">
+            <option value="">Selecione...</option>
+            <option *ngFor="let node of RelacVersionNodList" [value]="node.ID">{{node.Label}} </option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onConfirm()">Salvar</button>
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+</div>
