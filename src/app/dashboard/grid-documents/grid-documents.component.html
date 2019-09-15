@@ -16,6 +16,13 @@
   </ng-template>
 
 
+  <kendo-grid-column field="" title="" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span class="btn btn-avl-outline-dark" title="Visualizar" (click)="VisualizarProcesso(dataItem.ID)">
+          <i class="fas fa-eye"></i>
+        </span>
+      </ng-template>
+    </kendo-grid-column>
   <kendo-grid-column title="DATA DO PROCESSAMENTO" width="200">
     <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.DtFim | date: 'dd/MM/yyyy HH:mm'}}</ng-template>
   </kendo-grid-column>

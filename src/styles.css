@@ -1,12 +1,23 @@
 ::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); border-radius: 10px; background-color: #F5F5F5;}
 ::-webkit-scrollbar {width: 10px; background-color: #F5F5F5;}
-::-webkit-scrollbar-thumb {border-radius: 10px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); background-color: #ff6600;}
+::-webkit-scrollbar-thumb {border-radius: 10px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); background-color: #ae50dd;}
 /* You can add global styles to this file, and also import other style files */
 
 /**************************************************************************************************************/
-/************************************************* AVALARA ****************************************************/
+/************************************************* ONETECH ****************************************************/
 /**************************************************************************************************************/
 
+
+/* NAV BAR*/
+.one-nav-bar-color {background-color: #8925bc !important;}
+
+.nav-app[_ngcontent-c0] .nav-item.active[_ngcontent-c0] {
+    background-color: #6a1d91 !important;
+}
+
+
+/*Footer*/
+.one-footer{background-color: #a33cd9 !important;}
 /* Custom Margins */
 
 /*Botom*/
@@ -31,7 +42,7 @@
 
 /* General Tab Bars Custom */
 .nav-tabs span.nav-link:hover{ cursor: pointer;}
-.nav-tabs span.nav-link.active{ color: #f60 !important;}
+.nav-tabs span.nav-link.active{ color: #7a1fea !important;}
 
 /*GRID BUTTON*/
 .avl-grid-btn{-webkit-appearance: none !important;}
@@ -40,14 +51,14 @@
 .row-same-height{ display: table; width: 100%; table-layout: fixed;}
 
 /* Custom FONTS */
-.avalara-title{font-weight: 400; color: #ff6600;}
-.avalara-subtitle{font-weight: 400; color:#e65c00;}
+.avalara-title{font-weight: 400; color: #7a1fea;}
+.avalara-subtitle{font-weight: 400; color:#ae50dd;}
 h1.avalara-title,h1.avalara-subtitle{ font-size: 31px;}
 h2.avalara-title,h2.avalara-subtitle{ font-size: 28px;}
 h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
 
 .avalara-fieldset {border-top:1px solid #c5c2c0; margin-top: 10px;}
-.avalara-fieldset legend {padding: 0 10px 0 0; width: auto !important; color:#e65c00;}
+.avalara-fieldset legend {padding: 0 10px 0 0; width: auto !important; color:#ae50dd;}
 /* Custom FONTS */
 .btn-avl-outline-dark {
     color: #343a40;
@@ -57,8 +68,8 @@ h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
 
 .btn-avl-outline-dark:hover {
     color: #fff;
-    background-color: #ff6600;
-    border-color: #ff6600;
+    background-color: #7a1fea;
+    border-color: #7a1fea;
 }
 
 .avl-invalid-form textarea, .avl-invalid-form input,.avl-invalid-form select{border-color: #dc3545;}
@@ -78,7 +89,7 @@ h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
     font-weight: 500;
 }
 
-.dropdown-menu > li > a:hover{ color:#ff6600;}
+.dropdown-menu > li > a:hover{ color:#7a1fea;}
 
 .avl-list-items{max-height: 100%; overflow-y: auto; border:1px solid rgba(0,0,0,.125);}
 
@@ -99,7 +110,7 @@ h3.avalara-title,h3.avalara-subtitle{ font-size: 25px;}
 /************************************************* KENDO ****************************************************/
 /**************************************************************************************************************/
 
-.k-grid td.k-state-selected, .k-grid tr.k-state-selected, ul.k-pager-numbers.k-reset li a.k-link.k-state-selected{ background-color:rgba(255, 102, 0,.9); color:#fff;}
+.k-grid td.k-state-selected, .k-grid tr.k-state-selected, ul.k-pager-numbers.k-reset li a.k-link.k-state-selected{ background-color:rgba(122, 31, 234,.9); color:#fff;}
 .k-grid-header, .k-grid-toolbar, .k-grouping-header, .k-grid-add-row, .k-grid-footer, .k-drag-clue,.k-pager-wrap {
     color: #656565;
     background-color: #ffffff;

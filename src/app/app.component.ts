@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ export class AppComponent {
 
   myRoute: any;
 
+  currentYear = new Date().getFullYear();
   constructor(private router: Router) {
     this.myRoute = router;
   }

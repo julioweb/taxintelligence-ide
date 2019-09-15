@@ -62,6 +62,7 @@ import { CustomMethodsComponent } from './custom-methods/custom-methods.componen
 import { CustomMethodsService } from './services/data/custom-methods/custom-methods.service';
 import { CadCustomMethodsComponent } from './custom-methods/cad-custom-methods/cad-custom-methods.component';
 import { ModalMethodComponent } from './modais/modal-method/modal-method.component';
+import { ModalLoteRuleComponent } from './modais/modal-lote-rule/modal-lote-rule.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { ModalMethodComponent } from './modais/modal-method/modal-method.compone
     ModalDocApvEditComponent,
     CustomMethodsComponent,
     CadCustomMethodsComponent,
-    ModalMethodComponent
+    ModalMethodComponent,
+    ModalLoteRuleComponent
   ],
   imports: [
     BrowserModule,
@@ -133,7 +135,8 @@ import { ModalMethodComponent } from './modais/modal-method/modal-method.compone
     FullLoadingComponent,
     ModalNodeGroupComponent,
     ModalDocApvEditComponent,
-    ModalMethodComponent
+    ModalMethodComponent,
+    ModalLoteRuleComponent
   ],
   bootstrap: [AppComponent]
 })

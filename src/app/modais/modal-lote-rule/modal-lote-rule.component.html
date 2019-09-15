@@ -1,0 +1,42 @@
+<app-full-loading #fullLoading></app-full-loading>
+<div class="modal-header">
+    <h5 class="modal-title">Criar Regras em Lote</h5>
+  </div>
+  <div class="modal-body">
+    <form #frmMethod="ngForm">
+      <div class="form-row">
+        <div class="form-row">
+          <div class="form-group col-md-12" [class.avl-invalid-form]="!hasFile">
+            <label for="exampleFormControlFile1">Arquivo Excel</label>
+            <input type="file" class="form-control-file" id="exampleFormControlFile1" (change)="FileUploaded($event)" >
+            <div class="invalid-feedback">
+                Necessário adicionar um arquivo excel.
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label for="docRelac">Documento</label>
+            <select id="docRelac" class="form-control" name="docRelac" [(ngModel)]="DocId" (change)="GetVersionList(false)">
+              <option value="" selected>Selecione...</option>
+              <option *ngFor="let doc of _RelacDocsLst" [value]="doc.ID">{{doc.Name}} </option>
+            </select>
+          </div>
+          <div class="form-group col-md-12" [class.avl-invalid-form]="!hasDocVersion">
+            <label for="verRelac">
+              <strong>Versão</strong>
+            </label>
+            <select id="verRelac" class="form-control" name="verRelac" [(ngModel)]="VersionId">
+              <option value="" selected>Selecione...</option>
+              <option *ngFor="let version of _RelacDocVersionLst" [value]="version.ID">{{version.Name}} </option>
+            </select>
+            <div class="invalid-feedback">
+              Necessário informar uma Versão
+            </div>
+          </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">Salvar</button>
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancelar</button>
+  </div>

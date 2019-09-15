@@ -94,10 +94,6 @@
                 <strong>Tipo  de Tributação</strong>
               </label>
               <kendo-multiselect autoClose="false"  name="ruleTipoTrib" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstTipoTributacao" [(ngModel)]="ruleObjt.TipoTributacao"></kendo-multiselect>
-              <!-- <select id="ruleTipoTrib" class="form-control" name="ruleTipoTrib" [(ngModel)]="ruleObjt.TipoTributacao">
-                <option value="" selected>Selecione...</option>
-                <option *ngFor="let type of _LstTipoTributacao" [value]="type.ID">{{type.Nome}}</option>
-              </select> -->
             </div>
             <div class="form-group col-md-4">
               <label for="ruleEspecRegime">
@@ -105,39 +101,6 @@
               </label>
               <kendo-multiselect autoClose="false"  name="rule1regimeEspecial" placeholder="Selecione" [filterable]="true" [textField]="'Nome'" [valueField]="'ID'" [data]="_LstRegimeEspecial" [(ngModel)]="ruleObjt.IndRegEspecial"></kendo-multiselect>
             </div>
-            <!-- <div class="col-md-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="ruleIPI" [checked]="ruleObjt.IndIPI" (change)="ChangeContribuinteIpi()">
-                <label class="form-check-label" for="ruleIPI">
-                  Contribuinte do IPI
-                </label>
-              </div>
-            </div> 
-            <div class="col-md-4" *ngIf="ruleObjt.IndIPI" >
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="LojaFranca" [checked]="ruleObjt.IpiFranca" (change)="ruleObjt.IpiFranca = !ruleObjt.IpiFranca">
-                <label class="form-check-label" for="LojaFranca">
-                  Vende Prod para Loja Franca?
-                </label>
-              </div>
-            </div>
-            <div class="col-md-4" *ngIf="ruleObjt.IndIPI" >
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="IpiInsumos" [checked]="ruleObjt.IpiInsumos" (change)="ruleObjt.IpiInsumos = !ruleObjt.IpiInsumos">
-                <label class="form-check-label" for="IpiInsumos">
-                  Vende Insumos para as Inds: Alimentícia, Alimentícia Agro,  Química,  Farmaceutica,  Fertilizantes,  Calçados,  Aeroespacial e ou Exportadora
-                </label>
-              </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="ruleOpeEnt" [checked]="ruleObjt.OperEntGov" (change)="ruleObjt.OperEntGov = !ruleObjt.OperEntGov">
-                  <label class="form-check-label" for="ruleOpeEnt">
-                    Opera com Órgãos Públicos, Instituições Assistenciais ou de Ensino, Autarquias ou afins?
-                  </label>
-                </div>
-              </div>-->
-
             <div class="col-md-4">
                 <label class="col-md-12" >
                   Contribuinte do IPI 
@@ -212,7 +175,7 @@
               <label for="ruleDesc">
                 <strong>Descrição</strong>
               </label>
-              <textarea id="ruleDesc" class="form-control" name="Description" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.RuleDescription"></textarea>
+              <textarea id="ruleDesc" class="form-control" name="Description" rows="4" style="resize: none;" [(ngModel)]="ruleObjt.RuleDescription"></textarea>
               <div class="invalid-feedback">
                 Necessário informar uma Descrição
               </div>
@@ -223,7 +186,7 @@
               <label for="ruleSugestion">
                 <strong>Sugestão</strong>
               </label>
-              <textarea id="ruleSugestion" class="form-control" name="Sugestion" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.Sugestao"></textarea>
+              <textarea id="ruleSugestion" class="form-control" name="Sugestion" rows="4" style="resize: none;" [(ngModel)]="ruleObjt.Sugestao"></textarea>
             </div>
           </div>
           <div class="form-row">
@@ -231,7 +194,7 @@
               <label for="legalBase">
                 <strong>Base Legal</strong>
               </label>
-              <textarea id="legalBase" class="form-control" name="LegalBase" rows="4" maxlength="250" style="resize: none;" [(ngModel)]="ruleObjt.Fundamentacao"></textarea>
+              <textarea id="legalBase" class="form-control" name="LegalBase" rows="4" style="resize: none;" [(ngModel)]="ruleObjt.Fundamentacao"></textarea>
             </div>
           </div>
           <div class="form-row">
@@ -257,14 +220,14 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-4" [class.avl-invalid-form]="!hasValidationMsg">
+            <!-- <div class="form-group col-md-4" [class.avl-invalid-form]="!hasValidationMsg">
               <label for="detValMsg">Mensagem de Validação</label>
               <input type="text" maxlength="500" class="form-control" id="detValMsg" name="detValMsg" placeholder="Nome" [(ngModel)]="ruleObjt.Detail.ValidationMsg">
               <div class="invalid-feedback">
                 Necessário informar uma mensagem de validação
               </div>
-            </div>
-            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationCondition">
+            </div> -->
+            <div class="form-group col-md-3" [class.avl-invalid-form]="!hasValidationCondition">
               <label for="detCondition">
                 <strong>Condição</strong>
               </label>
@@ -276,7 +239,7 @@
                 Necessário informar uma condição de validação
               </div>
             </div>
-            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationLevel">
+            <div class="form-group col-md-3" [class.avl-invalid-form]="!hasValidationLevel">
               <label for="detLevel">
                 <strong>Nível</strong>
               </label>
@@ -288,20 +251,29 @@
                 Necessário informar um nível de validação
               </div>
             </div>
-            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationDtInit">
+            <div class="form-group col-md-3" [class.avl-invalid-form]="!hasValidationDtInit">
               <label for="detDtInit"> Data Início </label>
               <input type="date" class="form-control" id="detDtInit" name="detDtInit" placeholder="Data Início" [(ngModel)]="ruleObjt.Detail.InitValidity">
               <div class="invalid-feedback">
                 Necessário informar uma data inicio
               </div>
             </div>
-            <div class="form-group col-md-2" [class.avl-invalid-form]="!hasValidationDtFim">
+            <div class="form-group col-md-3" [class.avl-invalid-form]="!hasValidationDtFim">
               <label for="detDtFim"> Data Fim </label>
               <input type="date" class="form-control" id="detDtFim" name="detDtFim" placeholder="Data Fim" [(ngModel)]="ruleObjt.Detail.EndValiditiy">
               <div class="invalid-feedback">
                 Necessário informar uma data fim
               </div>
             </div>
+            <div class="form-group col-md-12"  [class.avl-invalid-form]="!hasValidationMsg">
+                <label for="detValMsg">
+                  <strong>Mensagem de Validação</strong>
+                </label>
+                <textarea id="detValMsg" class="form-control" name="detValMsg" rows="4" style="resize: none;" [(ngModel)]="ruleObjt.Detail.ValidationMsg"></textarea>
+                <div class="invalid-feedback">
+                  Necessário informar uma mensagem de validação
+                </div>
+              </div>
             <div class="form-group col-md-6">
               <label for="ruleSub">
                 <strong>Assinatura</strong>

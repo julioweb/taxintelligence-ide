@@ -5,6 +5,7 @@ import { GridDataResult, PageChangeEvent, SelectableSettings, SelectionEvent } f
 import{ DocBriefList } from "../../models/Documents";
 import { ServiceUtils } from  "../../services/Utils/Utils";
 import { FullLoadingComponent } from '../../modais/full-loading/full-loading.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashgrid-documents',
@@ -22,7 +23,8 @@ export class GridDocumentsComponent implements OnInit {
   @ViewChild('fullLoading') fullLoading: FullLoadingComponent;
   
   constructor(private documentService: DocumentsService,
-    private svcUtils: ServiceUtils) {
+    private svcUtils: ServiceUtils,
+    private router: Router ) {
     this.GridSkip = 0;
     this.GridReload(); 
   }
@@ -58,6 +60,18 @@ export class GridDocumentsComponent implements OnInit {
       this.fullLoading.hideLoading();
     });
   }
+
+  VisualizarProcesso(itemID){
+    this.router.navigate(
+      ['/doc-process'],
+      {
+        queryParams: {
+          'id': itemID
+        }
+      }
+    );
+  }
+
   public docSelectionChange(event:SelectionEvent):void{
     if(event.selected && event.selectedRows.length > 0)
     {

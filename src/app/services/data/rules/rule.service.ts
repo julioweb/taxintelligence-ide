@@ -189,6 +189,27 @@ export class RuleService {
     });
   }
   /******************************************Rules************************************************************/
+  SendNewRuleXlsToApi(xlsDoc:File,docid:string, versionid:string):Observable<any>{
+    return new Observable<any>(observable => {
+      let formData: FormData = new FormData();
+      formData.append('uploadFile', xlsDoc, xlsDoc.name);
+      formData.append('docid', docid);
+      formData.append('versionid', versionid);
+      let headers = new Headers()
+      let requestOptions = new RequestOptions({ headers: headers }); 
+      this.http.post(`${this._ruleSvcUrl}CreateRuleFromXls`,formData, requestOptions)
+        .toPromise()
+        .then(response => {
+          observable.next(response.json());
+          observable.complete();
+        })
+        .catch(error => {
+          observable.next('serverError');          
+          observable.complete();
+        });
+    });
+  }
+  
   GetRuleTotCount(Skip: number, PageSize: number): Observable<RuleTotList> {
     return new Observable<RuleTotList>(observable => {
 
